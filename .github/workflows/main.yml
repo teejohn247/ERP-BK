@@ -1,0 +1,23 @@
+name: Access server
+on: push
+jobs:
+  access_server:
+    name: Deploy to server
+    runs-on: ubuntu-latest
+    steps:
+    - name: multiple command
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        script: |
+          whoami
+          cd nigenius-sms
+          ls -l
+          git pull
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh 
+          npm install
+          npm run build
+          pm2 restart all
