@@ -46,33 +46,92 @@ const inviteEmployee = async (req, res) => {
         //     return;
         // }
         let checkRole = await Roles.findOne({_id: roleId})
-        console.log(req.payload.id)
+        console.log( personalEmail, companyEmail)
 
        
 
         let company = await Company.find({ _id: req.payload.id });
 
-        let checkPersonal = await Employee.findOne({ companyId: req.payload.id  },
-            { personalInformation: { $elemMatch: { personalEmail:  personalEmail} } })
+        let pp= await Employee.findOne({ companyId: req.payload.id })
+        console.log({pp})
 
-        let checkCompany = await Employee.findOne({ companyId: req.payload.id  },
+        var personal = false
+
+        let checkPersonal = await Employee.find({ companyId: req.payload.id  },
+            { personalInformation: { $elemMatch: { personalEmail:  personalEmail} } })
+            console.log(checkPersonal.length)
+
+            if (checkPersonal.length > 0){
+                checkPersonal.some((chk, i) => {
+                    console.log(chk.personalInformation.length)
+                    if(chk.personalInformation.length > 0){
+                        console.log(personal)
+                       personal = true
+                    }
+                })
+            
+        }
+        console.log('kk')
+
+        if(personal == true){
+            return res.status(400).json({
+                status: 400,
+                error: `An employee already exist with email: ${personalEmail}`
+            })
+        }
+
+
+        let checkCompany = await Employee.find({ companyId: req.payload.id  },
             { officialInformation: { $elemMatch: { companyEmail:  companyEmail} } })
 
-            console.log('oo',checkRole.leaveType)
-            console.log('oo',checkPersonal.personalInformation)
-            console.log('oo',checkCompany.officialInformation)
+            var comp= false
 
 
-
-
-
-        if (checkPersonal.personalInformation.length > 0 && checkCompany.officialInformation.length > 0) {
-            res.status(400).json({
-                status: 400,
-                error: 'An employee with this email address already exist'
+        //     if (checkPersonal.length > 0){
+        //         checkPersonal.some((chk, i) => {
+        //             console.log({chk})
+        //             if(chk.personalInformation.length > 0){
+        //                 personal== true
+                     
+        //             }
+        //         })
+        // }
+        if (checkCompany.length > 0){
+            checkCompany.some((chk, i) => {
+                console.log({chk})
+                if(chk.officialInformation.length > 0){
+                    comp = true
+                 
+                }
             })
-            return;
+    }
+
+        if(comp == true){
+            return res.status(400).json({
+                status: 400,
+                error: `An employee already exist with email: ${companyEmail}`
+            })
         }
+
+            if (checkPersonal.length > 0 && checkPersonal.some((chk, i) => {
+                chk.personalInformation.length > 0
+            })){
+                console.log({chk})
+                res.status(400).json({
+                    status: 400,
+                    error: `An employee already exist with email: ${personalEmail}}`
+                })
+                return
+            }
+
+
+        // if (checkPersonal.personalInformation.length > 0 && checkCompany.officialInformation.length > 0) {
+        //     res.status(400).json({
+        //         status: 400,
+        //         error: 'An employee with this email address already exist'
+        //     })
+        //     return;
+        // }
 
         const d = new Date();
         let year = d.getFullYear();

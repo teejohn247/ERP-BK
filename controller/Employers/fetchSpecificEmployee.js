@@ -12,7 +12,7 @@ const fetchSpecificEmployees = async (req, res) => {
     try {
 
 
-        const employee = await Employee.find({id: req.params.id})
+        const employee = await Employee.find({_id: req.params.id})
 
 
         if(!employee){
