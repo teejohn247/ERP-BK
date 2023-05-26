@@ -11,8 +11,8 @@ dotenv.config();
 
 module.exports = {
 
-encodeToken: (id, isSuperAdmin, email) => {
-const payload = { id, isSuperAdmin, email};
+encodeToken: (id, isAdmin, email) => {
+const payload = { id, isAdmin, email};
 const option = { expiresIn: '10d' };
 const secret = process.env.SECRET_KEY;
 return jwt.sign(payload, secret, option);

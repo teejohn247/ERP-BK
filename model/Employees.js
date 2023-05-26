@@ -1,39 +1,112 @@
 import mongoose from 'mongoose';
 
 const EmployeeSchema = new mongoose.Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    maritalStatus: { type: String },
-    religion: { type: String },
-    dateOfBirth: { type: String, required: true },
-    companyEmail: { type: String, required: true },
-    personalEmail: { type: String, required: true },
-    phoneNumber: { type: String, required: true },
-    gender: { type: String, required: true, trim: true },
-    password: { type: String },
-    level: { type: String },
-    address: { type: String },
-    position: { type: String },
-    role: { type: String },
-    profilePic: { type: String },
-    department: { type: String, },
-    employmentType: { type: String, required: true },
-    employeeCode: { type: String },
-    companyAddress: { type: String },
-    companyBranch: { type: String },
-    nextOfKinFullName: {
-        type: String,
-    },
-    nextOfKinAddress: {
-        type: String,
-    },
-    nextOfKinPhoneNumber: {
-        type: String,
-    },
-    nextOfKinGender: {
-        type: String,
-    },
-    paymentInformation:{
+    companyName: { type: String, required: true },
+    companyId:{ type: String, required: true },
+    personalInformation:[{
+        firstName: { type: String, required: true },
+        lastName: { type: String, required: true },
+        dateOfBirth: { type: String, required: true },
+        personalEmail: { type: String, required: true },
+        phoneNumber: { type: String, required: true },
+        profilePic: { type: String },
+        address: { type: String },
+        gender: { type: String, required: true, trim: true },
+        nextOfKinFullName: {
+            type: String,
+        },
+        nextOfKinAddress: {
+            type: String,
+        },
+        nextOfKinPhoneNumber: {
+            type: String,
+        },
+        nextOfKinGender: {
+            type: String,
+        },
+
+     }],
+
+    officialInformation:[{
+        companyEmail: { type: String, required: true },
+        department: { type: String, },
+        employmentType: { type: String, required: true },
+        employeeCode: { type: String },
+        companyAddress: { type: String },
+        companyBranch: { type: String },
+        position: { type: String },
+        role: { type: String },
+        roleName: { type: String },
+        dateOfJoining: { type: String },
+        manager: { type: String },
+        leave: [{
+            leaveName: {
+                type: String,
+            },
+            noOfDays: {
+                type: String,
+            },
+            paid: {
+                type:Boolean,
+            },
+            leaveType: {
+                type: String,
+            },
+            leaveStart: {
+                type: String,
+            },
+            leaveEndDate: {
+                type: String,
+            },
+            daysUsed: {
+                type: String,
+            },
+            leaveApproved: {
+                type: Boolean,
+            }
+        }],
+        // leave:
+        // [{
+        //     leaveId: {
+        //         type: String,
+        //     },
+            // leaveType: {
+            //     type: String,
+            // },
+            // leaveStart: {
+            //     type: String,
+            // },
+            // leaveEndDate: {
+            //     type: String,
+            // },
+            // daysUsed: {
+            //     type: String,
+            // },
+            // leaveApproved: {
+            //     type: Boolean,
+            //     default: false
+            // },
+            // leaveAttendedTo: {
+            //     type: Boolean,
+            //     default: false
+            // }
+        // }],
+        hmo:
+        [{
+            hmoName: {
+                type: String,
+            },
+            features: {
+                type: Array,
+            },
+            description: {
+                type: String,
+            }
+        }],
+
+    }],
+  
+    paymentInformation:[{
         bankName: {
             type: String,
         },
@@ -52,81 +125,56 @@ const EmployeeSchema = new mongoose.Schema({
         TaxIndentificationNumber: {
             type: String,
         },
-    },
-    leave:
-        [{
-            leaveId: {
-                type: String,
-            },
-            leaveType: {
-                type: String,
-            },
-            leaveStart: {
-                type: String,
-            },
-            leaveEndDate: {
-                type: String,
-            },
-            daysUsed: {
-                type: String,
-            },
-            leaveApproved: {
-                type: Boolean,
-                default: false
-            },
-            leaveAttendedTo: {
-                type: Boolean,
-                default: false
-            }
-        }],
-    attendance:
-        [{
-            attendanceDate: {
-                type: Date,
-            },
-            attendanceClockIn: {
-                type: String,
-            },
-            attendanceClockOut: {
-                type: String,
-            },
-            workHours: {
-                type: String,
-            },
-        }],
-    salaryHistory:
-        [{
-            salaryMonth: {
-                type: String,
-            },
-            amount: {
-                type: Number,
-            },
-            tax: {
-                type: Number,
-            },
-            deductables: {
-                type: Number,
-            },
-            totalTakeHome: {
-                type: Number,
-            },
-            salaryDate: {
-                type: Date
-            },
-            bankName: {
-                type: String,
-            },
-            acctNumber: {
-                type: String,
-            },
-            acctName: {
-                type: String,
-            },
-            sortCode: {
-                type: String,
-            },
-        }],
+    }],
+
+    // attendance:
+    //     [{
+    //         attendanceDate: {
+    //             type: Date,
+    //         },
+    //         attendanceClockIn: {
+    //             type: String,
+    //         },
+    //         attendanceClockOut: {
+    //             type: String,
+    //         },
+    //         workHours: {
+    //             type: String,
+    //         },
+    //     }],
+    // salaryHistory:
+    //     [{
+    //         salaryMonth: {
+    //             type: String,
+    //         },
+    //         amount: {
+    //             type: Number,
+    //         },
+    //         tax: {
+    //             type: Number,
+    //         },
+    //         deductables: {
+    //             type: Number,
+    //         },
+    //         totalTakeHome: {
+    //             type: Number,
+    //         },
+    //         salaryDate: {
+    //             type: Date
+    //         },
+    //         bankName: {
+    //             type: String,
+    //         },
+    //         acctNumber: {
+    //             type: String,
+    //         },
+    //         acctName: {
+    //             type: String,
+    //         },
+    //         sortCode: {
+    //             type: String,
+    //         },
+    //     }],
 
 })
 
