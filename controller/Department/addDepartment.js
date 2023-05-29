@@ -21,7 +21,7 @@ const addDepartment = async (req, res) => {
     try {
 
         const {departmentName} = req.body;
-        let departmentN = await Department.findOne({ departmentName });
+        let departmentN = await Department.findOne({ companyId: req.payload.id, departmentName: departmentName });
         let companyName = await Company.findOne({ _id: req.payload.id });
 
 

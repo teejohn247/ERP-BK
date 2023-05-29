@@ -54,15 +54,15 @@ router.post('/signUp',  signUp);
 
 router.post('/addDepartment', auth, addDepartment);
 router.get('/fetchDepartments', auth, fetchDepartment);
-router.patch('/updateDepartment/:id', updateDepartment);
-router.delete('/deleteDepartment/:id', deleteDepartment);
+router.patch('/updateDepartment/:id',auth, updateDepartment);
+router.delete('/deleteDepartment/:id',auth, deleteDepartment);
 router.post('/addTable', addTable);
-router.patch('/addPayment/:id', addPayment);
-router.post('/updatePayment', updatePayment);
-router.get('/fetchEmployees',  fetchEmployees);
-router.get('/fetchEmployee/:id', fetchSpecificEmployees);
-router.patch('/updateEmployee/:id', updateEmployee);
-router.delete('/deleteEmployee/:id', deleteEmployee);
+router.patch('/addPayment/:id',auth, addPayment);
+router.post('/updatePayment', auth, updatePayment);
+router.get('/fetchEmployees',auth,  fetchEmployees);
+router.get('/fetchEmployee/:id', auth, fetchSpecificEmployees);
+router.patch('/updateEmployee/:id', auth, updateEmployee);
+router.delete('/deleteEmployee/:id', auth, deleteEmployee);
 
 
 

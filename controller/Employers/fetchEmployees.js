@@ -28,7 +28,7 @@ const fetchEmployees = async (req, res) => {
 
         const { page, limit } = req.query;
 
-        const employee = await Employee.find()
+        const employee = await Employee.find({companyId: req.payload.id})
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
