@@ -22,6 +22,8 @@ import middlewareDetect from '../middleware/middlewareDetect';
 
 import auth from '../middleware/auth'
 import fetchCompany from '../controller/Company/fetchCompany';
+import createCompany from '../controller/Company/createCompany';
+import signUp from '../controller/Company/signUp';
 
 
 
@@ -42,6 +44,10 @@ router.post('/updateRole/:id', updateRole);
 router.get('/fetchCompanyRoles', auth, fetchRole);
 router.get('/fetchCompany', auth, fetchCompany);
 
+
+router.post('/createCompany', auth, createCompany);
+
+router.post('/signUp',  signUp);
 
 
 
