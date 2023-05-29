@@ -22,11 +22,11 @@ const fetchCompany = async (req, res) => {
         let company = await Company.findOne({ _id: req.payload.id }, {_id: 1, companyName:1})
 
 
-        if (!company) {
+        if (!company.companyName) {
 
             res.status(400).json({
                 status: 400,
-                error: 'This Company does not already exist'
+                error: 'This account has not registered a company'
             })
             return;
         }
