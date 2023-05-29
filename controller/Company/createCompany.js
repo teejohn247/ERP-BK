@@ -24,7 +24,6 @@ const createCompany = async (req, res) => {
         const {companyName} = req.body;
         let company = await Company.findOne({ adminEmail: req.payload.isAdmin });
 
-
         if (company.companyName) {
 
             res.status(400).json({
@@ -39,7 +38,7 @@ const createCompany = async (req, res) => {
 
         // console.log(salt, hashed)
 
-        Company.findOneAndUpdate({ adminEmail: req.payload.adminEmail}, { 
+        Company.findOneAndUpdate({ adminEmail: req.payload.isAdmin}, { 
             $set: { 
                 companyName: companyName && companyName,
             }

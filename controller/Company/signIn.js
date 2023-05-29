@@ -64,7 +64,7 @@ const signin = async (req, res) => {
             });
         }
 
-        let company = await Admin.findOne({ email });
+        let company = await Admin.findOne({ adminEmail: email  });
 
         const token = utils.encodeToken(admin._id, admin.adminEmail);
 
