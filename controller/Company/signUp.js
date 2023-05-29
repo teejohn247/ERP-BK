@@ -27,7 +27,7 @@ const signUp = async (req, res) => {
 
             res.status(400).json({
                 status: 400,
-                error: 'This Company already exist'
+                error: `A user with email: ${email} already exist`
             })
             return;
         }
