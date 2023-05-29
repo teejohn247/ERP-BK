@@ -47,10 +47,10 @@ const signin = async (req, res) => {
             })
             return;
         }
-        console.log(isMatch)
+        console.log(admin.firstTimeLogin)
 
 
-        if (!admin.firstTimeLogin) {
+        if (admin.firstTimeLogin == undefined) {
         console.log("here")
             
             await admin.updateOne({
@@ -62,6 +62,13 @@ const signin = async (req, res) => {
             await admin.updateOne({
                 firstTimeLogin: false, 
             });
+
+        }
+        else if (admin.firstTimeLogin == false){
+            await admin.updateOne({
+                firstTimeLogin: false, 
+            });
+            
         }
 
         let company = await Admin.findOne({ adminEmail: email  });
