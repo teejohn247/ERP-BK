@@ -7,7 +7,7 @@ const EmployeeSchema = new mongoose.Schema({
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
         dateOfBirth: { type: String, required: true },
-        personalEmail: { type: String, required: true },
+        personalEmail: { type: String },
         phoneNumber: { type: String, required: true },
         profilePic: { type: String },
         address: { type: String },
@@ -28,17 +28,22 @@ const EmployeeSchema = new mongoose.Schema({
      }],
 
     officialInformation:[{
-        companyEmail: { type: String, required: true },
-        department: { type: String, },
+        officialEmail: { type: String, required: true },
+        departmentId: { type: String, required: true},
+        departmentName: { type: String, required: true},
         employmentType: { type: String, required: true },
-        employeeCode: { type: String },
+        employeeCode: { type: String, required: true },
         companyAddress: { type: String },
         companyBranch: { type: String },
         position: { type: String },
         role: { type: String },
+        designationId: { type: String },
+        designationName: { type: String },
         roleName: { type: String },
         dateOfJoining: { type: String },
-        manager: { type: String },
+        reportingToId: { type: String },
+        reportingToName: { type: String },
+
         leave: [{
             leaveName: {
                 type: String,

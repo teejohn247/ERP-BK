@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 import Employee from '../../model/Employees';
 import Roles from '../../model/Role';
 import Company from '../../model/Company';
+import Department from '../../model/Department';
+import Designation from '../../model/Designation';
+
 
 
 
@@ -26,11 +29,12 @@ const inviteEmployee = async (req, res) => {
 
     try {
 
-        const { firstName, lastName, dateOfBirth, personalEmail, phoneNumber, nextOfKinFullName, nextOfKinAddress, nextOfKinPhoneNumber, nextOfKinGender, companyEmail, gender,
-        employmentType, roleId, department, companyAddress, manager, companyBranch} = req.body;
+        const { firstName, lastName, officialEmail, phoneNumber, dateOfBirth,  gender, departmentId, companyRoleId, designationId, dateOfJoining,
+        employmentType, reportingTo} = req.body;
 
 
-        
+        // const { firstName, lastName, dateOfBirth, personalEmail, phoneNumber, nextOfKinFullName, nextOfKinAddress, nextOfKinPhoneNumber, nextOfKinGender, companyEmail, gender,
+        //     employmentType, roleId, department, companyAddress, manager, companyBranch} = req.body;
 
         // let employee = await Employee.findOne({ "officialInformation.companyEmail": companyEmail });
 
@@ -45,57 +49,55 @@ const inviteEmployee = async (req, res) => {
         //     })
         //     return;
         // }
-        let checkRole = await Roles.findOne({_id: roleId})
-        console.log( personalEmail, companyEmail)
+        let checkRole = await Roles.findOne({_id: companyRoleId})
+        let checkDesignation = await Designation.findOne({_id: designationId})
+        let checkDept= await Department.findOne({_id: departmentId})
+        let checkName= await Employee.findOne({_id: reportingTo})
+
+
+
+        console.log(officialEmail)
+        console.log(checkName)
+
 
        
 
         let company = await Company.find({ _id: req.payload.id });
 
-        let pp= await Employee.findOne({ companyId: req.payload.id })
-        console.log({pp})
+        // let pp= await Employee.findOne({ companyId: req.payload.id })
+        // console.log({pp})
 
-        var personal = false
+        // var personal = false
 
-        let checkPersonal = await Employee.find({ companyId: req.payload.id  },
-            { personalInformation: { $elemMatch: { personalEmail:  personalEmail} } })
-            console.log(checkPersonal.length)
-
-            if (checkPersonal.length > 0){
-                checkPersonal.some((chk, i) => {
-                    console.log(chk.personalInformation.length)
-                    if(chk.personalInformation.length > 0){
-                        console.log(personal)
-                       personal = true
-                    }
-                })
-            
-        }
-        console.log('kk')
-
-        if(personal == true){
-            return res.status(400).json({
-                status: 400,
-                error: `An employee already exist with email: ${personalEmail}`
-            })
-        }
-
-
-        let checkCompany = await Employee.find({ companyId: req.payload.id  },
-            { officialInformation: { $elemMatch: { companyEmail:  companyEmail} } })
-
-            var comp= false
-
+        // let checkPersonal = await Employee.find({ companyId: req.payload.id  },
+        //     { officialInformation: { $elemMatch: { officialEmail: officialEmail} } })
+        //     console.log(checkPersonal.length)
 
         //     if (checkPersonal.length > 0){
         //         checkPersonal.some((chk, i) => {
-        //             console.log({chk})
+        //             console.log(chk.personalInformation.length)
         //             if(chk.personalInformation.length > 0){
-        //                 personal== true
-                     
+        //                 console.log(personal)
+        //                personal = true
         //             }
         //         })
+            
         // }
+        // console.log('kk')
+
+        // if(personal == true){
+        //     return res.status(400).json({
+        //         status: 400,
+        //         error: `An employee already exist with email: ${personalEmail}`
+        //     })
+        // }
+
+
+        let checkCompany = await Employee.find({ companyId: req.payload.id  },
+            { officialInformation: { $elemMatch: { officialEmail:  officialEmail} } })
+
+            var comp= false
+
         if (checkCompany.length > 0){
             checkCompany.some((chk, i) => {
                 console.log({chk})
@@ -104,25 +106,25 @@ const inviteEmployee = async (req, res) => {
                  
                 }
             })
-    }
+        }
 
         if(comp == true){
             return res.status(400).json({
                 status: 400,
-                error: `An employee already exist with email: ${companyEmail}`
+                error: `An employee already exist with email: ${officialEmail}`
             })
         }
 
-            if (checkPersonal.length > 0 && checkPersonal.some((chk, i) => {
-                chk.personalInformation.length > 0
-            })){
-                console.log({chk})
-                res.status(400).json({
-                    status: 400,
-                    error: `An employee already exist with email: ${personalEmail}}`
-                })
-                return
-            }
+            // if (checkPersonal.length > 0 && checkPersonal.some((chk, i) => {
+            //     chk.personalInformation.length > 0
+            // })){
+            //     console.log({chk})
+            //     res.status(400).json({
+            //         status: 400,
+            //         error: `An employee already exist with email: ${officialEmail}}`
+            //     })
+            //     return
+            // }
 
 
         // if (checkPersonal.personalInformation.length > 0 && checkCompany.officialInformation.length > 0) {
@@ -170,7 +172,6 @@ const inviteEmployee = async (req, res) => {
     //         // text: 'This is a test email',
     //         html: `${resp}`,
     //     }
-
        let employee = new Employee({
             companyName: company[0].companyName,
             companyId: req.payload.id,
@@ -178,25 +179,22 @@ const inviteEmployee = async (req, res) => {
                 firstName,
                 lastName,
                 dateOfBirth,
-                personalEmail,
                 gender,
                 phoneNumber,
-                nextOfKinAddress,
-                nextOfKinFullName,
-                nextOfKinPhoneNumber,
-                nextOfKinGender,
-
             }],
             officialInformation:[{
                 employeeCode: `EMP-${year}-${letter}${last}${total.length + 1}`,
-                role: roleId,
+                role: companyRoleId,
                 roleName: checkRole.roleName,
-                department: department,
+                designationName: checkDesignation.designationName,
+                designationId,
+                departmentId: departmentId,
+                departmentName: checkDept.departmentName,
                 employmentType,
-                companyBranch,
-                companyAddress,
-                manager,
-                companyEmail,
+                dateOfJoining,
+                reportingToId: reportingTo,
+                reportingToName: `${checkName.firstName} ${checkName.lastName}` ,
+                officialEmail,
                 leave: checkRole.leaveType,
                 hmo: checkRole.hmoPackages
             }],

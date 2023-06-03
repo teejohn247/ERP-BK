@@ -24,6 +24,8 @@ import auth from '../middleware/auth'
 import fetchCompany from '../controller/Company/fetchCompany';
 import createCompany from '../controller/Company/createCompany';
 import signUp from '../controller/Company/signUp';
+import createDesignation from '../controller/createDesignation/createDesignation';
+import fetchDesignation from '../controller/createDesignation/fetchDesignation';
 
 
 
@@ -49,9 +51,7 @@ router.post('/createCompany', auth, createCompany);
 
 router.post('/signUp',  signUp);
 
-
-
-
+router.post('/createDesignation', auth,  createDesignation);
 router.post('/addDepartment', auth, addDepartment);
 router.get('/fetchDepartments', auth, fetchDepartment);
 router.patch('/updateDepartment/:id',auth, updateDepartment);
@@ -63,6 +63,9 @@ router.get('/fetchEmployees',auth,  fetchEmployees);
 router.get('/fetchEmployee/:id', auth, fetchSpecificEmployees);
 router.patch('/updateEmployee/:id', auth, updateEmployee);
 router.delete('/deleteEmployee/:id', auth, deleteEmployee);
+
+router.get('/fetchDesignations', auth, fetchDesignation);
+
 
 
 
