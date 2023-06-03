@@ -4,7 +4,7 @@ const CompanySchema = new mongoose.Schema({
     companyName: { type: String },
     adminEmail: { type: String, required: true },
     password: { type: String, required: true  },
-    firstTimeLogin: { type: Boolean }
+    // firstTimeLogin: { type: Boolean }
 })
 
 module.exports = mongoose.model("Company", CompanySchema);

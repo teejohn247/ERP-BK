@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import Admin from '../../model/Company';
 import utils from '../../config/utils';
+import Company from '../../model/Company';
 
 const sgMail = require('@sendgrid/mail')
 
@@ -21,65 +22,107 @@ const signin = async (req, res) => {
         // let useragent = req.useragent;
         // let detectResult = req.device;
 
+        // let admin = await Admin.findOne({ adminEmail: email });
+
+        // console.log(admin)
+
+        // if (!admin) {
+        //     res.status(400).json({
+        //         status: 400,
+        //         success: false,
+        //         error: 'Account does not exist'
+        //     })
+        //     return;
+        // }
 
         let admin = await Admin.findOne({ adminEmail: email });
 
-        console.log(admin)
 
         if (!admin) {
-            res.status(400).json({
-                status: 400,
-                success: false,
-                error: 'Account does not exist'
+
+            // res.status(400).json({
+            //     status: 400,
+            //     error: `A user with email: ${email} already exist`
+            // })
+            // return;
+
+            const salt = await bcrypt.genSalt(10);
+            const hashed = await bcrypt.hash(password, salt);
+    
+            console.log(salt, hashed)
+    
+            admin= new Company({
+                adminEmail: email,
+                password: hashed,
+            });
+    
+            await admin.save().then((use) => {
+
+                const token = utils.encodeToken(use._id, use.adminEmail);
+
+                res.status(200).json({
+                    status: 200,
+                    data: admin,
+                    firstTimeLogin: true,
+                    token: token,
+
+
+                    // firstTimeLogin: true
+                })
             })
-            return;
+
+
+
+
+          
         }
 
 
+        else{
+            const isMatch = await bcrypt.compare(password, admin.password);
+            if (!isMatch) {
+                res.status(404).json({
+                    status: 404,
+                    success: false,
+                    error: 'Invalid login credentials'
+                })
+                return;
+            }
+            // console.log(admin.firstTimeLogin)
 
 
-        const isMatch = await bcrypt.compare(password, admin.password);
-        if (!isMatch) {
-            res.status(404).json({
-                status: 404,
-                success: false,
-                error: 'Invalid login credentials'
+            // if (admin.firstTimeLogin == undefined) {
+            // console.log("here")
+                
+            //     await admin.updateOne({
+
+            //         firstTimeLogin: true, 
+                
+            //     });
+            // }else if (admin.firstTimeLogin == true){
+            //     await admin.updateOne({
+            //         firstTimeLogin: false, 
+            //     });
+
+            // }
+            // else if (admin.firstTimeLogin == false){
+            //     await admin.updateOne({
+            //         firstTimeLogin: false, 
+            //     });
+                
+            // }
+
+            let company = await Admin.findOne({ adminEmail: email  });
+
+            const token = utils.encodeToken(admin._id, admin.adminEmail);
+
+            res.status(200).json({
+                status: 200,
+                data: company,
+                firstTimeLogin: false,
+                token: token,
             })
-            return;
         }
-        console.log(admin.firstTimeLogin)
-
-
-        if (admin.firstTimeLogin == undefined) {
-        console.log("here")
-            
-            await admin.updateOne({
-
-                firstTimeLogin: true, 
-            
-            });
-        }else if (admin.firstTimeLogin == true){
-            await admin.updateOne({
-                firstTimeLogin: false, 
-            });
-
-        }
-        else if (admin.firstTimeLogin == false){
-            await admin.updateOne({
-                firstTimeLogin: false, 
-            });
-            
-        }
-
-        let company = await Admin.findOne({ adminEmail: email  });
-
-        const token = utils.encodeToken(admin._id, admin.adminEmail);
-
-        res.status(200).json({
-            status: 200,
-            data: company,
-            token: token
-        })
       
         } catch (error) {
         res.status(500).json({
