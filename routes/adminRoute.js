@@ -38,7 +38,7 @@ router.post('/addEmployee', auth, inviteEmployee);
 router.post('/addLeaveType/:roleId', auth, addLeave);
 router.patch('/addHmo/:id', addHmo);
 router.post('/addCompany', addCompany);
-router.post('/signIn', signin);
+router.post('/auth', signin);
 router.post('/addRole', auth, addRole);
 router.post('/updateRole/:id', updateRole);
 router.get('/fetchCompanyRoles', auth, fetchRole);
