@@ -40,7 +40,7 @@ router.post('/addEmployee', auth, inviteEmployee);
 router.post('/addLeaveType/:roleId', auth, addLeave);
 router.patch('/addHmo/:id', addHmo);
 router.post('/addCompany', addCompany);
-router.post('/auth', signin);
+router.post('/signIn', signin);
 router.post('/addRole', auth, addRole);
 router.post('/updateRole/:id', updateRole);
 router.get('/fetchCompanyRoles', auth, fetchRole);
@@ -49,7 +49,7 @@ router.get('/fetchCompany', auth, fetchCompany);
 
 router.post('/createCompany', auth, createCompany);
 
-router.post('/signUp',  signUp);
+router.post('/signUp', signUp);
 
 router.post('/createDesignation', auth,  createDesignation);
 router.post('/addDepartment', auth, addDepartment);

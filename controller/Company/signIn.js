@@ -26,50 +26,57 @@ const signin = async (req, res) => {
 
         // console.log(admin)
 
-        // if (!admin) {
-        //     res.status(400).json({
-        //         status: 400,
-        //         success: false,
-        //         error: 'Account does not exist'
-        //     })
-        //     return;
-        // }
+        if (!email) {
+            res.status(400).json({
+                status: 400,
+                success: false,
+                errorMessage: 'Please enter a valid email'
+            })
+            return;
+        }
+
+        if (!password) {
+            res.status(400).json({
+                status: 400,
+                success: false,
+                errorMessage: 'Please password field is required'
+            })
+            return;
+        }
 
         let admin = await Admin.findOne({ adminEmail: email });
 
 
         if (!admin) {
 
-            // res.status(400).json({
-            //     status: 400,
-            //     error: `A user with email: ${email} already exist`
-            // })
-            // return;
-
-            const salt = await bcrypt.genSalt(10);
-            const hashed = await bcrypt.hash(password, salt);
-    
-            console.log(salt, hashed)
-    
-            admin= new Company({
-                adminEmail: email,
-                password: hashed,
-            });
-    
-            await admin.save().then((use) => {
-
-                const token = utils.encodeToken(use._id, use.adminEmail);
-
-                res.status(200).json({
-                    status: 200,
-                    data: admin,
-                    firstTimeLogin: true,
-                    token: token,
-
-
-                    // firstTimeLogin: true
-                })
+            res.status(400).json({
+                status: 400,
+                error: `User with email: ${email} does not exist`
             })
+            return;
+
+            // const salt = await bcrypt.genSalt(10);
+            // const hashed = await bcrypt.hash(password, salt);
+    
+            // console.log(salt, hashed)
+    
+            // admin= new Company({
+            //     adminEmail: email,
+            //     password: hashed,
+            // });
+    
+            // await admin.save().then((use) => {
+
+            //     const token = utils.encodeToken(use._id, use.adminEmail);
+
+            //     res.status(200).json({
+            //         status: 200,
+            //         data: admin,
+            //         firstTimeLogin: true,
+            //         token: token,
+            //         // firstTimeLogin: true
+            //     })
+            // })
 
 
 
@@ -88,29 +95,29 @@ const signin = async (req, res) => {
                 })
                 return;
             }
-            // console.log(admin.firstTimeLogin)
+            console.log(admin.firstTimeLogin)
 
 
-            // if (admin.firstTimeLogin == undefined) {
-            // console.log("here")
+            if (admin.firstTimeLogin == undefined) {
+            console.log("here")
                 
-            //     await admin.updateOne({
+                await admin.updateOne({
 
-            //         firstTimeLogin: true, 
+                    firstTimeLogin: true, 
                 
-            //     });
-            // }else if (admin.firstTimeLogin == true){
-            //     await admin.updateOne({
-            //         firstTimeLogin: false, 
-            //     });
+                });
+            }else if (admin.firstTimeLogin == true){
+                await admin.updateOne({
+                    firstTimeLogin: false, 
+                });
 
-            // }
-            // else if (admin.firstTimeLogin == false){
-            //     await admin.updateOne({
-            //         firstTimeLogin: false, 
-            //     });
+            }
+            else if (admin.firstTimeLogin == false){
+                await admin.updateOne({
+                    firstTimeLogin: false, 
+                });
                 
-            // }
+            }
 
             let company = await Admin.findOne({ adminEmail: email  });
 
@@ -119,7 +126,6 @@ const signin = async (req, res) => {
             res.status(200).json({
                 status: 200,
                 data: company,
-                firstTimeLogin: false,
                 token: token,
             })
         }
