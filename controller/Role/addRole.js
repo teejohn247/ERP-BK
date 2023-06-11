@@ -43,8 +43,8 @@ const addRole = async (req, res) => {
             roleName,
             companyId: req.payload.id,
             companyName: company.companyName,
-            leaveType,
-            hmoPackages
+            // leaveType,
+            // hmoPackages
         })
 
 
