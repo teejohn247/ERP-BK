@@ -26,7 +26,75 @@ const EmployeeSchema = new mongoose.Schema({
         },
 
      }],
+     roles:{
 
+        humanResources: [
+            {
+                role_id: {
+                    type: String,
+                },
+                role_name: {
+                    type: String
+                },
+                date_assigned: {
+                    type: Date
+                }
+            }
+        ],
+        accounting: [
+            {
+                role_id: {
+                    type: String,
+                },
+                role_name: {
+                    type: String
+                },
+                date_assigned: {
+                    type: Date
+                }
+            }
+        ],
+        projects: [
+            {
+                role_id: {
+                    type: String,
+                },
+                role_name: {
+                    type: String
+                },
+                date_assigned: {
+                    type: Date
+                }
+            }
+        ],
+        crm: [
+            {
+                role_id: {
+                    type: String,
+                },
+                role_name: {
+                    type: String
+                },
+                date_assigned: {
+                    type: Date
+                }
+            }
+        ],
+        supplyChain: [
+            {
+                role_id: {
+                    type: String,
+                },
+                role_name: {
+                    type: String
+                },
+                date_assigned: {
+                    type: Date
+                }
+            }
+        ],
+     
+    },
     officialInformation:[{
         officialEmail: { type: String, required: true },
         departmentId: { type: String, required: true},

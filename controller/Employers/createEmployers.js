@@ -5,6 +5,8 @@ import Roles from '../../model/Role';
 import Company from '../../model/Company';
 import Department from '../../model/Department';
 import Designation from '../../model/Designation';
+import AuditTrail from '../../model/AuditTrail';
+
 
 
 
@@ -60,9 +62,11 @@ const inviteEmployee = async (req, res) => {
         console.log(checkName)
 
 
-       
+       console.log(req.payload)
 
         let company = await Company.find({ _id: req.payload.id });
+
+        console.log({company})
 
         // let pp= await Employee.findOne({ companyId: req.payload.id })
         // console.log({pp})
@@ -93,7 +97,7 @@ const inviteEmployee = async (req, res) => {
         // }
 
 
-        let checkCompany = await Employee.find({ companyId: req.payload.id  },
+        let checkCompany = await Employee.find({ companyId: req.payload.id },
             { officialInformation: { $elemMatch: { officialEmail:  officialEmail} } })
 
             var comp= false
@@ -172,6 +176,8 @@ const inviteEmployee = async (req, res) => {
     //         // text: 'This is a test email',
     //         html: `${resp}`,
     //     }
+    console.log('ff', company[0].companyName)
+
        let employee = new Employee({
             companyName: company[0].companyName,
             companyId: req.payload.id,
@@ -203,13 +209,41 @@ const inviteEmployee = async (req, res) => {
 
         await employee.save().then((adm) => {
 
+            AuditTrail.findOneAndUpdate({ companyId: company[0]._id}, 
+                { $push: { humanResources: { 
+
+                    userName: `${firstName} ${lastName}`,
+                    userEmail: `${officialEmail}`,
+                    action: `Super admin invited ${firstName} ${lastName} as an employee`,
+                    dateTime: new Date()
+                 }}
+               },
+                    function (
+                        err,
+                        result
+                    ) {
+                        if (err) {
+                            res.status(401).json({
+                                status: 401,
+                                success: false,
+                                error: err
+        
+                            })
+        
+                        } else {
+        
+        
+                            console.log(adm)
+                                res.status(200).json({
+                                    status: 200,
+                                    success: true,
+                                    data: "Employee has been invited successfully"
+                                })
+                        }
+                    })
+
             // sgMail.send(msg)
-            console.log(adm)
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: "Employee has been invited successfully"
-            })
+          
         }).catch((err) => {
                 console.error(err)
                 res.status(400).json({

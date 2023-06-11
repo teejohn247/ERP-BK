@@ -9,7 +9,7 @@ import bodyParser from 'body-parser';
 import multer from 'multer';
 import DeviceDetector from 'node-device-detector';
 import middlewareDetect from './middleware/middlewareDetect'
-
+import { cloudinaryConfig } from './config/cloudinary';
 const upload = multer()
 
 const app = express();
@@ -53,6 +53,7 @@ const hasBotResult = (result) => {
 // attach middleware
 app.use(middlewareDetect);
 
+// app.use('*', cloudinaryConfig);
 
 
 // app.use(logger('dev'));

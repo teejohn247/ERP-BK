@@ -1,37 +1,29 @@
-const fs = require('fs');
-const AWS = require('aws-sdk');
+import cloudinary from 'cloudinary';
 
+async function handleUpload(file) {
+  const res = await cloudinary.uploader.upload(file, {
+    resource_type: "auto",
+  });
+  return res
+}
+const imageUploader = async (req, res, next) => {
+  try {
 
+    console.log(req.file)
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+    const cldRes = await handleUpload(dataURI);
 
-import dotenv from 'dotenv';
-import multer from 'multer';
-import multerS3 from 'multer-s3'
+    console.log({cldRes})
+    req.body.image = cldRes.secure_url;
+    next()
+    // res.json(cldRes);
+  } catch (error) {
+    console.log(error);
+    res.send({
+      message: error.message,
+    });
+  }
+}
 
-
-
-dotenv.config();
-
-
-const s3 = new AWS.S3({
-    accessKeyId: process.env.AWSACCESSKEY,
-    secretAccessKey: process.env.AWSSECRETKEY
-});
-
-
-
-
-const uploadFile = multer({
-    storage: multerS3({
-      s3: s3,
-      bucket: process.env.AWSBUCKETNAME, 
-      metadata: function (req, file, cb) {
-      
-        cb(null, { fieldName: file.fieldname });
-      }, 
-      key: function (req, file, cb) {
-        cb(null, Date.now().toString())
-      }
-    })
-  })
-
-export default uploadFile;
+export default imageUploader

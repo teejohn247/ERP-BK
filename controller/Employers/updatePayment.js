@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import Employee from '../../model/Employees';
 import Roles from '../../model/Roles';
 
+import AuditTrail from '../../model/AuditTrail';
+import Company from '../../model/Company';
 
 import utils from '../../config/utils';
 
@@ -23,10 +25,12 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 const updatePayment = async (req, res) => {
 
     try {
-   
         const { bankAddress, bankName, accountNumber, sortCode, TaxIndentificationNumber} = req.body;
 
         const check = await Employee.findOne({ _id: req.params.id })
+
+        console.log(check)
+        let company = await Company.find({ _id: req.payload.id });
 
         if (!check) {
             res.status(400).json({
@@ -65,14 +69,44 @@ const updatePayment = async (req, res) => {
 
                 } else {
 
-
-                    res.status(200).json({
-                        status: 200,
-                        success: true,
-                        data: "Update Successful"
-                    })
+                 
 
                 }
+
+                const checkUpdated = Employee.findOne({ _id: req.params.id })
+                    
+                AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
+                    { $push: { humanResources: { 
+    
+                        userName: `${checkUpdated.personalInformation.firstName} ${checkUpdated.personalInformation.lastName}`,
+                        userEmail: checkUpdated.officiallInformation.officialEmail,
+                        action: `Super admin updated ${checkUpdated.personalInformation.firstName} ${checkUpdated.personalInformation.lastName} bank details`,
+                        dateTime: new Date()
+                     }}
+                   },
+                        function (
+                            err,
+                            result
+                        ) {
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    success: false,
+                                    error: err
+            
+                                })
+            
+                            } else {
+            
+            
+                                res.status(200).json({
+                                    status: 200,
+                                    success: true,
+                                    data: "Update Successful"
+                                })
+            
+                            }
+                        })
             })
 
 

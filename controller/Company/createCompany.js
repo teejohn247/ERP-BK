@@ -1,6 +1,8 @@
 
 import dotenv from 'dotenv';
 import Company from '../../model/Company';
+import AuditTrail from '../../model/AuditTrail';
+
 import bcrypt from 'bcrypt';
 
 
@@ -21,26 +23,23 @@ const createCompany = async (req, res) => {
 
         console.log(req.payload)
        
-        const {companyName} = req.body;
+        const {companyName, companyAddress, generalSettings} = req.body;
         let company = await Company.findOne({ adminEmail: req.payload.isAdmin });
+        console.log({company})
 
-        if (company.companyName) {
+        // if (company.companyName ) {
 
-            res.status(400).json({
-                status: 400,
-                error: 'A company has already been registered on this account'
-            })
-            return;
-        }
-
-        // const salt = await bcrypt.genSalt(10);
-        // const hashed = await bcrypt.hash(password, salt);
-
-        // console.log(salt, hashed)
-
+        //     res.status(400).json({
+        //         status: 400,
+        //         error: 'A company has already been registered on this account'
+        //     })
+        //     return;
+        // }
         Company.findOneAndUpdate({ adminEmail: req.payload.isAdmin}, { 
             $set: { 
                 companyName: companyName && companyName,
+                companyAddress: companyAddress && companyAddress,
+                generalSettings: generalSettings && generalSettings,
             }
        },
             function (
@@ -55,6 +54,13 @@ const createCompany = async (req, res) => {
                     })
 
                 } else {
+
+
+                    new AuditTrail({
+                        companyName: companyName,
+                        companyId: company._id
+                    }).save()
+
                     res.status(200).json({
                         status: 200,
                         success: true,
