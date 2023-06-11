@@ -32,6 +32,8 @@ import imageUploader from '../middleware/uploadFile'
 import addImage from '../controller/addImage';
 import { cloudinaryConfig }  from '../config/cloudinary';
 import listAudits from '../controller/AuditTrail.js/listAudits';
+import addDesignationLeave from '../controller/createDesignation/addDesignationLeave';
+import addDesignationHmo from '../controller/createDesignation/addDesignationHmo';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 
@@ -66,7 +68,11 @@ router.post("/addImage/:id", upload.single("my_file"), imageUploader, addImage);
 router.post('/addEmployee', auth, inviteEmployee);
 
 router.patch('/addLeaveType/:roleId', auth, addLeave);
-router.patch('/addHmo/:id', addHmo);
+// router.patch('/addHmo/:id', auth, addHmo);
+
+router.patch('/addLeave/:id', auth, addDesignationLeave);
+router.patch('/addHmo/:id', auth, addDesignationHmo);
+
 router.post('/addCompany', addCompany);
 router.post('/signIn', signin);
 router.post('/addRole', auth, addRole);
