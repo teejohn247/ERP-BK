@@ -20,8 +20,7 @@ const fetchCompany = async (req, res) => {
     try {
        
         let company = await Company.findOne({ _id: req.payload.id }, {_id: 1, companyName:1, companyAddress: 1, generalSettings: 1})
-console.log({company})
-
+        console.log({company})
         if (!company.companyName) {
 
             res.status(400).json({
@@ -30,9 +29,7 @@ console.log({company})
             })
             return;
         }
-
-     
-
+        
         res.status(200).json({
             status: 200,
             data: company

@@ -22,7 +22,7 @@ const createDesignation = async (req, res) => {
 
     try {
        
-        const {designationName} = req.body;
+        const {designationName, leaveTypes} = req.body;
 
         let designation = await Designation.findOne({ designationName });
 
@@ -53,6 +53,7 @@ const createDesignation = async (req, res) => {
             designationName,
             companyId: req.payload.id,
             companyName: company.companyName,
+            leaveTypes
         })
 
         await designations.save().then((adm) => {

@@ -27,7 +27,6 @@ const EmployeeSchema = new mongoose.Schema({
 
      }],
      roles:{
-
         humanResources: [
             {
                 role_id: {

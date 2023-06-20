@@ -1,172 +1,92 @@
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 // import PermissionsSchema from './Permissions'
 
-// const RolesSchema = new mongoose.Schema({
+const RolesSchema = new mongoose.Schema({
 
-//             role_name: {type: String, required: true},
-//             permissions: {
-//             school: 
-//             {
-//                 add_school: {
-//                      type: Boolean,
-//                      default: false
-//                  },
-//                  edit_school: {
-//                      type: Boolean,
-//                      default: false
-//                  },
-//                  deactivate_school: {
-//                      type: Boolean,
-//                      default: false
-//                  },
-//                  view_all_schools: {
-//                      type: Boolean,
-//                      default: false
-//                  }
-//              },
-//              class_creation: {
-//                  assign_class_creation: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   deactivate_class_assigning: {
-//                       type: Boolean,
-//                       default: false
-//                   }
-//               },
-//               notification: {
-//                  create_notification_type: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   assign_notification: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   view_notification: {
-//                      type: Boolean,
-//                      default: false
-//                  },
-//                   edit_notification: {
-//                      type: Boolean,
-//                      default: false
-//                  },
-//                  deactivate_notification: {
-//                      type: Boolean,
-//                      default: false
-//                  }
-//               },
-//               calender: {
-//                  view_calender: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   assign_calender_schools: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   deactivate_calender: {
-//                      type: Boolean,
-//                      default: false
-//                  }
-//               },
-//               user_management: {
-//                  create_user: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   deactivate_user: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   view_users: {
-//                      type: Boolean,
-//                      default: false
-//                  }
-//               },
-//               expansion: {
-//                  expand_school: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   view_schools_and_school_branches: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   assign_expansion_funtionality: {
-//                      type: Boolean,
-//                      default: false
-//                  }
-//               },
-//               forms: {
-//                  edit_forms: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   assign_forms: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   deactivate_form_settings: {
-//                      type: Boolean,
-//                      default: false
-//                  }
-//               },
-//              data_onboarding: {
-//                  view_data_onboarding_forms: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   create_data_onboarding_forms: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   deactivate_data_onboarding_forms: {
-//                      type: Boolean,
-//                      default: false
-//                  },
-//                  assign_forms: {
-//                      type: Boolean,
-//                      default: false
-//                  }
-//               },
-//               academics: {
-//                 create_user: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   deactivate_user: {
-//                       type: Boolean,
-//                       default: false
-//                   },
-//                   view_users: {
-//                      type: Boolean,
-//                      default: false
-//                  }
-//               }
-//             },
+            role_name: {type: String, required: true},
+            permissions: {
+            employeeManagement: 
+            [{
+                views:{
+                view_employee: {
+                     type: Boolean,
+                     default: false
+                 },
+                 view_payment_information: {
+                     type: Boolean,
+                     default: false
+                 },
+                 view_leave_details: {
+                     type: Boolean,
+                     default: false
+                 },
+                 view_employee_ladder: {
+                     type: Boolean,
+                     default: false
+                 }
+                },
 
-//             assigned_to:  [{
-//                 admin_id: {
-//                     type: String,
-//                 },
-//                 admin_name: {
-//                     type: String
-//                 },
-//                 date_assigned: {
-//                     type: Date
-//                 }
-//             }],
-//             enabled: {
-//                 type: Boolean,
-//                 default: true
-//             },
+                actions:{
+                    add_employee: {
+                         type: Boolean,
+                         default: false
+                     },
+                     edit_employee: {
+                         type: Boolean,
+                         default: false
+                     },
+                     delete_employee: {
+                         type: Boolean,
+                         default: false
+                     },
+                    },
+             }],
+             recruitment: 
+             [{
+                 views:{
+                 view_recruitment_history: {
+                      type: Boolean,
+                      default: false
+                  },
+                  view_recruitment_overview: {
+                      type: Boolean,
+                      default: false
+                  },
+                  view_job_listings: {
+                      type: Boolean,
+                      default: false
+                  },
+                  view_employee_ladder: {
+                      type: Boolean,
+                      default: false
+                  },
+                  view_job_applicants: {
+                    type: Boolean,
+                    default: false
+                },
+                 },
  
-//         },
-//     { timestamps: true })
+                 actions:{
+                     publish_job_listing: {
+                          type: Boolean,
+                          default: false
+                      },
+                      edit_job_listing: {
+                          type: Boolean,
+                          default: false
+                      },
+                      delete_job_listing: {
+                          type: Boolean,
+                          default: false
+                      },
+                     },
+              }],
+             
+            }
+        }, { timestamps: true });
 
 
-// module.exports = mongoose.model("Roles", RolesSchema);
+module.exports = mongoose.model("Roles", RolesSchema);
 
 

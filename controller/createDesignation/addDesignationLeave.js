@@ -43,7 +43,7 @@ const addDesignationLeave = async (req, res) => {
             console.log({check})
     
 
-        if(check[0].leaveTypess.length > 0){
+        if(check[0].leaveTypes.length > 0){
 
     
         Employee.findOneAndUpdate({ _id: req.params.id}, { 

@@ -24,6 +24,7 @@ const addHmo = async (req, res) => {
 
     try {
         
+        
         const { leaveName, noOfDays, paid } = req.body;
 
         const check = await Employee.findOne({ leaveName })
