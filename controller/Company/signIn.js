@@ -116,12 +116,13 @@ const signin = async (req, res) => {
                 await admin.updateOne({
                     firstTimeLogin: false, 
                 });
-                
             }
 
-            let company = await Admin.findOne({ adminEmail: email  });
+            let company = await Admin.findOne({ adminEmail: email });
 
-            const token = utils.encodeToken(admin._id, admin.adminEmail);
+            console.log({admin})
+
+            const token = utils.encodeToken(admin._id, admin.isSuperAdmin, admin.adminEmail);
 
             res.status(200).json({
                 status: 200,

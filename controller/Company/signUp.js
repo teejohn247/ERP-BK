@@ -40,6 +40,7 @@ const signUp = async (req, res) => {
         company= new Company({
             adminEmail: email,
             password: hashed,
+            isSuperAdmin: true
         });
 
         await company.save();
@@ -49,7 +50,6 @@ const signUp = async (req, res) => {
             data: company
         })
 
-        // const token = utils.encodeToken(superAdmin.id, true, superAdmin.email);
 
     } catch (error) {
         res.status(500).json({

@@ -24,7 +24,7 @@ const createCompany = async (req, res) => {
         console.log(req.payload)
        
         const {companyName, companyAddress, generalSettings} = req.body;
-        let company = await Company.findOne({ adminEmail: req.payload.isAdmin });
+        let company = await Company.findOne({ adminEmail: req.payload.email });
         console.log({company})
 
         // if (company.companyName ) {
@@ -35,7 +35,7 @@ const createCompany = async (req, res) => {
         //     })
         //     return;
         // }
-        Company.findOneAndUpdate({ adminEmail: req.payload.isAdmin}, { 
+        Company.findOneAndUpdate({ adminEmail: req.payload.email}, { 
             $set: { 
                 companyName: companyName && companyName,
                 companyAddress: companyAddress && companyAddress,
