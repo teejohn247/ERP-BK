@@ -19,7 +19,6 @@ import addRole from '../controller/Role/addRole';
 import fetchRole from '../controller/Role/fetchRole';
 import updateRole from '../controller/Role/updateRole';
 import middlewareDetect from '../middleware/middlewareDetect';
-
 import auth from '../middleware/auth'
 import fetchCompany from '../controller/Company/fetchCompany';
 import createCompany from '../controller/Company/createCompany';
@@ -34,12 +33,14 @@ import { cloudinaryConfig }  from '../config/cloudinary';
 import listAudits from '../controller/AuditTrail.js/listAudits';
 import addDesignationLeave from '../controller/createDesignation/addDesignationLeave';
 import addDesignationHmo from '../controller/createDesignation/addDesignationHmo';
+import sheetModel from '../model/Test'
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
-
+const multer = require("multer");
+const mult = multer({ dest: "uploads/" });
 const cloudinary = require("cloudinary").v2;
 const Multer = require("multer");
-
+const csv = require('csvtojson');
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME, 
     api_key: process.env.CLOUD_API_KEY, 
@@ -63,6 +64,32 @@ cloudinary.config({
 
 
 const router = express.Router();
+
+router.post("/upload-csv", mult.single("csv"), (req, res) => {
+  console.log(req.file)
+  //convert csvfile to jsonArray
+  
+  const fileName = req.file.filename
+
+  console.log(fileName)
+
+    csv()
+    .fromFile(req.file.path)
+    .then((jsonObj) => {
+      console.log(jsonObj)
+   
+      sheetModel.insertMany(jsonObj, function(err){
+        if (err){
+          console.log(err);
+        } else {
+          console.log("Succesfully saved");
+        }
+      });
+
+});
+});
+
+
 
 router.post("/addImage/:id", upload.single("my_file"), imageUploader, addImage);
 router.post('/addEmployee', auth, inviteEmployee);
@@ -94,7 +121,6 @@ router.get('/fetchEmployee/:id', auth, fetchSpecificEmployees);
 router.patch('/updateEmployee/:id', auth, updateEmployee);
 router.delete('/deleteEmployee/:id', auth, deleteEmployee);
 router.get('/fetchDesignations', auth, fetchDesignation);
-
 router.get('/listAuditTrails', auth, listAudits);
 
 

@@ -10,8 +10,8 @@ import multer from 'multer';
 import DeviceDetector from 'node-device-detector';
 import middlewareDetect from './middleware/middlewareDetect'
 import { cloudinaryConfig } from './config/cloudinary';
-const upload = multer()
 
+const upload = multer()
 const app = express();
 dotenv.config();
 
@@ -92,6 +92,6 @@ app.get('/test', (req, res) => {
 
 app.use('/api/v1', userRouter);
 
-server.listen(process.env.PORT || 6000, () => console.log(`Server has started. ${port}`));
+server.listen(process.env.PORT || 1000, () => console.log(`Server has started. ${port}`));
 
 export default app;
