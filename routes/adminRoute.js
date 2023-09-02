@@ -81,8 +81,22 @@ router.post("/upload-csv", mult.single("csv"), (req, res) => {
       sheetModel.insertMany(jsonObj, function(err){
         if (err){
           console.log(err);
+
+          res.status(500).json({
+            status: 500,
+            success: true,
+            data: err
+        })
+
         } else {
           console.log("Succesfully saved");
+
+          res.status(200).json({
+            status: 200,
+            success: true,
+            data: "Update Successful"
+        })
+
         }
       });
 
