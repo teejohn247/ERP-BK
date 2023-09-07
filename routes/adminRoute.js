@@ -34,6 +34,10 @@ import listAudits from '../controller/AuditTrail.js/listAudits';
 import addDesignationLeave from '../controller/createDesignation/addDesignationLeave';
 import addDesignationHmo from '../controller/createDesignation/addDesignationHmo';
 import sheetModel from '../model/Test'
+import Employees from '../model/Employees';
+import forgotPassword from '../controller/Company/forgotPassword';
+import changePassword from '../controller/Company/changePassword';
+import verifyToken from '../controller/Company/verifyToken';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -41,6 +45,7 @@ const mult = multer({ dest: "uploads/" });
 const cloudinary = require("cloudinary").v2;
 const Multer = require("multer");
 const csv = require('csvtojson');
+
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME, 
     api_key: process.env.CLOUD_API_KEY, 
@@ -60,9 +65,6 @@ cloudinary.config({
     return res;
   }
 
-  
-
-
 const router = express.Router();
 
 router.post("/upload-csv", mult.single("csv"), (req, res) => {
@@ -78,7 +80,7 @@ router.post("/upload-csv", mult.single("csv"), (req, res) => {
     .then((jsonObj) => {
       console.log(jsonObj)
    
-      sheetModel.insertMany(jsonObj, function(err){
+      Employees.insertMany(jsonObj, function(err){
         if (err){
           console.log(err);
 
@@ -90,30 +92,30 @@ router.post("/upload-csv", mult.single("csv"), (req, res) => {
 
         } else {
           console.log("Succesfully saved");
-
           res.status(200).json({
             status: 200,
             success: true,
             data: "Update Successful"
         })
-
         }
       });
 
 });
 });
 
+router.get('/forgotPassword', forgotPassword);
+router.patch('/changePassword', auth, changePassword);
+router.patch('/verifyPassword', verifyToken);
+
+
 
 
 router.post("/addImage/:id", upload.single("my_file"), imageUploader, addImage);
 router.post('/addEmployee', auth, inviteEmployee);
-
 router.patch('/addLeaveType/:roleId', auth, addLeave);
 // router.patch('/addHmo/:id', auth, addHmo);
-
 router.patch('/addLeave/:id', auth, addDesignationLeave);
 router.patch('/addHmo/:id', auth, addDesignationHmo);
-
 router.post('/addCompany', addCompany);
 router.post('/signIn', signin);
 router.post('/addRole', auth, addRole);

@@ -3,7 +3,30 @@ import mongoose from 'mongoose';
 const EmployeeSchema = new mongoose.Schema({
     companyName: { type: String, required: true },
     companyId:{ type: String, required: true },
-    personalInformation:[{
+    status: { type: String, default: 'Pending'},
+    // personalInformation:[{
+    //     firstName: { type: String, required: true },
+    //     lastName: { type: String, required: true },
+    //     dateOfBirth: { type: String, required: true },
+    //     personalEmail: { type: String },
+    //     phoneNumber: { type: String, required: true },
+    //     profilePic: { type: String },
+    //     address: { type: String },
+    //     gender: { type: String, required: true, trim: true },
+    //     nextOfKinFullName: {
+    //         type: String,
+    //     },
+    //     nextOfKinAddress: {
+    //         type: String,
+    //     },
+    //     nextOfKinPhoneNumber: {
+    //         type: String,
+    //     },
+    //     nextOfKinGender: {
+    //         type: String,
+    //     },
+
+    //  }],
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
         dateOfBirth: { type: String, required: true },
@@ -25,7 +48,22 @@ const EmployeeSchema = new mongoose.Schema({
             type: String,
         },
 
-     }],
+        officialEmail: { type: String, required: true },
+        departmentId: { type: String, required: true},
+        departmentName: { type: String, required: true},
+        employmentType: { type: String, required: true },
+        employeeCode: { type: String, required: true },
+        companyAddress: { type: String },
+        companyBranch: { type: String },
+        position: { type: String },
+        role: { type: String },
+        designationId: { type: String },
+        designationName: { type: String },
+        roleName: { type: String },
+        dateOfJoining: { type: String },
+        reportingToId: { type: String },
+        reportingToName: { type: String },
+
      roles:{
         humanResources: [
             {
@@ -95,21 +133,21 @@ const EmployeeSchema = new mongoose.Schema({
      
     },
     officialInformation:[{
-        officialEmail: { type: String, required: true },
-        departmentId: { type: String, required: true},
-        departmentName: { type: String, required: true},
-        employmentType: { type: String, required: true },
-        employeeCode: { type: String, required: true },
-        companyAddress: { type: String },
-        companyBranch: { type: String },
-        position: { type: String },
-        role: { type: String },
-        designationId: { type: String },
-        designationName: { type: String },
-        roleName: { type: String },
-        dateOfJoining: { type: String },
-        reportingToId: { type: String },
-        reportingToName: { type: String },
+        // officialEmail: { type: String, required: true },
+        // departmentId: { type: String, required: true},
+        // departmentName: { type: String, required: true},
+        // employmentType: { type: String, required: true },
+        // employeeCode: { type: String, required: true },
+        // companyAddress: { type: String },
+        // companyBranch: { type: String },
+        // position: { type: String },
+        // role: { type: String },
+        // designationId: { type: String },
+        // designationName: { type: String },
+        // roleName: { type: String },
+        // dateOfJoining: { type: String },
+        // reportingToId: { type: String },
+        // reportingToName: { type: String },
 
         leave: [{
             leaveName: {

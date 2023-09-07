@@ -4,6 +4,8 @@ const DepartmentSchema = new mongoose.Schema({
     departmentName: { type: String, required: true },
     companyId: { type: String, required: true },
     companyName: { type: String, required: true },
+    managerId:  { type: String, required: true },
+    managerName: { type: String, required: true }
 })
 
 module.exports = mongoose.model("Department", DepartmentSchema);

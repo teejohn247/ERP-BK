@@ -20,12 +20,7 @@ const sgMail = require('@sendgrid/mail')
 
 dotenv.config();
 
-
-
-
 sgMail.setApiKey(process.env.SENDGRID_KEY);
-
-
 
 const inviteEmployee = async (req, res) => {
 
@@ -35,22 +30,9 @@ const inviteEmployee = async (req, res) => {
         employmentType, reportingTo} = req.body;
 
 
-        // const { firstName, lastName, dateOfBirth, personalEmail, phoneNumber, nextOfKinFullName, nextOfKinAddress, nextOfKinPhoneNumber, nextOfKinGender, companyEmail, gender,
-        //     employmentType, roleId, department, companyAddress, manager, companyBranch} = req.body;
-
-        // let employee = await Employee.findOne({ "officialInformation.companyEmail": companyEmail });
-
         let total = await Employee.find();
 
 
-        // if (employee) {
-
-        //     res.status(400).json({
-        //         status: 400,
-        //         error: 'An employee with this email address already exist'
-        //     })
-        //     return;
-        // }
         let checkRole = await Roles.findOne({_id: companyRoleId})
         let checkDesignation = await Designation.findOne({_id: designationId})
         let checkDept= await Department.findOne({_id: departmentId})
@@ -181,14 +163,11 @@ const inviteEmployee = async (req, res) => {
        let employee = new Employee({
             companyName: company[0].companyName,
             companyId: req.payload.id,
-            personalInformation:[{
                 firstName,
                 lastName,
                 dateOfBirth,
                 gender,
                 phoneNumber,
-            }],
-            officialInformation:[{
                 employeeCode: `EMP-${year}-${letter}${last}${total.length + 1}`,
                 role: companyRoleId,
                 roleName: checkRole.roleName,
@@ -203,8 +182,37 @@ const inviteEmployee = async (req, res) => {
                 officialEmail,
                 leave: checkRole.leaveType,
                 hmo: checkRole.hmoPackages
-            }],
+          
         })
+
+        const token = utils.encodeToken("", false, email);
+
+        let data = `<div>
+        <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+        Hi Admin,
+        </p> 
+
+        <p style="font-size: 16px;font-weight: 300;">
+
+        You have been invited to join <a href="https://main.d3i12sou25ghi7.amplifyapp.com/verify-email/${token}">Nigenius SMS Platform</a> as ${role.role_name == "Admin" ? `an ${role.role_name}` : `a ${role.role_name}`} 
+
+        <br><br>
+        </p>
+        
+        <div>`
+
+       let resp = emailTemp(data, 'Nigenius SMS Admin Invitation')
+
+        const msg = {
+            to: email, // Change to your recipient
+            subject: 'Nigenius SMS Admin Invitation',
+            html: `${resp}`,
+            from: {
+                email:'smsnebula@nigenius.ng',
+                name: "Nigenius SMS"
+            }
+        }
+
 
 
         await employee.save().then((adm) => {
@@ -232,7 +240,8 @@ const inviteEmployee = async (req, res) => {
         
                         } else {
         
-        
+                            sgMail.send(msg)
+                            console.log('Email sent')
                             console.log(adm)
                                 res.status(200).json({
                                     status: 200,
