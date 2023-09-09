@@ -1,6 +1,13 @@
 import nodemailer, { Transporter } from 'nodemailer';
-
+var SibApiV3Sdk = require('sib-api-v3-sdk');
+var defaultClient = SibApiV3Sdk.ApiClient.instance;
 // Define an email configuration object
+var apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.SMTP_API;
+
+
+
+
 const emailConfig = {
 	host: process.env.SMTP_HOST,
 	port: process.env.SMTP_PORT,
@@ -9,6 +16,9 @@ const emailConfig = {
     user: process.env.SMTP_USERNAME,
     pass: process.env.SMTP_PASSWORD
   },
+  tls: {
+    rejectUnauthorized: false, // only for testing purposes, should be true in production
+  },
 };
 
 // Create a Nodemailer transporter
@@ -16,18 +26,53 @@ const transporter = nodemailer.createTransport(emailConfig);
 
 // Function to send an email
 export const sendEmail = async (
-  to,
+  req, res,
+  to, receivers,
   subject,
   html
 ) => {
   try {
     // Send an email
-    await transporter.sendMail({
+    console.log(process.env.SMTP_HOST,process.env.SMTP_PORT,process.env.SMTP_USERNAME,process.env.SMTP_PASSWORD)
+
+    var apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+    const senders = {
+      email: process.env.SMTP_USERNAME,
+      name: 'SILO'
+    }
+    
+    // const receivers = [
+    //   {
+    //     email: 'teejohn247@gmail.com'
+    //   }
+    
+    // ]
+    
+    
+    await apiInstance.sendTransacEmail({
+      sender: senders,
+      to: receivers,
       from: process.env.EMAIL_FROM, // Sender's email address
-      to, // Recipient's email address
       subject, // Email subject
-      html, // HTML version of the email (optional)
+      htmlContent: html, // HTML version of the email (optional)
     });
+    
+    // sendEmails
+    // res.send(sendEmails);
+
+      // res.status(200).json({
+      //                               status: 200,
+      //                               success: true,
+      //                               data: "Employee has been invited successfully"
+      //                           })
+    // console.log('send an email')
+    // await transporter.sendMail({
+    //   from: process.env.EMAIL_FROM, // Sender's email address
+    //   to, // Recipient's email address
+    //   subject, // Email subject
+    //   html, // HTML version of the email (optional)
+    // });
 
     console.log('Email sent successfully.');
   } catch (error) {

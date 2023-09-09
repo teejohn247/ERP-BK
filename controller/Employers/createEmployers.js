@@ -6,7 +6,7 @@ import Company from '../../model/Company';
 import Department from '../../model/Department';
 import Designation from '../../model/Designation';
 import AuditTrail from '../../model/AuditTrail';
-
+import { sendEmail } from '../../config/email';
 
 
 
@@ -20,7 +20,6 @@ const sgMail = require('@sendgrid/mail')
 
 dotenv.config();
 
-sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 const inviteEmployee = async (req, res) => {
 
@@ -36,7 +35,7 @@ const inviteEmployee = async (req, res) => {
         let checkRole = await Roles.findOne({_id: companyRoleId})
         let checkDesignation = await Designation.findOne({_id: designationId})
         let checkDept= await Department.findOne({_id: departmentId})
-        let checkName= await Employee.findOne({_id: reportingTo})
+        let checkName= await Employee.findOne({_id: reportingTo })
 
 
 
@@ -158,7 +157,55 @@ const inviteEmployee = async (req, res) => {
     //         // text: 'This is a test email',
     //         html: `${resp}`,
     //     }
-    console.log('ff', company[0].companyName)
+    console.log('ff',
+        company[0].companyName,
+        req.payload.id,
+        firstName,
+        lastName,
+        dateOfBirth,
+        gender,
+        phoneNumber,
+        `EMP-${year}-${letter}${last}${total.length + 1}`,
+        companyRoleId,
+        checkRole.roleName,
+        checkDesignation.designationName,
+        designationId,
+         departmentId,
+        checkDept.departmentName,
+        employmentType,
+        dateOfJoining,
+        reportingTo,
+        // `${checkName.firstName} ${checkName.lastName}` ,
+        officialEmail,
+        // checkRole.leaveType,
+        // checkRole.hmoPackages
+        )
+
+
+    //     const token = utils.encodeToken(69696, false, officialEmail);
+    
+    //     console.log('{employee}')
+
+    //     let data = `<div>
+    //     <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+    //     Hi ${firstName},
+    //     </p> 
+
+    //     <p style="font-size: 16px;font-weight: 300;">
+
+    //     You have been invited to join <a href="https://main.d3i12sou25ghi7.amplifyapp.com/verify-email/${token}">ERP Software</a> as an employee 
+
+    //     <br><br>
+    //     </p>
+        
+    //     <div>`
+
+    //    let resp = emailTemp(data, 'Employee Invitation')
+
+    //     await sendEmail(req, res, officialEmail, 'Employee Invitation', resp);
+
+    //     return;
+
 
        let employee = new Employee({
             companyName: company[0].companyName,
@@ -178,45 +225,51 @@ const inviteEmployee = async (req, res) => {
                 employmentType,
                 dateOfJoining,
                 reportingToId: reportingTo,
-                reportingToName: `${checkName.firstName} ${checkName.lastName}` ,
+                reportingToName: ` ${checkName && checkName.firstName} ${checkName && checkName.lastName}}` ,
                 officialEmail,
                 leave: checkRole.leaveType,
                 hmo: checkRole.hmoPackages
-          
         })
 
-        const token = utils.encodeToken("", false, email);
 
-        let data = `<div>
-        <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
-        Hi Admin,
-        </p> 
+        await employee.save().then(async(adm) => {
 
-        <p style="font-size: 16px;font-weight: 300;">
 
-        You have been invited to join <a href="https://main.d3i12sou25ghi7.amplifyapp.com/verify-email/${token}">Nigenius SMS Platform</a> as ${role.role_name == "Admin" ? `an ${role.role_name}` : `a ${role.role_name}`} 
+            const token = utils.encodeToken(adm._id, false, adm.officialEmail);
+    
+            console.log('{employee}')
+    
+            let data = `<div>
+            <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+            Hi ${firstName},
+            </p> 
+    
+            <p style="font-size: 16px;font-weight: 300;">
+    
+            You have been invited to join <a href="https://localhost:3000/verify-email/${token}">ERP Software</a> as an employee 
+    
+            <br><br>
+            </p>
+            
+            <div>`
+    
+           let resp = emailTemp(data, 'Employee Invitation')
 
-        <br><br>
-        </p>
-        
-        <div>`
 
-       let resp = emailTemp(data, 'Nigenius SMS Admin Invitation')
-
-        const msg = {
-            to: email, // Change to your recipient
-            subject: 'Nigenius SMS Admin Invitation',
-            html: `${resp}`,
-            from: {
-                email:'smsnebula@nigenius.ng',
-                name: "Nigenius SMS"
+           const receivers = [
+            {
+              email: officialEmail
             }
-        }
-
-
-
-        await employee.save().then((adm) => {
-
+          
+          ]
+    
+            await sendEmail(req, res, officialEmail, receivers, 'Employee Invitation', resp);
+    
+       
+    
+            console.log('{employee}2')
+    
+         
             AuditTrail.findOneAndUpdate({ companyId: company[0]._id}, 
                 { $push: { humanResources: { 
 
@@ -239,10 +292,9 @@ const inviteEmployee = async (req, res) => {
                             })
         
                         } else {
+
+                            console.log({result})
         
-                            sgMail.send(msg)
-                            console.log('Email sent')
-                            console.log(adm)
                                 res.status(200).json({
                                     status: 200,
                                     success: true,
@@ -250,17 +302,27 @@ const inviteEmployee = async (req, res) => {
                                 })
                         }
                     })
-
-            // sgMail.send(msg)
-          
+                // sgMail.send(msg)
+            // console.log(adm)
+            // return res.status(200).json({
+            //     status: 200,
+            //     success: true,
+            //     data: adm
+            // })
         }).catch((err) => {
                 console.error(err)
-                res.status(400).json({
+               return res.status(400).json({
                     status: 400,
                     success: false,
                     error: err
                 })
             })
+
+   
+        // await employee.save().then((adm) => {
+
+          
+                // });
     } catch (error) {
         res.status(500).json({
             status: 500,

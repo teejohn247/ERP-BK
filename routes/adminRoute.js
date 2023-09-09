@@ -38,6 +38,7 @@ import Employees from '../model/Employees';
 import forgotPassword from '../controller/Company/forgotPassword';
 import changePassword from '../controller/Company/changePassword';
 import verifyToken from '../controller/Company/verifyToken';
+import bulkEmployee from '../controller/Employers/bulkEmployees';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -67,7 +68,7 @@ cloudinary.config({
 
 const router = express.Router();
 
-router.post("/upload-csv", mult.single("csv"), (req, res) => {
+router.post("/upload-cv", mult.single("csv"), (req, res) => {
   console.log(req.file)
   //convert csvfile to jsonArray
   
@@ -110,7 +111,7 @@ router.patch('/verifyPassword', verifyToken);
 
 
 
-router.post("/addImage/:id", upload.single("my_file"), imageUploader, addImage);
+router.post("/addImage/:id", auth, upload.single("my_file"), imageUploader, addImage);
 router.post('/addEmployee', auth, inviteEmployee);
 router.patch('/addLeaveType/:roleId', auth, addLeave);
 // router.patch('/addHmo/:id', auth, addHmo);
@@ -139,6 +140,7 @@ router.delete('/deleteEmployee/:id', auth, deleteEmployee);
 router.get('/fetchDesignations', auth, fetchDesignation);
 router.get('/listAuditTrails', auth, listAudits);
 
+router.post("/uploadEmployees", auth, mult.single("csv"), bulkEmployee);
 
 
 export default router;

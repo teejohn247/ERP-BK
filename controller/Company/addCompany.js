@@ -23,6 +23,16 @@ const addCompany = async (req, res) => {
         let company = await Company.findOne({ adminEmail });
 
 
+        if (!company.companyName) {
+
+            res.status(400).json({
+                status: 400,
+                error: 'Company Name is required'
+            })
+            return;
+        }
+
+
         if (company) {
 
             res.status(400).json({

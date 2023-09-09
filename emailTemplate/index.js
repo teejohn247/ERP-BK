@@ -89,7 +89,7 @@ return `<!DOCTYPE html>
             <td height="305" style="background-color: #166A37; color: #ffffff; width: 100%">
                 <div style="padding-top: 24px;">
                     <a href="#">
-                    <img src="https://nigenius-sms-bucket.s3.amazonaws.com/1675888849694" title="Nigenius Logo" alt="Nigenius Logo" width="53"/>
+                    <img src="https://silo-inc.com/wp-content/uploads/2023/01/White-logo-no-background-Recovered.svg" title="SILO Logo" alt="SILO Logo" width="53"/>
                     </a>
                 </div>
                 <h1 class="header-text">${subject}</h1>
@@ -107,7 +107,7 @@ return `<!DOCTYPE html>
                                 Cheers,
                             </p>
                             <p style="font-family: 'DM Sans'; line-height: 24px;font-size: 16px;">
-                                Nigenius Team
+                                SILO Team
                             </p>
                         </div>
                     </div>
@@ -119,8 +119,7 @@ return `<!DOCTYPE html>
         <tr>
             <td style="background-color: #F2F5F9;  padding: 56px 0; font-size: 16px; vertical-align: middle">
                 <div style="margin: 0 auto;">
-                    <p>Phone: 080890898756</p>
-                    <p style="padding-top: 12px">Email: contactus@nigenius.com</p>
+                    <p style="padding-top: 12px">Email: contactus@silo.com</p>
                     <div style="padding-top: 12px">
                       
                     </div>

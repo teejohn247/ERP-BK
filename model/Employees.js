@@ -27,42 +27,45 @@ const EmployeeSchema = new mongoose.Schema({
     //     },
 
     //  }],
-        firstName: { type: String, required: true },
-        lastName: { type: String, required: true },
-        dateOfBirth: { type: String, required: true },
+        firstName: { type: String, required: true , trim: true },
+        lastName: { type: String, required: true, trim: true  },
+        dateOfBirth: { type: String, required: true, trim: true  },
         personalEmail: { type: String },
-        phoneNumber: { type: String, required: true },
+        phoneNumber: { type: String, required: true, trim: true  },
         profilePic: { type: String },
-        address: { type: String },
+        address: { type: String, trim: true  },
         gender: { type: String, required: true, trim: true },
         nextOfKinFullName: {
             type: String,
+            trim: true 
         },
         nextOfKinAddress: {
             type: String,
+            trim: true 
         },
         nextOfKinPhoneNumber: {
             type: String,
+            trim: true 
         },
         nextOfKinGender: {
             type: String,
+            trim: true 
         },
-
-        officialEmail: { type: String, required: true },
-        departmentId: { type: String, required: true},
-        departmentName: { type: String, required: true},
-        employmentType: { type: String, required: true },
-        employeeCode: { type: String, required: true },
-        companyAddress: { type: String },
-        companyBranch: { type: String },
-        position: { type: String },
-        role: { type: String },
-        designationId: { type: String },
-        designationName: { type: String },
-        roleName: { type: String },
-        dateOfJoining: { type: String },
-        reportingToId: { type: String },
-        reportingToName: { type: String },
+        officialEmail: { type: String, required: true, unique: true , trim: true },
+        departmentId: { type: String, required: true, trim: true },
+        departmentName: { type: String, required: true, trim: true },
+        employmentType: { type: String, required: true,trim: true  },
+        employeeCode: { type: String, required: true, trim: true  },
+        companyAddress: { type: String, trim: true  },
+        companyBranch: { type: String, trim: true  },
+        position: { type: String, trim: true  },
+        role: { type: String , trim: true },
+        designationId: { type: String, trim: true  },
+        designationName: { type: String, trim: true  },
+        roleName: { type: String, trim: true  },
+        dateOfJoining: { type: String, trim: true  },
+        reportingToId: { type: String , trim: true },
+        reportingToName: { type: String,trim: true  },
 
      roles:{
         humanResources: [
