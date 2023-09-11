@@ -49,6 +49,7 @@ export const sendEmail = async (
     
     // ]
     
+    console.log('Email here');
     
     await apiInstance.sendTransacEmail({
       sender: senders,

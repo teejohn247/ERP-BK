@@ -17,6 +17,13 @@ const option = { expiresIn: '10d' };
 const secret = process.env.SECRET_KEY;
 return jwt.sign(payload, secret, option);
     },
+
+encodeSignUpToken: (email, password) => {
+        const payload = {email, password};
+        const option = { expiresIn: '10d' };
+        const secret = process.env.SECRET_KEY;
+        return jwt.sign(payload, secret, option);
+}
 };
 
 

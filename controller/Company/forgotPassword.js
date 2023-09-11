@@ -52,7 +52,13 @@ const forgotPassword = async (req, res) => {
         'Password Reset'
       );
 
-			sendEmail(email, 'Password Reset', message);
+			// sendEmail(email, 'Password Reset', message);
+
+			const receivers= [{
+				email: email
+			}]
+			await sendEmail(req, res, email, receivers, 'Reset Password', message);
+
 
 			res.status(HTTP_STATUS.CREATED).json({
 				status: HTTP_STATUS.CREATED,

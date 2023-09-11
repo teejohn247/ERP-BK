@@ -25,7 +25,7 @@ const inviteEmployee = async (req, res) => {
 
     try {
 
-        const { firstName, lastName, officialEmail, phoneNumber, dateOfBirth,  gender, departmentId, companyRoleId, designationId, dateOfJoining,
+        const { firstName, lastName, companyEmail, phoneNumber, dateOfBirth,  gender, departmentId, companyRoleId, designationId, dateOfJoining,
         employmentType, reportingTo} = req.body;
 
 
@@ -39,7 +39,7 @@ const inviteEmployee = async (req, res) => {
 
 
 
-        console.log(officialEmail)
+        console.log(companyEmail)
         console.log(checkName)
 
 
@@ -78,25 +78,31 @@ const inviteEmployee = async (req, res) => {
         // }
 
 
-        let checkCompany = await Employee.find({ companyId: req.payload.id },
-            { officialInformation: { $elemMatch: { officialEmail:  officialEmail} } })
+        // let checkCompany = await Employee.find({ companyId: req.payload.id },
+        //     { officialInformation: { $elemMatch: { companyEmail:  companyEmail} } })
+
+            let checkCompany = await Employee.find(
+                {   companyId: req.payload.id,
+                    companyEmail: companyEmail},
+                
+              );
 
             var comp= false
 
         if (checkCompany.length > 0){
             checkCompany.some((chk, i) => {
                 console.log({chk})
-                if(chk.officialInformation.length > 0){
+                // if(chk.officialInformation.length > 0){
                     comp = true
                  
-                }
+                // }
             })
         }
 
         if(comp == true){
             return res.status(400).json({
                 status: 400,
-                error: `An employee already exist with email: ${officialEmail}`
+                error: `An employee already exist with email: ${companyEmail}`
             })
         }
 
@@ -170,13 +176,12 @@ const inviteEmployee = async (req, res) => {
         checkRole.roleName,
         checkDesignation.designationName,
         designationId,
-         departmentId,
-        checkDept.departmentName,
+        departmentId,
         employmentType,
         dateOfJoining,
         reportingTo,
         // `${checkName.firstName} ${checkName.lastName}` ,
-        officialEmail,
+        companyEmail,
         // checkRole.leaveType,
         // checkRole.hmoPackages
         )
@@ -221,12 +226,12 @@ const inviteEmployee = async (req, res) => {
                 designationName: checkDesignation.designationName,
                 designationId,
                 departmentId: departmentId,
-                departmentName: checkDept.departmentName,
+                department: checkDept.departmentName,
                 employmentType,
                 dateOfJoining,
                 reportingToId: reportingTo,
                 reportingToName: ` ${checkName && checkName.firstName} ${checkName && checkName.lastName}}` ,
-                officialEmail,
+                companyEmail,
                 leave: checkRole.leaveType,
                 hmo: checkRole.hmoPackages
         })
@@ -235,7 +240,7 @@ const inviteEmployee = async (req, res) => {
         await employee.save().then(async(adm) => {
 
 
-            const token = utils.encodeToken(adm._id, false, adm.officialEmail);
+            const token = utils.encodeToken(adm._id, false, adm.companyEmail);
     
             console.log('{employee}')
     
@@ -258,12 +263,12 @@ const inviteEmployee = async (req, res) => {
 
            const receivers = [
             {
-              email: officialEmail
+              email: companyEmail
             }
           
           ]
     
-            await sendEmail(req, res, officialEmail, receivers, 'Employee Invitation', resp);
+            await sendEmail(req, res, companyEmail, receivers, 'Employee Invitation', resp);
     
        
     
@@ -274,7 +279,7 @@ const inviteEmployee = async (req, res) => {
                 { $push: { humanResources: { 
 
                     userName: `${firstName} ${lastName}`,
-                    userEmail: `${officialEmail}`,
+                    userEmail: `${companyEmail}`,
                     action: `Super admin invited ${firstName} ${lastName} as an employee`,
                     dateTime: new Date()
                  }}

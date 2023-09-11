@@ -40,6 +40,8 @@ const createCompany = async (req, res) => {
                 companyName: companyName && companyName,
                 companyAddress: companyAddress && companyAddress,
                 generalSettings: generalSettings && generalSettings,
+                activeStatus: true,
+
             }
        },
             function (
