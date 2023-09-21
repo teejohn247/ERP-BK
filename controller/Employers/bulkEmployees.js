@@ -193,7 +193,7 @@ const bulkEmployee = async (req, res) => {
                     res.status(400).json({
                         status: 400,
                         success: false,
-                        data: err.writeErrors[0].err.errmsg
+                        message: err.writeErrors[0].err.errmsg
                     })
                     return;
     
@@ -215,7 +215,7 @@ const bulkEmployee = async (req, res) => {
     
                         <p style="font-size: 16px;font-weight: 300;">
     
-                        You have been invited to join <a href="https://main.d3i12sou25ghi7.amplifyapp.com/verify-email/${token}">SILO ERP Platform</a> as an employee 
+                        You have been invited to join <a href="https://xped8-ca9291a9a7e0.herokuapp.com/login/${token}">SILO ERP Platform</a> as an employee 
     
                         <br><br>
                         </p>
@@ -230,7 +230,7 @@ const bulkEmployee = async (req, res) => {
                     res.status(200).json({
                         status: 200,
                         success: true,
-                        data: "Upload Successful"
+                        message: "Upload Successful"
                     })
                     return;
                     }

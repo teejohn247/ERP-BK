@@ -53,7 +53,7 @@ const signUp = async (req, res) => {
 
         <p style="font-size: 16px;font-weight: 300;">
 
-        Click on this link to complete your registration process <a href="https://xped8.herokuapp.com/${token}">SILO ERP Platform</a> as an employee 
+        Click on this link to complete your registration process <a href="https://xped8-ca9291a9a7e0.herokuapp.com/dashboard/${token}">SILO ERP Platform</a> as an employee 
 
         <br><br>
         </p>
