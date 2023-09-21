@@ -53,7 +53,7 @@ const signUp = async (req, res) => {
 
         <p style="font-size: 16px;font-weight: 300;">
 
-        Click on this link to complete your registration process <a href="https://main.d3i12sou25ghi7.amplifyapp.com/verify-email/${token}">SILO ERP Platform</a> as an employee 
+        Click on this link to complete your registration process <a href="https://xped8.herokuapp.com/${token}">SILO ERP Platform</a> as an employee 
 
         <br><br>
         </p>
@@ -76,7 +76,7 @@ const signUp = async (req, res) => {
 
         res.status(200).json({
             status: 200,
-            data: `A confirmation email has been sent to ${email}`
+            message: `A confirmation email has been sent to ${email}`
         })
 
 
