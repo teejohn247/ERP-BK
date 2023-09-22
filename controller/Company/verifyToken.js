@@ -14,10 +14,9 @@ const verifyToken = async (req, res) => {
 
     try {
 
-	 const { verificationToken } = req.body;
-	 console.log({verificationToken})
-
-	 if(!verificationToken){
+	 const { token } = req.body;
+	
+	 if(!token){
 		res.status(HTTP_STATUS.BAD_REQUEST).json({
 			status: HTTP_STATUS.BAD_REQUEST,
 			error: 'verification token is required'
@@ -25,16 +24,16 @@ const verifyToken = async (req, res) => {
 
 		return;
 	 }
-
-	 const payload = jwt_decode(verificationToken);
+	 const payload = jwt_decode(token);
 	 console.log({payload})
 	 if (!payload) {
 		 throw new Error('Token cannot be decoded');
 	 } else {
+		
 			res.status(HTTP_STATUS.OK).json({
 				status: HTTP_STATUS.OK,
 				success: true,
-				data: payload
+				data: payload.email
 			});
 	  }
 	}catch(error){

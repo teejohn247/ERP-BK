@@ -40,6 +40,7 @@ import changePassword from '../controller/Company/changePassword';
 import verifyToken from '../controller/Company/verifyToken';
 import bulkEmployee from '../controller/Employers/bulkEmployees';
 import verifyNewUser from '../controller/Company/verifyNewUser';
+import verifyEmployee from '../controller/Employers/verifyEmployee';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -140,9 +141,11 @@ router.patch('/updateEmployee/:id', auth, updateEmployee);
 router.delete('/deleteEmployee/:id', auth, deleteEmployee);
 router.get('/fetchDesignations', auth, fetchDesignation);
 router.get('/listAuditTrails', auth, listAudits);
-
 router.post("/uploadEmployees", auth, mult.single("csv"), bulkEmployee);
 router.post("/verifyEmail", verifyNewUser);
+router.post("/decodeEmail", verifyToken);
+router.post("/setPassword", auth, verifyEmployee);
+
 
 
 

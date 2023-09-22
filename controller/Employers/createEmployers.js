@@ -241,6 +241,8 @@ const inviteEmployee = async (req, res) => {
 
 
             const token = utils.encodeToken(adm._id, false, adm.companyEmail);
+
+            console.log({token})
     
             console.log('{employee}')
     
@@ -251,7 +253,7 @@ const inviteEmployee = async (req, res) => {
     
             <p style="font-size: 16px;font-weight: 300;">
     
-            You have been invited to join <a href="https://localhost:3000/verify-email/${token}">ERP Software</a> as an employee 
+            You have been invited to join <a href="https://xped8-ca9291a9a7e0.herokuapp.com/login/${token}">SILO ERP Platform</a> as an employee 
     
             <br><br>
             </p>

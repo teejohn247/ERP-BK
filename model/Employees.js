@@ -4,6 +4,10 @@ const EmployeeSchema = new mongoose.Schema({
     companyName: { type: String, required: true },
     companyId:{ type: String, required: true },
     status: { type: String, default: 'Pending'},
+    password: { type: String},
+    firstTimeLogin: { type: Boolean },
+
+
     // personalInformation:[{
     //     firstName: { type: String, required: true },
     //     lastName: { type: String, required: true },

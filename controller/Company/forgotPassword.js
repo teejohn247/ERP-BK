@@ -41,7 +41,7 @@ const forgotPassword = async (req, res) => {
         Please, complete your reset your password using this link
         <br>
 				<a href="localhost:3000/resetPassword?token=${token}"><button>Reset Password</button></a>
-        localhost:3000/resetPassword?token=${token}
+      
 
         <br><br>
         </p>

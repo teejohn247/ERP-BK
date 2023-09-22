@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import Admin from '../../model/Company';
+import Employee from '../../model/Employees';
+
 import utils from '../../config/utils';
 import Company from '../../model/Company';
 
@@ -45,47 +47,25 @@ const signin = async (req, res) => {
         }
 
         let admin = await Admin.findOne({ adminEmail: email });
-
-
-        if (!admin) {
-
-            res.status(400).json({
-                status: 400,
-                error: `User with email: ${email} does not exist`
-            })
-            return;
-
-            // const salt = await bcrypt.genSalt(10);
-            // const hashed = await bcrypt.hash(password, salt);
-    
-            // console.log(salt, hashed)
-    
-            // admin= new Company({
-            //     adminEmail: email,
-            //     password: hashed,
-            // });
-    
-            // await admin.save().then((use) => {
-
-            //     const token = utils.encodeToken(use._id, use.adminEmail);
-
-            //     res.status(200).json({
-            //         status: 200,
-            //         data: admin,
-            //         firstTimeLogin: true,
-            //         token: token,
-            //         // firstTimeLogin: true
-            //     })
-            // })
+        let employee = await Employee.findOne({ companyEmail: email });
+        console.log({employee})
+        console.log(admin)
 
 
 
 
+        // if (!admin) {
+
+        //     res.status(400).json({
+        //         status: 400,
+        //         error: `User with email: ${email} does not exist`
+        //     })
+        //     return;
           
-        }
+        // }
 
 
-        else{
+        if (admin){
             const isMatch = await bcrypt.compare(password, admin.password);
             if (!isMatch) {
                 res.status(404).json({
@@ -129,7 +109,62 @@ const signin = async (req, res) => {
                 data: company,
                 token: token,
             })
-        }
+
+            return;
+        } else if(employee){
+            const isMatch = await bcrypt.compare(password, employee.password);
+
+            console.log({isMatch})
+            if (!isMatch) {
+                res.status(404).json({
+                    status: 404,
+                    success: false,
+                    error: 'Invalid login credentials'
+                })
+                return;
+            }
+            console.log(employee.firstTimeLogin)
+
+
+            if (employee.firstTimeLogin == undefined) {
+            console.log("here")
+                await employee.updateOne({
+                    firstTimeLogin: true, 
+                });
+            }else if (employee.firstTimeLogin == true){
+                await employee.updateOne({
+                    firstTimeLogin: false, 
+                });
+
+            }
+            else if (employee.firstTimeLogin == false){
+                await employee.updateOne({
+                    firstTimeLogin: false, 
+                });
+            }
+
+            let company = await Employee.findOne({ companyEmail: email });
+
+            console.log({employee})
+
+            const token = utils.encodeToken(employee._id, false, employee.adminEmail);
+
+            res.status(200).json({
+                status: 200,
+                data: company,
+                token: token,
+            })
+
+            return
+
+         }  else {
+
+                res.status(400).json({
+                    status: 400,
+                    error: `User with email: ${email} does not exist`
+                })
+                return;
+         }
       
         } catch (error) {
         res.status(500).json({
