@@ -42,32 +42,60 @@ const verifyNewUser = async (req, res) => {
                 error: "Token can not be decoded"
             })
          } else {
+
+            let admin = await Company.findOne({ adminEmail: payload.email });
+
+            console.log({admin})
+
+            if (admin) {
+    
+                res.status(400).json({
+                    status: 400,
+                    error: `User with email: ${payload.email} has already been verified. Use the login route`
+                })
+                return;
+            }
             const salt = await bcrypt.genSalt(10);
             const hashed = await bcrypt.hash(payload.password, salt);
     
             console.log(salt, hashed)
-            let company= new Company({
+            let company = new Company({
                 adminEmail: payload.email,
                 password: hashed,
+                firstTimeLogin: true, 
                 isSuperAdmin: true
             });
     
             await company.save();
+
+            let registered = await Company.findOne({ adminEmail: payload.email });
+
+            console.log({registered})
     
-            res.status(200).json({
-                status: 200,
-                data: company
-            })
+            // if (company.firstTimeLogin == undefined) {
+            //         await registered.updateOne({
+            //             firstTimeLogin: true, 
+            //         });
+            //     }else if (registered.firstTimeLogin == true){
+            //         await registered.updateOne({
+            //             firstTimeLogin: false, 
+            //         });
     
-                res.status(HTTP_STATUS.OK).json({
-                    status: HTTP_STATUS.OK,
-                    success: true,
-                    data: payload
-                });
+            //     }
+            //     else if (registered.firstTimeLogin == false){
+            //         await registered.updateOne({
+            //             firstTimeLogin: false, 
+            //         });
+            //     }
+    
+                const token = utils.encodeToken(company._id, company.isSuperAdmin, company.adminEmail);
+    
+                res.status(200).json({
+                    status: 200,
+                    data: registered,
+                    token: token,
+                })
           }
-
-      
-
     } catch (error) {
         res.status(500).json({
             status: 500,
