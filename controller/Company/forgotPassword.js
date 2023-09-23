@@ -40,7 +40,7 @@ const forgotPassword = async (req, res) => {
 
         Please, complete your reset your password using this link
         <br>
-				<a href="http://localhost:3000/resetPassword?token=${token}"><button>Reset Password</button></a>
+				<a href="http://localhost:4200/forgot-password/${token}"><button>Reset Password</button></a>
       
 
         <br><br>
