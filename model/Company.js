@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const CompanySchema = new mongoose.Schema({
     companyName: { type: String },
-    adminEmail: { type: String, required: true },
+    userEmail: { type: String, required: true },
     password: { type: String, required: true  },
     companyAddress: { type: String},
     generalSettings: {

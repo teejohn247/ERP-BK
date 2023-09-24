@@ -23,7 +23,7 @@ const signUp = async (req, res) => {
     try {
        
         const {email, password} = req.body;
-        let company = await Company.findOne({ adminEmail: email });
+        let company = await Company.findOne({ userEmail: email });
 
 
         if (company) {
@@ -53,7 +53,7 @@ const signUp = async (req, res) => {
 
         <p style="font-size: 16px;font-weight: 300;">
 
-        Click on this link to complete your registration process <a href="http://localhost:3000/dashboard/${token}">SILO ERP Platform</a> as an employee 
+        Click on this link to complete your registration process <a href="http://localhost:4200/dashboard/${token}">SILO ERP Platform</a> as an employee 
 
         <br><br>
         </p>
@@ -67,7 +67,7 @@ const signUp = async (req, res) => {
         await sendEmail(req, res, email, receivers, 'Email Confirmation', resp);
 
         // company = new Company({
-        //     adminEmail: email,
+        //     userEmail: email,
         //     password: hashed,
         //     isSuperAdmin: true
         // });
@@ -88,6 +88,3 @@ const signUp = async (req, res) => {
     }
 }
 export default signUp;
-
-
-

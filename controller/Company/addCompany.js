@@ -19,8 +19,8 @@ const addCompany = async (req, res) => {
 
     try {
        
-        const {companyName, adminEmail, password} = req.body;
-        let company = await Company.findOne({ adminEmail });
+        const {companyName, userEmail, password} = req.body;
+        let company = await Company.findOne({ userEmail });
 
 
         if (!company.companyName) {
@@ -49,7 +49,7 @@ const addCompany = async (req, res) => {
 
         company= new Company({
             companyName, 
-            adminEmail,
+            userEmail,
             password: hashed,
         });
 

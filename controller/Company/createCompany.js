@@ -24,8 +24,8 @@ const createCompany = async (req, res) => {
         console.log(req.payload)
        
         const {companyName, companyAddress, generalSettings} = req.body;
-        let company = await Company.findOne({ adminEmail: req.payload.email });
-        console.log({company})
+        let company = await Company.findOne({ userEmail: req.payload.email });
+        console.log(req.payload.email)
 
         // if (company.companyName ) {
 
@@ -35,7 +35,7 @@ const createCompany = async (req, res) => {
         //     })
         //     return;
         // }
-        Company.findOneAndUpdate({ adminEmail: req.payload.email}, { 
+        Company.findOneAndUpdate({ userEmail: req.payload.email}, { 
             $set: { 
                 companyName: companyName && companyName,
                 companyAddress: companyAddress && companyAddress,
@@ -58,6 +58,7 @@ const createCompany = async (req, res) => {
                 } else {
 
 
+
                     new AuditTrail({
                         companyName: companyName,
                         companyId: company._id
@@ -66,11 +67,22 @@ const createCompany = async (req, res) => {
                     res.status(200).json({
                         status: 200,
                         success: true,
-                        data: "Company Added Successfully"
+                        data: {
+                            companyName: companyName && companyName,
+                            userEmail: req.payload.email,
+                            companyAddress: companyAddress && companyAddress,
+                            generalSettings: generalSettings && generalSettings,
+                            activeStatus: true,
+                        }
                     })
+                     return
 
                 }
             })
+
+
+        // let latestCompany = await Company.findOne({ userEmail: req.payload.email });
+
 
         // await company.save();
 

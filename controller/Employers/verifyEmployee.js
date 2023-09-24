@@ -24,7 +24,7 @@ const verifyEmployee = async (req, res) => {
         const {password} = req.body;
 
         let emp = await Company.findOne({ companyEmail: req.payload.email });
-        let adm = await Admin.findOne({ adminEmail: req.payload.email });
+        let adm = await Admin.findOne({ userEmail: req.payload.email });
 
         console.log({emp})
 
@@ -108,7 +108,7 @@ const verifyEmployee = async (req, res) => {
            return;
 
         } else if (adm){
-            let admin = await Admin.findOne({ adminEmail: req.payload.email });
+            let admin = await Admin.findOne({ userEmail: req.payload.email });
 
 
             if(password.length < 1){
@@ -132,10 +132,6 @@ const verifyEmployee = async (req, res) => {
         
                 return;
              }
-        
-           
-    
-    
                 console.log({admin})
     
                 if (!admin) {
@@ -151,16 +147,14 @@ const verifyEmployee = async (req, res) => {
         
                 console.log(salt, hashed)
                 await admin.updateOne({
-    
                     password: password && hashed
-                
                 });
         
                 await admin.save();
     
-                let registered = await Admin.findOne({ adminEmail: req.payload.email });
+                let registered = await Admin.findOne({ userEmail: req.payload.email });
         
-                const token = utils.encodeToken(admin._id, true, admin.adminEmail);
+                const token = utils.encodeToken(admin._id, true, admin.userEmail);
         
                     res.status(200).json({
                         status: 200,

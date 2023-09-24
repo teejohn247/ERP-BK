@@ -24,7 +24,7 @@ const signin = async (req, res) => {
         // let useragent = req.useragent;
         // let detectResult = req.device;
 
-        // let admin = await Admin.findOne({ adminEmail: email });
+        // let admin = await Admin.findOne({ userEmail: email });
 
         // console.log(admin)
 
@@ -46,24 +46,10 @@ const signin = async (req, res) => {
             return;
         }
 
-        let admin = await Admin.findOne({ adminEmail: email });
+        let admin = await Admin.findOne({ userEmail: email });
         let employee = await Employee.findOne({ companyEmail: email });
         console.log({employee})
         console.log(admin)
-
-
-
-
-        // if (!admin) {
-
-        //     res.status(400).json({
-        //         status: 400,
-        //         error: `User with email: ${email} does not exist`
-        //     })
-        //     return;
-          
-        // }
-
 
         if (admin){
             const isMatch = await bcrypt.compare(password, admin.password);
@@ -98,11 +84,11 @@ const signin = async (req, res) => {
                 });
             }
 
-            let company = await Admin.findOne({ adminEmail: email });
+            let company = await Admin.findOne({ userEmail: email });
 
             console.log({admin})
 
-            const token = utils.encodeToken(admin._id, admin.isSuperAdmin, admin.adminEmail);
+            const token = utils.encodeToken(admin._id, admin.isSuperAdmin, admin.userEmail);
 
             res.status(200).json({
                 status: 200,
@@ -147,7 +133,7 @@ const signin = async (req, res) => {
 
             console.log({employee})
 
-            const token = utils.encodeToken(employee._id, false, employee.adminEmail);
+            const token = utils.encodeToken(employee._id, false, employee.userEmail);
 
             res.status(200).json({
                 status: 200,

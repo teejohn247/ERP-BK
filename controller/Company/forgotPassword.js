@@ -28,7 +28,7 @@ const forgotPassword = async (req, res) => {
 
 				return;
 			}
-	       const token = utils.encodeToken(user._id, user.isSuperAdmin, user.adminEmail);
+	       const token = utils.encodeToken(user._id, user.isSuperAdmin, user.userEmail);
 
       const msg = `<div>
         <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
@@ -40,9 +40,7 @@ const forgotPassword = async (req, res) => {
 
         Please, complete your reset your password using this link
         <br>
-				<a href="http://localhost:4200/forgot-password/${token}"><button>Reset Password</button></a>
-      
-
+				<a href="http://localhost:4200/set-password/${token}"><button>Reset Password</button></a>
         <br><br>
         </p>
         <div>`;
