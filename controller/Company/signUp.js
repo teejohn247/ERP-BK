@@ -23,7 +23,7 @@ const signUp = async (req, res) => {
     try {
        
         const {email, password} = req.body;
-        let company = await Company.findOne({ userEmail: email });
+        let company = await Company.findOne({ email: email });
 
 
         if (company) {
@@ -67,7 +67,7 @@ const signUp = async (req, res) => {
         await sendEmail(req, res, email, receivers, 'Email Confirmation', resp);
 
         // company = new Company({
-        //     userEmail: email,
+        //     email: email,
         //     password: hashed,
         //     isSuperAdmin: true
         // });

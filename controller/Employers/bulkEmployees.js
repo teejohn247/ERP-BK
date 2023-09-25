@@ -104,7 +104,7 @@ const bulkEmployee = async (req, res) => {
             console.log(jsonObj)
 
             jsonObj.map((data, index) => {
-                emails.push(data.companyEmail)
+                emails.push(data.email)
                 departments.push(data.department)
 
 
@@ -155,7 +155,7 @@ const bulkEmployee = async (req, res) => {
 
             let checkCompany = await Employee.find(
                 {   companyId: req.payload.id,
-                    companyEmail: { $in: emails }},
+                    email: { $in: emails }},
                 
               );
             
@@ -179,7 +179,7 @@ const bulkEmployee = async (req, res) => {
                     if(comp == true){
                          res.status(400).json({
                             status: 400,
-                            error: `An employee already exist with email: ${checkCompany[0].companyEmail}`
+                            error: `An employee already exist with email: ${checkCompany[0].email}`
                         })
 
                         return;
@@ -327,7 +327,7 @@ const bulkEmployee = async (req, res) => {
         //         { $push: { humanResources: { 
 
         //             userName: `${firstName} ${lastName}`,
-        //             userEmail: `${officialEmail}`,
+        //             email: `${officialEmail}`,
         //             action: `Super admin invited ${firstName} ${lastName} as an employee`,
         //             dateTime: new Date()
         //          }}

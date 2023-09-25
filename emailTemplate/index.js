@@ -94,13 +94,10 @@ return `<!DOCTYPE html>
                     <div class="email-body" style="padding: 20px 0px !important;">
                         <div style="padding-left: 10%; width: 80%;">
                         
-                           <h1 class="header-text" style="z-index: 99; font-                   weight: 600;
-            font-size: 24px;
-            text-align: left; margin-bottom: 23px;
-         ">${subject}</h1>
-         
-         
-                        ${data}  
+                           <h1 class="header-text" style="z-index: 99; font-weight: 600;
+                            font-size: 24px;
+                            text-align: left; margin-bottom: 23px;">${subject}</h1>
+                             ${data}  
                             <p style= "padding-top: 32px; line-height: 24px;font-size: 16px;">
                                 Cheers,
                             </p>

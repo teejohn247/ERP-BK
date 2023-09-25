@@ -7,7 +7,7 @@ const AuditTrailSchema = new mongoose.Schema({
     companyId: { type: String },
     humanResources: [
         {
-            userEmail: { type: String },
+            email: { type: String },
             userName: { type: String },
             action: { type: String },
             dateTime: { type: String },
@@ -15,7 +15,7 @@ const AuditTrailSchema = new mongoose.Schema({
     ],
     accounting: [
         {
-            userEmail: { type: String },
+            email: { type: String },
             userName: { type: String },
             action: { type: String },
             dateTime: { type: String },
@@ -23,7 +23,7 @@ const AuditTrailSchema = new mongoose.Schema({
     ],
     projects: [
         {
-            userEmail: { type: String },
+            email: { type: String },
             userName: { type: String },
             action: { type: String },
             dateTime: { type: String },
@@ -31,7 +31,7 @@ const AuditTrailSchema = new mongoose.Schema({
     ],
     crm: [
         {
-            userEmail: { type: String },
+            email: { type: String },
             userName: { type: String },
             action: { type: String },
             dateTime: { type: String },
@@ -39,7 +39,7 @@ const AuditTrailSchema = new mongoose.Schema({
     ],
     supplyChain: [
         {
-            userEmail: { type: String },
+            email: { type: String },
             userName: { type: String },
             action: { type: String },
             dateTime: { type: String },

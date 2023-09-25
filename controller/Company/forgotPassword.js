@@ -28,7 +28,7 @@ const forgotPassword = async (req, res) => {
 
 				return;
 			}
-	       const token = utils.encodeToken(user._id, user.isSuperAdmin, user.userEmail);
+	       const token = utils.encodeToken(user._id, user.isSuperAdmin, user.email);
 
       const msg = `<div>
         <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">

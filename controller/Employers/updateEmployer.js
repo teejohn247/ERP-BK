@@ -23,7 +23,7 @@ const updateEmployee = async (req, res) => {
 
     try {
    
-        const { firstName, lastName, dateOfBirth, personalEmail, phoneNumber, companyEmail, gender,
+        const { firstName, lastName, dateOfBirth, personalEmail, phoneNumber, email, gender,
         employmentType, role, department, companyAddress, companyBranch, nextOfKinFullName, nextOfKinPhoneNumber, nextOfKinGender,
         nextOfKinAddress, paymentInformation} = req.body;
 
@@ -47,7 +47,7 @@ const updateEmployee = async (req, res) => {
                 dateOfBirth: dateOfBirth && dateOfBirth,
                 personalEmail: personalEmail && personalEmail,
                 phoneNumber: phoneNumber && phoneNumber,
-                companyEmail: companyEmail && companyEmail,
+                email: email && email,
                 gender: gender && gender,
                 employmentType: employmentType && employmentType,
                 role: role && role,
@@ -79,7 +79,7 @@ const updateEmployee = async (req, res) => {
                         { $push: { humanResources: { 
         
                             userName: checkUpdated.personalInformation[0].firstName && checkUpdated.personalInformation[0].perlastName,
-                            userEmail: checkUpdated.officiallInformation[0].officialEmail && checkUpdated.officialInformation[0].officialEmail,
+                            email: checkUpdated.officiallInformation[0].officialEmail && checkUpdated.officialInformation[0].officialEmail,
                             action: `Super admin updated ${checkUpdated.personalInformation[0].firstName} ${checkUpdated.personalInformation[0].lastName} records`,
                             dateTime: new Date()
                          }}

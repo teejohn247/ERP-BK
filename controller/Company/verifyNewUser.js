@@ -43,7 +43,7 @@ const verifyNewUser = async (req, res) => {
             })
          } else {
 
-            let admin = await Company.findOne({ userEmail: payload.email });
+            let admin = await Company.findOne({ email: payload.email });
 
             console.log({admin})
 
@@ -60,7 +60,7 @@ const verifyNewUser = async (req, res) => {
     
             console.log(salt, hashed)
             let company = new Company({
-                userEmail: payload.email,
+                email: payload.email,
                 password: hashed,
                 firstTimeLogin: true, 
                 isSuperAdmin: true
@@ -68,7 +68,7 @@ const verifyNewUser = async (req, res) => {
     
             await company.save();
 
-            let registered = await Company.findOne({ userEmail: payload.email });
+            let registered = await Company.findOne({ email: payload.email });
 
             console.log({registered})
     
@@ -88,7 +88,7 @@ const verifyNewUser = async (req, res) => {
             //         });
             //     }
     
-                const token = utils.encodeToken(company._id, company.isSuperAdmin, company.userEmail);
+                const token = utils.encodeToken(company._id, company.isSuperAdmin, company.email);
     
                 res.status(200).json({
                     status: 200,

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const CompanySchema = new mongoose.Schema({
     companyName: { type: String },
-    userEmail: { type: String, required: true },
+    email: { type: String, required: true },
     password: { type: String, required: true  },
     companyAddress: { type: String},
     generalSettings: {
@@ -15,7 +15,7 @@ const CompanySchema = new mongoose.Schema({
     systemRoles:{
         humanResources: [
             {
-                userEmail: { type: String },
+                email: { type: String },
                 userName: { type: String },
                 userId: { type: String },
                 dateTime: { type: String },
@@ -23,7 +23,7 @@ const CompanySchema = new mongoose.Schema({
         ],
         accounting: [
             {
-                userEmail: { type: String },
+                email: { type: String },
                 userName: { type: String },
                 userId: { type: String },
                 dateTime: { type: String },
@@ -31,7 +31,7 @@ const CompanySchema = new mongoose.Schema({
         ],
         projects: [
             {
-                userEmail: { type: String },
+                email: { type: String },
                 userName: { type: String },
                 userId: { type: String },
                 dateTime: { type: String },
@@ -39,7 +39,7 @@ const CompanySchema = new mongoose.Schema({
         ],
         crm: [
             {
-                userEmail: { type: String },
+                email: { type: String },
                 userName: { type: String },
                 userId: { type: String },
                 dateTime: { type: String },
@@ -47,7 +47,7 @@ const CompanySchema = new mongoose.Schema({
         ],
         supplyChain: [
             {
-                userEmail: { type: String },
+                email: { type: String },
                 userName: { type: String },
                 userId: { type: String },
                 dateTime: { type: String },

@@ -23,8 +23,8 @@ const verifyEmployee = async (req, res) => {
        
         const {password} = req.body;
 
-        let emp = await Company.findOne({ companyEmail: req.payload.email });
-        let adm = await Admin.findOne({ userEmail: req.payload.email });
+        let emp = await Company.findOne({ email: req.payload.email });
+        let adm = await Admin.findOne({ email: req.payload.email });
 
         console.log({emp})
 
@@ -54,7 +54,7 @@ const verifyEmployee = async (req, res) => {
         
            
     
-                let employee = await Company.findOne({ companyEmail: req.payload.email });
+                let employee = await Company.findOne({ email: req.payload.email });
     
                 console.log({employee})
     
@@ -96,9 +96,9 @@ const verifyEmployee = async (req, res) => {
                         });
                     }
     
-                   let registered = await Company.findOne({ companyEmail: req.payload.email });
+                   let registered = await Company.findOne({ email: req.payload.email });
         
-                    const token = utils.encodeToken(employee._id, false, employee.companyEmail);
+                    const token = utils.encodeToken(employee._id, false, employee.email);
         
                     res.status(200).json({
                         status: 200,
@@ -108,7 +108,7 @@ const verifyEmployee = async (req, res) => {
            return;
 
         } else if (adm){
-            let admin = await Admin.findOne({ userEmail: req.payload.email });
+            let admin = await Admin.findOne({ email: req.payload.email });
 
 
             if(password.length < 1){
@@ -152,9 +152,9 @@ const verifyEmployee = async (req, res) => {
         
                 await admin.save();
     
-                let registered = await Admin.findOne({ userEmail: req.payload.email });
+                let registered = await Admin.findOne({ email: req.payload.email });
         
-                const token = utils.encodeToken(admin._id, true, admin.userEmail);
+                const token = utils.encodeToken(admin._id, true, admin.email);
         
                     res.status(200).json({
                         status: 200,

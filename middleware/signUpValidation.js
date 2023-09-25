@@ -4,7 +4,7 @@ const userValidationRules = () => {
   return [
     // username must be an email
     body('firstName').isString().notEmpty().withMessage("First Name field is a required field"),
-    // body('companyEmail').isEmail().withMessage("Email is a required field"),
+    // body('email').isEmail().withMessage("Email is a required field"),
     body('personalEmail').isEmail().withMessage("Personal Name is a required field"),
     body('dateOfBirth').notEmpty().withMessage("Date of Birth field is a required field"),
     body('phoneNumber').notEmpty().withMessage("Phone number field is a required field"),

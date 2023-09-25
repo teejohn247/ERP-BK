@@ -55,7 +55,7 @@ const EmployeeSchema = new mongoose.Schema({
             type: String,
             trim: true 
         },
-        companyEmail: { type: String, required: true, unique: true , trim: true },
+        email: { type: String, required: true, unique: true , trim: true },
         department: { type: String, required: true, trim: true },
         employmentType: { type: String, required: true,trim: true  },
         employeeCode: { type: String, required: true, trim: true  },
@@ -66,10 +66,10 @@ const EmployeeSchema = new mongoose.Schema({
         designation: { type: String, trim: true  },
         // designationName: { type: String, trim: true  },
         roleName: { type: String, trim: true  },
-        dateOfJoining: { type: String, trim: true  },
+        employmentStartDate: { type: String, trim: true  },
         reportingToId: { type: String , trim: true },
         reportingToName: { type: String,trim: true  },
-
+        companyRole: { type: String,trim: true  },
      roles:{
         humanResources: [
             {

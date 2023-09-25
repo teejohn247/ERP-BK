@@ -79,7 +79,7 @@ const updatePayment = async (req, res) => {
                     { $push: { humanResources: { 
     
                         userName: `${checkUpdated.personalInformation.firstName} ${checkUpdated.personalInformation.lastName}`,
-                        userEmail: checkUpdated.officiallInformation.officialEmail,
+                        email: checkUpdated.officiallInformation.officialEmail,
                         action: `Super admin updated ${checkUpdated.personalInformation.firstName} ${checkUpdated.personalInformation.lastName} bank details`,
                         dateTime: new Date()
                      }}

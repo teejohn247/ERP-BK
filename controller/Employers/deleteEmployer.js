@@ -46,7 +46,7 @@ const deleteEmployee = async (req, res) => {
                                 humanResources: {
 
                                     userName: `${employee.personalInformation[0].firstName} ${employee.personalInformation[0].lastName}`,
-                                    userEmail: employee.officialInformation[0].officialEmail,
+                                    email: employee.officialInformation[0].officialEmail,
                                     action: `Super admin deleted ${employee.personalInformation[0].firstName} ${employee.personalInformation[0].lastName} as an employee`,
                                     dateTime: new Date()
                                 }
@@ -102,7 +102,7 @@ const deleteEmployee = async (req, res) => {
             //         $push: {
             //             humanResources: {
             //                 userName: `${employee.personalInformation[0].firstName}  ${employee.personalInformation[0].lastName}`,
-            //                 userEmail: employee.officialInformation[0].officialEmail,
+            //                 email: employee.officialInformation[0].officialEmail,
             //                 action: `Super admin deleted ${checkUpdated.personalInformation[0].firstName} ${checkUpdated.personalInformation[0].lastName} as an employee`,
             //                 dateTime: new Date()
             //             }

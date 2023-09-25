@@ -25,7 +25,7 @@ const inviteEmployee = async (req, res) => {
 
     try {
 
-        const { firstName, lastName, companyEmail, phoneNumber, dateOfBirth,  gender, departmentId, companyRoleId, designationId, dateOfJoining,
+        const { firstName, lastName, email, phoneNumber, dateOfBirth, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
         employmentType, reportingTo} = req.body;
 
 
@@ -39,7 +39,7 @@ const inviteEmployee = async (req, res) => {
 
 
 
-        console.log(companyEmail)
+        console.log({checkDesignation})
         console.log(checkName)
 
 
@@ -79,11 +79,11 @@ const inviteEmployee = async (req, res) => {
 
 
         // let checkCompany = await Employee.find({ companyId: req.payload.id },
-        //     { officialInformation: { $elemMatch: { companyEmail:  companyEmail} } })
+        //     { officialInformation: { $elemMatch: { email:  email} } })
 
             let checkCompany = await Employee.find(
                 {   companyId: req.payload.id,
-                    companyEmail: companyEmail},
+                    email: email},
                 
               );
 
@@ -102,7 +102,7 @@ const inviteEmployee = async (req, res) => {
         if(comp == true){
             return res.status(400).json({
                 status: 400,
-                error: `An employee already exist with email: ${companyEmail}`
+                error: `An employee already exist with email: ${email}`
             })
         }
 
@@ -138,7 +138,7 @@ const inviteEmployee = async (req, res) => {
         console.log('hgh')
 
 
-    //     const token = utils.encodeToken("", false, companyEmail);
+    //     const token = utils.encodeToken("", false, email);
 
     //     let data = `<div>
     //     <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
@@ -163,6 +163,8 @@ const inviteEmployee = async (req, res) => {
     //         // text: 'This is a test email',
     //         html: `${resp}`,
     //     }
+
+    console.log(company[0].companyName)
     console.log('ff',
         company[0].companyName,
         req.payload.id,
@@ -173,15 +175,14 @@ const inviteEmployee = async (req, res) => {
         phoneNumber,
         `EMP-${year}-${letter}${last}${total.length + 1}`,
         companyRoleId,
-        checkRole.roleName,
+        // checkRole.roleName,
         checkDesignation.designationName,
         designationId,
         departmentId,
         employmentType,
-        dateOfJoining,
-        reportingTo,
+        employmentStartDate,
         // `${checkName.firstName} ${checkName.lastName}` ,
-        companyEmail,
+        email,
         // checkRole.leaveType,
         // checkRole.hmoPackages
         )
@@ -221,26 +222,26 @@ const inviteEmployee = async (req, res) => {
                 gender,
                 phoneNumber,
                 employeeCode: `EMP-${year}-${letter}${last}${total.length + 1}`,
-                role: companyRoleId,
-                roleName: checkRole.roleName,
+                // role: companyRoleId,
+                companyRole: companyRole,
+                // roleName: checkRole.roleName,
                 designationName: checkDesignation.designationName,
                 designationId,
                 departmentId: departmentId,
                 department: checkDept.departmentName,
                 employmentType,
-                dateOfJoining,
-                reportingToId: reportingTo,
-                reportingToName: ` ${checkName && checkName.firstName} ${checkName && checkName.lastName}}` ,
-                companyEmail,
-                leave: checkRole.leaveType,
-                hmo: checkRole.hmoPackages
+                employmentStartDate,
+                // reportingToName: ` ${checkName && checkName.firstName} ${checkName && checkName.lastName}}` ,
+                email,
+                leave: checkRole && checkRole.leaveType,
+                hmo: checkRole && checkRole.hmoPackages
         })
 
 
         await employee.save().then(async(adm) => {
 
 
-            const token = utils.encodeToken(adm._id, false, adm.companyEmail);
+            const token = utils.encodeToken(adm._id, false, adm.email);
 
             console.log({token})
     
@@ -265,12 +266,12 @@ const inviteEmployee = async (req, res) => {
 
            const receivers = [
             {
-              email: companyEmail
+              email: email
             }
           
           ]
     
-            await sendEmail(req, res, companyEmail, receivers, 'Employee Invitation', resp);
+            await sendEmail(req, res, email, receivers, 'Employee Invitation', resp);
     
        
     
@@ -281,7 +282,7 @@ const inviteEmployee = async (req, res) => {
                 { $push: { humanResources: { 
 
                     userName: `${firstName} ${lastName}`,
-                    userEmail: `${companyEmail}`,
+                    email: `${email}`,
                     action: `Super admin invited ${firstName} ${lastName} as an employee`,
                     dateTime: new Date()
                  }}
@@ -305,7 +306,7 @@ const inviteEmployee = async (req, res) => {
                                 res.status(200).json({
                                     status: 200,
                                     success: true,
-                                    data: "Employee has been invited successfully"
+                                    data: employee
                                 })
                         }
                     })

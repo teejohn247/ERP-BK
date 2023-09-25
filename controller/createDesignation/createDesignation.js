@@ -24,9 +24,10 @@ const createDesignation = async (req, res) => {
        
         const {designationName, leaveTypes} = req.body;
 
-        let designation = await Designation.findOne({ designationName });
 
         let company = await Company.findOne({ _id: req.payload.id });
+
+        let designation = await Designation.findOne({ companyId:company._id,  designationName: designationName });
 
         console.log({company})
 

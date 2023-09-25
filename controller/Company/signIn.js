@@ -24,7 +24,7 @@ const signin = async (req, res) => {
         // let useragent = req.useragent;
         // let detectResult = req.device;
 
-        // let admin = await Admin.findOne({ userEmail: email });
+        // let admin = await Admin.findOne({ email: email });
 
         // console.log(admin)
 
@@ -46,8 +46,8 @@ const signin = async (req, res) => {
             return;
         }
 
-        let admin = await Admin.findOne({ userEmail: email });
-        let employee = await Employee.findOne({ companyEmail: email });
+        let admin = await Admin.findOne({ email: email });
+        let employee = await Employee.findOne({ email: email });
         console.log({employee})
         console.log(admin)
 
@@ -84,11 +84,11 @@ const signin = async (req, res) => {
                 });
             }
 
-            let company = await Admin.findOne({ userEmail: email });
+            let company = await Admin.findOne({ email: email });
 
             console.log({admin})
 
-            const token = utils.encodeToken(admin._id, admin.isSuperAdmin, admin.userEmail);
+            const token = utils.encodeToken(admin._id, admin.isSuperAdmin, admin.email);
 
             res.status(200).json({
                 status: 200,
@@ -129,11 +129,11 @@ const signin = async (req, res) => {
                 });
             }
 
-            let company = await Employee.findOne({ companyEmail: email });
+            let company = await Employee.findOne({ email: email });
 
             console.log({employee})
 
-            const token = utils.encodeToken(employee._id, false, employee.userEmail);
+            const token = utils.encodeToken(employee._id, false, employee.email);
 
             res.status(200).json({
                 status: 200,
