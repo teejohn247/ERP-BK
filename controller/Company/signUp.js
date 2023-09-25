@@ -47,13 +47,13 @@ const signUp = async (req, res) => {
         }]
 
         let data = `<div>
-        <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+        <p style="padding: 32px 0; text-align:left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
         Hi,
         </p> 
 
-        <p style="font-size: 16px;font-weight: 300;">
+        <p style="font-size: 16px; text-align:left !important; font-weight: 300;">
 
-        Click on this link to complete your registration process <a href="http://localhost:4200/dashboard/${token}">SILO ERP Platform</a> as an employee 
+        Click on this link to complete your registration process <a href="https://xped8-ca9291a9a7e0.herokuapp.com/dashboard/${token}">SILO ERP Platform</a> as an employee 
 
         <br><br>
         </p>

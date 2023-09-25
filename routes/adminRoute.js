@@ -41,6 +41,10 @@ import verifyToken from '../controller/Company/verifyToken';
 import bulkEmployee from '../controller/Employers/bulkEmployees';
 import verifyNewUser from '../controller/Company/verifyNewUser';
 import verifyEmployee from '../controller/Employers/verifyEmployee';
+import createLeave from '../controller/Leave/createLeave';
+import updateLeave from '../controller/Leave/updateLeave';
+import fetchLeaves from '../controller/Leave/fetchLeave';
+import fetchLeavesDetails from '../controller/Leave/fetchLeaveDetails';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -145,6 +149,17 @@ router.post("/uploadEmployees", auth, mult.single("csv"), bulkEmployee);
 router.post("/verifyEmail", verifyNewUser);
 router.post("/decodeEmail", verifyToken);
 router.post("/setPassword", auth, verifyEmployee);
+
+router.post("/createLeave", auth, createLeave);
+router.patch("/updateLeave/:id", auth, updateLeave);
+router.get("/fetchLeave", auth, fetchLeaves);
+router.get("/fetchLeave/:id", auth, fetchLeavesDetails);
+
+
+
+
+
+
 
 
 

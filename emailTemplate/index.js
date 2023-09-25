@@ -74,7 +74,7 @@ return `<!DOCTYPE html>
     <table class="main">
         <!--	HEADER SECTION		-->
         <tr class="header">
-            <td height="305" class="bg" style="background-image: url('https://cdn.pixabay.com/photo/2023/04/21/01/48/ai-generated-7940899_1280.jpg'), linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)); background-blend-mode: overlay; background-repeat: no-repeat; background-size: cover; color: #ffffff; width: 100%; padding-left: 10%; display:flex; justify-content: space-between; background-position: top left; height: 300px" >
+            <td height="305" class="bg" style="background-image: url('https://cdn.pixabay.com/photo/2023/04/21/01/48/ai-generated-7940899_1280.jpg'), linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)); background-blend-mode: overlay; background-repeat: no-repeat; background-size: cover; color: #ffffff; width: 100%; padding-left: 10%; display:flex; justify-content: space-between; background-position: 40% 20%; height: 350px" >
                 <div style="padding-top: 35px; margin-right:90px; ">
                    <a href="#">
                     <img src="https://drive.google.com/uc?export=view&id=1hZcXNXms4aUdl2H2mBRpzlwmuW-CJHaa" style="width: 100px;"/>
@@ -96,12 +96,12 @@ return `<!DOCTYPE html>
                         
                            <h1 class="header-text" style="z-index: 99; font-weight: 600;
                             font-size: 24px;
-                            text-align: left; margin-bottom: 23px;">${subject}</h1>
+                            text-align: left !important; margin-bottom: 23px;">${subject}</h1>
                              ${data}  
-                            <p style= "padding-top: 32px; line-height: 24px;font-size: 16px;">
+                            <p style= "padding-top: 32px; text-align: left !important; line-height: 24px;font-size: 16px;">
                                 Cheers,
                             </p>
-                            <p style=" line-height: 24px;font-size: 16px;">
+                            <p style=" text-align: left !important; line-height: 24px;font-size: 16px;">
                                 SILO Team
                             </p>
                         </div>

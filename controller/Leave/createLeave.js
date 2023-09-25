@@ -2,7 +2,6 @@
 import dotenv from 'dotenv';
 import Role from '../../model/Role';
 import Company from '../../model/Company';
-import Designation from '../../model/Designation';
 import Leave from '../../model/Leaves';
 
 
@@ -19,18 +18,16 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
 
-const createDesignation = async (req, res) => {
+const createLeave = async (req, res) => {
 
     try {
        
-        const {designationName, description, leaveId, noOfLeaveDays, paidLeave} = req.body;
+        const { leaveName, description } = req.body;
 
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let designation = await Designation.findOne({ companyId:company._id,  designationName: designationName });
-        let leave = await Leave.findOne({ _id: leaveId });
-
+        let designation = await Leave.findOne({ companyId:company._id,  leaveName: leaveName });
 
         console.log({company})
 
@@ -48,23 +45,19 @@ const createDesignation = async (req, res) => {
 
             res.status(400).json({
                 status: 400,
-                error: 'This designation name already exist'
+                error: 'This leaveName already exist'
             })
             return;
         }
 
-       let designations = new Designation({
-            designationName,
+       let leave = new Leave({
+            leaveName,
             companyId: req.payload.id,
             companyName: company.companyName,
             description,
-            leaveId,
-            leaveName: leave.leaveName,
-            noOfLeaveDays,
-            paidLeave
         })
 
-        await designations.save().then((adm) => {
+        await leave.save().then((adm) => {
             console.log(adm)
             res.status(200).json({
                 status: 200,
@@ -87,7 +80,7 @@ const createDesignation = async (req, res) => {
         })
     }
 }
-export default createDesignation;
+export default createLeave;
 
 
 

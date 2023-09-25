@@ -209,11 +209,11 @@ const bulkEmployee = async (req, res) => {
                         }]
     
                         let data = `<div>
-                        <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+                        <p style="padding: 32px 0; text-align:left !important;  font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
                         Hi,
                         </p> 
     
-                        <p style="font-size: 16px;font-weight: 300;">
+                        <p style="font-size: 16px; text-align:left !important; font-weight: 300;">
     
                         You have been invited to join <a href="https://xped8-ca9291a9a7e0.herokuapp.com/login/${token}">SILO ERP Platform</a> as an employee 
     
