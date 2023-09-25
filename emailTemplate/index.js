@@ -74,40 +74,37 @@ return `<!DOCTYPE html>
     <table class="main">
         <!--	HEADER SECTION		-->
         <tr class="header">
-            <td height="305" class="bg" style="background: url('https://img.freepik.com/free-photo/business-man-talking-workmates-about-project-planning-strategy-office-person-presenting-analysis-colleagues-company-development-financial-growth-presentation-ideas_482257-40433.jpg?w=1800&t=st=1695287481~exp=1695288081~hmac=41ce6542aff41aea961ac8489d26fdf2871dab96be694d4a68a93f0c91e07bd1'), linear-gradient(rgba(4,171, 180,0.3),rgba(0,0,0,0.9)); background-blend-mode: overlay; background-repeat: no-repeat; background-size: cover; color: #ffffff; width: 100%;  padding-left: 10%;" >
-                <div style="padding-top: 130px;">
+            <td height="305" class="bg" style="background-image: url('https://cdn.pixabay.com/photo/2023/04/21/01/48/ai-generated-7940899_1280.jpg'), linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)); background-blend-mode: overlay; background-repeat: no-repeat; background-size: cover; color: #ffffff; width: 100%; padding-left: 10%; display:flex; justify-content: space-between; background-position: top left; height: 300px" >
+                <div style="padding-top: 35px; margin-right:90px; ">
                    <a href="#">
-                    <img src="https://drive.google.com/uc?export=view&id=1hZcXNXms4aUdl2H2mBRpzlwmuW-CJHaa" style="width: 150px;"/>
+                    <img src="https://drive.google.com/uc?export=view&id=1hZcXNXms4aUdl2H2mBRpzlwmuW-CJHaa" style="width: 100px;"/>
                     </a>
+                   
+                    
                 </div>
-                <h1 class="header-text" style="z-index: 99; font-weight: 600;
-            font-size: 24px;
-            line-height: 125%;
-            text-align: left;">${subject}</h1>
+               
             </td>
         </tr>
 
         <!--			BODY SECTION-->
-        <tr style="height: 455px; background-color: #eee;position: relative;">
+        <tr style="height: auto; background-color: white;position: relative;">
             <td>
                 <div>
-                    <div class="email-body" style="background-color: #ffffff;
-            box-shadow: 0px 0px 60px 1px rgba(0, 0, 0, 0.1);
-            color: #000000;
-            height: auto;
-            width: 80%;
-            max-width: 480px;
-            position: relative;
-            top: -118px;
-            margin: 0 auto;
-            font-size: 16px;
-            text-align: left;">
-                        <div style="padding: 32px">
-                        ${data}
-                            <p style="font-family: 'DM Sans'; padding-top: 32px; line-height: 24px;font-size: 16px;">
+                
+                    <div class="email-body" style="padding: 20px 0px !important;">
+                        <div style="padding-left: 10%; width: 80%;">
+                        
+                           <h1 class="header-text" style="z-index: 99; font-                   weight: 600;
+            font-size: 24px;
+            text-align: left; margin-bottom: 23px;
+         ">${subject}</h1>
+         
+         
+                        ${data}  
+                            <p style= "padding-top: 32px; line-height: 24px;font-size: 16px;">
                                 Cheers,
                             </p>
-                            <p style="font-family: 'DM Sans'; line-height: 24px;font-size: 16px;">
+                            <p style=" line-height: 24px;font-size: 16px;">
                                 SILO Team
                             </p>
                         </div>
@@ -118,7 +115,7 @@ return `<!DOCTYPE html>
 
         <!--FOOTER SECTION-->
         <tr>
-            <td style="background-color: #1F3C6B;  padding: 56px 0; font-size: 16px; text-align: center !important">
+            <td style="background-color: #04ABB4;  padding: 56px 0; font-size: 16px; text-align: center !important">
                 <div style="margin: 0 auto;">
                     <p style="padding-top: 12px; color: white">Email: contactus@silo.com</p>
                     <div style="padding-top: 12px">
