@@ -1,3 +1,4 @@
+import { string } from 'joi';
 import mongoose from 'mongoose';
 
 const EmployeeSchema = new mongoose.Schema({
@@ -6,8 +7,6 @@ const EmployeeSchema = new mongoose.Schema({
     status: { type: String, default: 'Pending'},
     password: { type: String},
     firstTimeLogin: { type: Boolean },
-
-
     // personalInformation:[{
     //     firstName: { type: String, required: true },
     //     lastName: { type: String, required: true },
@@ -63,9 +62,14 @@ const EmployeeSchema = new mongoose.Schema({
         companyBranch: { type: String, trim: true  },
         position: { type: String, trim: true  },
         role: { type: String , trim: true },
-        designation: { type: String, trim: true  },
-        // designationName: { type: String, trim: true  },
-        roleName: { type: String, trim: true  },
+        designation: {
+            type: String,
+          },
+        designationId: {
+            type: String,
+          },
+        designationName: { type: String, trim: true  },
+        roleName: { type: String, trim: true },
         employmentStartDate: { type: String, trim: true  },
         reportingToId: { type: String , trim: true },
         reportingToName: { type: String,trim: true  },
@@ -139,22 +143,6 @@ const EmployeeSchema = new mongoose.Schema({
      
     },
     officialInformation:[{
-        // officialEmail: { type: String, required: true },
-        // departmentId: { type: String, required: true},
-        // departmentName: { type: String, required: true},
-        // employmentType: { type: String, required: true },
-        // employeeCode: { type: String, required: true },
-        // companyAddress: { type: String },
-        // companyBranch: { type: String },
-        // position: { type: String },
-        // role: { type: String },
-        // designationId: { type: String },
-        // designationName: { type: String },
-        // roleName: { type: String },
-        // dateOfJoining: { type: String },
-        // reportingToId: { type: String },
-        // reportingToName: { type: String },
-
         leave: [{
             leaveName: {
                 type: String,

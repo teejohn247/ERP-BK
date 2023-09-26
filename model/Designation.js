@@ -9,18 +9,6 @@ const DesignationSchema = new mongoose.Schema({
     leaveId: { type: String, required: true },
     noOfLeaveDays: { type: String, required: true },
     paidLeave: { type: Boolean, required: true },
-    // leaveTypes:
-    // [{
-    //     leaveName: {
-    //         type: String,
-    //     },
-    //     noOfDays: {
-    //         type: String,
-    //     },
-    //     paid: {
-    //         type:Boolean,
-    //     },
-    // }],
     hmoPackages:
     [{
         hmoName: {
@@ -33,8 +21,5 @@ const DesignationSchema = new mongoose.Schema({
             type: String,
         }
     }],
-})
-
+});
 module.exports = mongoose.model("Designation", DesignationSchema);
-
-// const {designationName, description, leaveId, noOfLeaveDays, paidLeave} = req.body;

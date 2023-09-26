@@ -226,6 +226,7 @@ const inviteEmployee = async (req, res) => {
                 companyRole: companyRole,
                 // roleName: checkRole.roleName,
                 designationName: checkDesignation.designationName,
+                // designation: checkDesignation,
                 designationId,
                 departmentId: departmentId,
                 department: checkDept.departmentName,
@@ -233,8 +234,6 @@ const inviteEmployee = async (req, res) => {
                 employmentStartDate,
                 // reportingToName: ` ${checkName && checkName.firstName} ${checkName && checkName.lastName}}` ,
                 email,
-                leave: checkRole && checkRole.leaveType,
-                hmo: checkRole && checkRole.hmoPackages
         })
 
 
