@@ -52,14 +52,14 @@ const createDesignation = async (req, res) => {
         }
 
 
-        // if (designation) {
+        if (designation) {
 
-        //     res.status(400).json({
-        //         status: 400,
-        //         error: 'This designation name already exist'
-        //     })
-        //     return;
-        // }
+            res.status(400).json({
+                status: 400,
+                error: 'This designation name already exist'
+            })
+            return;
+        }
 
         const leaves = []
         const leaveTypes = []
