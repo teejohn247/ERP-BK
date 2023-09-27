@@ -5,10 +5,17 @@ const DesignationSchema = new mongoose.Schema({
     description: { type: String},
     companyId: { type: String, required: true },
     companyName: { type: String, required: true },
-    leaveName: { type: String, required: true },
-    leaveId: { type: String, required: true },
-    noOfLeaveDays: { type: String, required: true },
-    paidLeave: { type: Boolean, required: true },
+    leaveTypes:
+    [{
+       leaveId: { type: String},
+       leaveName: { type: String},
+       noOfLeaveDays: {
+            type: String,
+        },
+       paidLeave: { type: Boolean},
+
+       
+    }],
     hmoPackages:
     [{
         hmoName: {

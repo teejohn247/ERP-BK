@@ -23,14 +23,12 @@ const createDesignation = async (req, res) => {
 
     try {
        
-        const {designationName, description, leaveId, noOfLeaveDays, paidLeave} = req.body;
+        const {designationName, description, leaveAssignment} = req.body;
 
 
         let company = await Company.findOne({ _id: req.payload.id });
 
         let designation = await Designation.findOne({ companyId:company._id,  designationName: designationName });
-        let leave = await Leave.findOne({ _id: leaveId });
-
 
         console.log({company})
 
@@ -44,41 +42,87 @@ const createDesignation = async (req, res) => {
         }
 
 
-        if (designation) {
+        if (!leaveAssignment) {
 
             res.status(400).json({
                 status: 400,
-                error: 'This designation name already exist'
+                error: 'Leave assignment field is compulsory'
             })
             return;
         }
 
-       let designations = new Designation({
-            designationName,
-            companyId: req.payload.id,
-            companyName: company.companyName,
-            description,
-            leaveId,
-            leaveName: leave.leaveName,
-            noOfLeaveDays,
-            paidLeave
-        })
 
-        await designations.save().then((adm) => {
-            console.log(adm)
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: adm
-            })
-        }).catch((err) => {
-                console.error(err)
+        // if (designation) {
+
+        //     res.status(400).json({
+        //         status: 400,
+        //         error: 'This designation name already exist'
+        //     })
+        //     return;
+        // }
+
+        const leaves = []
+        const leaveTypes = []
+
+        leaveAssignment.map((data, index) => {
+            if(!data){
                 res.status(400).json({
                     status: 400,
-                    success: false,
-                    error: err
+                    error: 'Leave id field is compulsory'
                 })
-            })
+                return;
+            }
+            leaves.push(data.leaveId)
+        })
+
+        leaves.map(async (data, index) => {
+            const check = await Leave.findOne({_id: data});
+
+            console.log({check})
+
+            if(!check){
+                res.status(400).json({
+                    status: 400,
+                    error: 'Leave type does not exist'
+                })
+                return;
+
+            }else{
+                leaveTypes.push({
+                    leaveId: data,
+                    leaveName: check.leaveName,
+                    noOfLeaveDays: leaveAssignment[index].noOfLeaveDays,
+                    paidLeave: leaveAssignment[index].paidLeave,
+                })
+
+                let designations = new Designation({
+                    designationName,
+                    companyId: req.payload.id,
+                    companyName: company.companyName,
+                    description,
+                    leaveTypes
+                })
+        
+                await designations.save().then((adm) => {
+                    console.log(adm)
+                    res.status(200).json({
+                        status: 200,
+                        success: true,
+                        data: adm
+                    })
+                }).catch((err) => {
+                        console.error(err)
+                        res.status(400).json({
+                            status: 400,
+                            success: false,
+                            error: err
+                        })
+                    })
+            }})
+
+            console.log(leaveTypes)
+      
+ 
     } catch (error) {
         res.status(500).json({
             status: 500,
