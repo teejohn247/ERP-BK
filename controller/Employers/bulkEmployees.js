@@ -95,9 +95,7 @@ const bulkEmployee = async (req, res) => {
 
         let emails = [];
         let departments = [];
-
-        console.log('hgh')
-
+        let designations = [];
         csv()
             .fromFile(req.file.path)
             .then(async (jsonObj) => {
@@ -106,6 +104,8 @@ const bulkEmployee = async (req, res) => {
             jsonObj.map((data, index) => {
                 emails.push(data.email)
                 departments.push(data.department)
+                designations.push(data.designation)
+
 
 
                 const d = new Date();
@@ -122,8 +122,37 @@ const bulkEmployee = async (req, res) => {
             console.log(emails)
 
             const uniqueDepartments = [...new Set(departments)]
+            const uniqueDesignations = [...new Set(designations)]
 
             console.log(uniqueDepartments);
+
+
+            uniqueDesignations.map(async (data, index) => {
+                const check = await Designation.findOne({companyId: req.payload.id, designationName: data});
+                console.log({check})
+    
+                if(!check){
+                    let designation = new Designation({
+                        designationName: data,
+                        companyId: req.payload.id,
+                        companyName: companyName.companyName
+                    })
+            
+                    await designation.save().then(async (adm) => {
+                
+                 console.log(adm)
+                     
+                    }).catch((err) => {
+                            console.error(err)
+                            res.status(400).json({
+                                status: 400,
+                                success: false,
+                                error: err
+                            })
+                        })
+    
+                }
+            })
 
             uniqueDepartments.map(async (data, index) => {
             const check = await Department.findOne({companyId: req.payload.id, departmentName: data});

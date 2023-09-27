@@ -171,7 +171,7 @@ const EmployeeSchema = new mongoose.Schema({
         }],
         // leave:
         // [{
-        //     leaveId: {
+        //     leaveTypeId: {
         //         type: String,
         //     },
             // leaveType: {

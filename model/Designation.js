@@ -7,14 +7,11 @@ const DesignationSchema = new mongoose.Schema({
     companyName: { type: String, required: true },
     leaveTypes:
     [{
-       leaveId: { type: String},
+       leaveTypeId: { type: String},
        leaveName: { type: String},
        noOfLeaveDays: {
             type: String,
         },
-       paidLeave: { type: Boolean},
-
-       
     }],
     hmoPackages:
     [{
