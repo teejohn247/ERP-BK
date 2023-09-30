@@ -11,7 +11,6 @@ import inviteEmployee from '../controller/Employers/createEmployers';
 import deleteEmployee from '../controller/Employers/deleteEmployer';
 import fetchEmployees from '../controller/Employers/fetchEmployees';
 import fetchSpecificEmployees from '../controller/Employers/fetchSpecificEmployee';
-import updateEmployee from '../controller/Employers/updateEmployer';
 import updatePayment from '../controller/Employers/updatePayment';
 import addHmo from '../controller/Role/addHmo';
 import addLeave from '../controller/Role/addLeaveType';
@@ -45,6 +44,11 @@ import createLeave from '../controller/Leave/createLeave';
 import updateLeave from '../controller/Leave/updateLeave';
 import fetchLeaves from '../controller/Leave/fetchLeave';
 import fetchLeavesDetails from '../controller/Leave/fetchLeaveDetails';
+import updateEmployeeAdmin from '../controller/Employers/updateEmployeeAdmin';
+import updateEmployee from '../controller/Employers/updateEmployee';
+import updateDesignation from '../controller/createDesignation/updateDesignation';
+import deleteDesignation from '../controller/createDesignation/deleteDesignation';
+import deleteLeave from '../controller/Leave/deleteLeave';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -117,7 +121,7 @@ router.patch('/verifyPassword', verifyToken);
 
 
 
-router.post("/addImage/:id", auth, upload.single("my_file"), imageUploader, addImage);
+router.post("/addImage", auth, upload.single("my_file"), imageUploader, addImage);
 router.post('/addEmployee', auth, inviteEmployee);
 router.patch('/addLeaveType/:roleId', auth, addLeave);
 // router.patch('/addHmo/:id', auth, addHmo);
@@ -141,7 +145,8 @@ router.patch('/addPayment/:id',auth, addPayment);
 router.post('/updatePayment', auth, updatePayment);
 router.get('/fetchEmployees',auth,  fetchEmployees);
 router.get('/fetchEmployee/:id', auth, fetchSpecificEmployees);
-router.patch('/updateEmployee/:id', auth, updateEmployee);
+router.patch('/adminUpdateEmployee/:id', auth, upload.single("my_file"), imageUploader, updateEmployeeAdmin);
+router.patch('/updateEmployee', auth, upload.single("my_file"), imageUploader, updateEmployee);
 router.delete('/deleteEmployee/:id', auth, deleteEmployee);
 router.get('/fetchDesignations', auth, fetchDesignation);
 router.get('/listAuditTrails', auth, listAudits);
@@ -149,11 +154,16 @@ router.post("/uploadEmployees", auth, mult.single("csv"), bulkEmployee);
 router.post("/verifyEmail", verifyNewUser);
 router.post("/decodeEmail", verifyToken);
 router.post("/setPassword", auth, verifyEmployee);
-
 router.post("/createLeave", auth, createLeave);
+router.delete("/deleteLeave/:id", auth, deleteLeave);
+
 router.patch("/updateLeave/:id", auth, updateLeave);
 router.get("/fetchLeave", auth, fetchLeaves);
 router.get("/fetchLeave/:id", auth, fetchLeavesDetails);
+router.patch("/updateDesignation/:id", auth, updateDesignation);
+router.delete("/deleteDesignation/:id", auth, deleteDesignation);
+
+
 
 
 

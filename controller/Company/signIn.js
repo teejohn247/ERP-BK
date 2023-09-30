@@ -98,6 +98,7 @@ const signin = async (req, res) => {
 
             return;
         } else if(employee){
+            console.log('ii')
             const isMatch = await bcrypt.compare(password, employee.password);
 
             console.log({isMatch})
@@ -131,9 +132,9 @@ const signin = async (req, res) => {
 
             let company = await Employee.findOne({ email: email });
 
-            console.log({employee})
+            console.log('po')
 
-            const token = utils.encodeToken(employee._id, false, employee.email);
+            const token = utils.encodeToken(employee._id, false, email);
 
             res.status(200).json({
                 status: 200,

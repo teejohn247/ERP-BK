@@ -26,7 +26,7 @@ const addImage = async (req, res) => {
    
         console.log(req.body.image)
 
-        const check = await Employee.findOne({ _id: req.params.id })
+        const check = await Employee.findOne({ _id: req.payload.id })
 
         console.log({check})
 
@@ -44,9 +44,9 @@ const addImage = async (req, res) => {
         // });
     
 
-        Employee.findOneAndUpdate({ _id: req.params.id}, { 
+        Employee.findOneAndUpdate({ _id: req.payload.id}, { 
             $set: { 
-               "personalInformation.$[].profilePic": req.body.image,
+               "profilePic": req.body.image,
             }
        },
        { upsert: true, new: true },

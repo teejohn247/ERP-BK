@@ -74,8 +74,8 @@ const EmployeeSchema = new mongoose.Schema({
         reportingToId: { type: String , trim: true },
         reportingToName: { type: String,trim: true  },
         companyRole: { type: String,trim: true  },
-     roles:{
-        humanResources: [
+        roles:{
+         humanResources: [
             {
                 role_id: {
                     type: String,

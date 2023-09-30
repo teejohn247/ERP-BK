@@ -7,6 +7,8 @@ import Company from '../../model/Company';
 import utils from '../../config/utils';
 import { emailTemp } from '../../emailTemplate';
 
+import Designation from "../../model/Designation";
+import Department from "../../model/Department";
 
 const sgMail = require('@sendgrid/mail')
 
@@ -23,22 +25,27 @@ const updateEmployee = async (req, res) => {
 
     try {
    
-        const { firstName, lastName, dateOfBirth, departmentId , companyRole, designationId, phoneNumber, gender,
-        employmentType} = req.body;
+        // const { firstName, lastName, dateOfBirth, departmentId , companyRole, designationId, phoneNumber, gender,
+        // employmentType} = req.body;
 
-        const check = await Employee.findOne({ _id: req.params.id })
-        let company = await Company.find({ _id: req.payload.id });
+        const { firstName, lastName, personalEmail, gender, phoneNumber, address, dateOfBirth,
+             paymentInformation, image } = req.body;
 
+
+             console.log({paymentInformation})
+        
+
+        const check = await Employee.findOne({ _id: req.payload.id });
+     
+        let company = await Company.find({ _id: check.companyId});
 
         if (!check) {
             res.status(400).json({
                 status: 400,
                 error: "Employee doesn't exist"
-            })
+            });
             return;
         }
-    
-
         Employee.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
 
@@ -46,16 +53,13 @@ const updateEmployee = async (req, res) => {
                     lastName: lastName && lastName,
                     dateOfBirth: dateOfBirth && dateOfBirth,
                     gender: gender && gender,
+                    address: address && address,
+                    personalEmail: personalEmail && personalEmail,
                     phoneNumber: phoneNumber && phoneNumber,
-                    companyRole: companyRole && companyRole,
-                    // role: companyRoleId,
-                    // roleName: checkRole.roleName,
-                    designationId: designationId && designationId,
-                    departmentId: departmentId && departmentId,
-                    employmentType: employmentType && employmentType,
+                    profilePic: image && image
             }
        },
-            function (
+            async function (
                 err,
                 result
             ) {
@@ -70,6 +74,10 @@ const updateEmployee = async (req, res) => {
                     return;
 
                 } else {
+
+                    await check.updateOne({
+                        paymentInformation: paymentInformation && paymentInformation, 
+                    });
                     const checkUpdated = Employee.findOne({ _id: req.params.id })
                     AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
                         { $push: { humanResources: { 
