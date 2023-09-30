@@ -36,50 +36,7 @@ const inviteEmployee = async (req, res) => {
         let checkDesignation = await Designation.findOne({_id: designationId})
         let checkDept= await Department.findOne({_id: departmentId})
         let checkName= await Employee.findOne({_id: reportingTo })
-
-
-
-        console.log({checkDesignation})
-        console.log(checkName)
-
-
-       console.log(req.payload)
-
         let company = await Company.find({ _id: req.payload.id });
-
-        console.log({company})
-
-        // let pp= await Employee.findOne({ companyId: req.payload.id })
-        // console.log({pp})
-
-        // var personal = false
-
-        // let checkPersonal = await Employee.find({ companyId: req.payload.id  },
-        //     { officialInformation: { $elemMatch: { officialEmail: officialEmail} } })
-        //     console.log(checkPersonal.length)
-
-        //     if (checkPersonal.length > 0){
-        //         checkPersonal.some((chk, i) => {
-        //             console.log(chk.personalInformation.length)
-        //             if(chk.personalInformation.length > 0){
-        //                 console.log(personal)
-        //                personal = true
-        //             }
-        //         })
-            
-        // }
-        // console.log('kk')
-
-        // if(personal == true){
-        //     return res.status(400).json({
-        //         status: 400,
-        //         error: `An employee already exist with email: ${personalEmail}`
-        //     })
-        // }
-
-
-        // let checkCompany = await Employee.find({ companyId: req.payload.id },
-        //     { officialInformation: { $elemMatch: { email:  email} } })
 
             let checkCompany = await Employee.find(
                 {   companyId: req.payload.id,
@@ -94,7 +51,6 @@ const inviteEmployee = async (req, res) => {
                 console.log({chk})
                 // if(chk.officialInformation.length > 0){
                     comp = true
-                 
                 // }
             })
         }
@@ -106,26 +62,6 @@ const inviteEmployee = async (req, res) => {
             })
         }
 
-            // if (checkPersonal.length > 0 && checkPersonal.some((chk, i) => {
-            //     chk.personalInformation.length > 0
-            // })){
-            //     console.log({chk})
-            //     res.status(400).json({
-            //         status: 400,
-            //         error: `An employee already exist with email: ${officialEmail}}`
-            //     })
-            //     return
-            // }
-
-
-        // if (checkPersonal.personalInformation.length > 0 && checkCompany.officialInformation.length > 0) {
-        //     res.status(400).json({
-        //         status: 400,
-        //         error: 'An employee with this email address already exist'
-        //     })
-        //     return;
-        // }
-
         const d = new Date();
         let year = d.getFullYear();
         // var timeNow = (new Date()).getTime().toString();
@@ -136,34 +72,6 @@ const inviteEmployee = async (req, res) => {
         let letter = firstName.charAt(0);
         let last = lastName.charAt(0);
         console.log('hgh')
-
-
-    //     const token = utils.encodeToken("", false, email);
-
-    //     let data = `<div>
-    //     <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
-    //     Hi Admin,
-    //     </p> 
-
-    //     <p style="font-size: 16px;font-weight: 300;">
-
-    //     You have been invited to join <a href="#">Xped8</a> as ${role == "Admin" ? `an ${role}` : `a ${role}`} 
-
-    //     <br><br>
-    //     </p>
-        
-    //     <div>`
-
-    //    let resp = emailTemp(data, 'Xped8 Platform Invitation')
-
-    //     const msg = {
-    //         to: email, // Change to your recipient
-    //         from: 'smsnebula@nigenius.ng',
-    //         subject: 'Xped8 Platform Invitation',
-    //         // text: 'This is a test email',
-    //         html: `${resp}`,
-    //     }
-
     console.log(company[0].companyName)
     console.log('ff',
         company[0].companyName,
@@ -186,31 +94,6 @@ const inviteEmployee = async (req, res) => {
         // checkRole.leaveType,
         // checkRole.hmoPackages
         )
-
-
-    //     const token = utils.encodeToken(69696, false, officialEmail);
-    
-    //     console.log('{employee}')
-
-    //     let data = `<div>
-    //     <p style="padding: 32px 0; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
-    //     Hi ${firstName},
-    //     </p> 
-
-    //     <p style="font-size: 16px;font-weight: 300;">
-
-    //     You have been invited to join <a href="https://main.d3i12sou25ghi7.amplifyapp.com/verify-email/${token}">ERP Software</a> as an employee 
-
-    //     <br><br>
-    //     </p>
-        
-    //     <div>`
-
-    //    let resp = emailTemp(data, 'Employee Invitation')
-
-    //     await sendEmail(req, res, officialEmail, 'Employee Invitation', resp);
-
-    //     return;
 
 
        let employee = new Employee({
@@ -253,7 +136,7 @@ const inviteEmployee = async (req, res) => {
     
             <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
     
-            You have been invited to join <a href="https://xped8-ca9291a9a7e0.herokuapp.com/login/${token}">SILO ERP Platform</a> as an employee 
+            You have been invited to join <a href="http://localhost:4200/login/${token}">SILO ERP Platform</a> as an employee 
     
             <br><br>
             </p>

@@ -244,7 +244,7 @@ const bulkEmployee = async (req, res) => {
     
                         <p style="font-size: 16px; text-align:left !important; font-weight: 300;">
     
-                        You have been invited to join <a href="https://xped8-ca9291a9a7e0.herokuapp.com/login/${token}">SILO ERP Platform</a> as an employee 
+                        You have been invited to join <a href="http://localhost:4200/login/${token}">SILO ERP Platform</a> as an employee 
     
                         <br><br>
                         </p>

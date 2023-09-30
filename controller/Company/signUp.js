@@ -53,7 +53,7 @@ const signUp = async (req, res) => {
 
         <p style="font-size: 16px; text-align:left !important; font-weight: 300;">
 
-        Click on this link to complete your registration process <a href="https://xped8-ca9291a9a7e0.herokuapp.com/dashboard/${token}">SILO ERP Platform</a> as an employee 
+        Click on this link to complete your registration process <a href="http://localhost:4200/dashboard/${token}">SILO ERP Platform</a> as an employee 
 
         <br><br>
         </p>
@@ -65,13 +65,6 @@ const signUp = async (req, res) => {
         console.log({token})
 
         await sendEmail(req, res, email, receivers, 'Email Confirmation', resp);
-
-        // company = new Company({
-        //     email: email,
-        //     password: hashed,
-        //     isSuperAdmin: true
-        // });
-        // await company.save();
 
         res.status(200).json({
             status: 200,
