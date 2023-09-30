@@ -31,13 +31,13 @@ const updateDesignation = async (req, res) => {
       return;
     }
 
-    if (designation) {
-      res.status(400).json({
-        status: 400,
-        error: "This designation name already exist",
-      });
-      return;
-    }
+    // if (designation) {
+    //   res.status(400).json({
+    //     status: 400,
+    //     error: "This designation name already exist",
+    //   });
+    //   return;
+    // }
 
     if (!leaveAssignment) {
 
