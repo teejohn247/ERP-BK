@@ -42,13 +42,6 @@ export const sendEmail = async (
       name: 'SILO'
     }
     
-    // const receivers = [
-    //   {
-    //     email: 'teejohn247@gmail.com'
-    //   }
-    
-    // ]
-    
     console.log('Email here');
     
     await apiInstance.sendTransacEmail({
@@ -58,23 +51,6 @@ export const sendEmail = async (
       subject, // Email subject
       htmlContent: html, // HTML version of the email (optional)
     });
-    
-    // sendEmails
-    // res.send(sendEmails);
-
-      // res.status(200).json({
-      //                               status: 200,
-      //                               success: true,
-      //                               data: "Employee has been invited successfully"
-      //                           })
-    // console.log('send an email')
-    // await transporter.sendMail({
-    //   from: process.env.EMAIL_FROM, // Sender's email address
-    //   to, // Recipient's email address
-    //   subject, // Email subject
-    //   html, // HTML version of the email (optional)
-    // });
-
     console.log('Email sent successfully.');
   } catch (error) {
     console.error('Error sending email:', error);

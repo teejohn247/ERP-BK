@@ -38,6 +38,30 @@ const inviteEmployee = async (req, res) => {
         let checkName= await Employee.findOne({_id: reportingTo })
         let company = await Company.find({ _id: req.payload.id });
 
+
+
+        console.log({company});
+        if (company.length < 1){
+            return res.status(400).json({
+                status: 400,
+                error: `Company does not exist`
+            })
+           
+        }
+
+        if (checkDesignation.length < 1){
+            return res.status(400).json({
+                status: 400,
+                error: `Designation does not exist`
+            })
+           
+        }
+
+
+        console.log('hgh')
+        console.log(company)
+
+
             let checkCompany = await Employee.find(
                 {   companyId: req.payload.id,
                     email: email},
@@ -67,33 +91,13 @@ const inviteEmployee = async (req, res) => {
         // var timeNow = (new Date()).getTime().toString();
      
         console.log('hgh')
+        console.log(lastName)
+        console.log(firstName)
+
 
 
         let letter = firstName.charAt(0);
         let last = lastName.charAt(0);
-        console.log('hgh')
-    console.log(company[0].companyName)
-    console.log('ff',
-        company[0].companyName,
-        req.payload.id,
-        firstName,
-        lastName,
-        dateOfBirth,
-        gender,
-        phoneNumber,
-        `EMP-${year}-${letter}${last}${total.length + 1}`,
-        companyRoleId,
-        // checkRole.roleName,
-        checkDesignation.designationName,
-        designationId,
-        departmentId,
-        employmentType,
-        employmentStartDate,
-        // `${checkName.firstName} ${checkName.lastName}` ,
-        email,
-        // checkRole.leaveType,
-        // checkRole.hmoPackages
-        )
 
 
        let employee = new Employee({
@@ -136,7 +140,7 @@ const inviteEmployee = async (req, res) => {
     
             <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
     
-            You have been invited to join <a href="http://localhost:4200/login/${token}">SILO ERP Platform</a> as an employee 
+            You have been invited to join <a href="http://localhost:4200/set-password/${token}">SILO ERP Platform</a> as an employee 
     
             <br><br>
             </p>

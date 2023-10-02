@@ -27,6 +27,8 @@ const verifyEmployee = async (req, res) => {
         let adm = await Admin.findOne({ email: req.payload.email });
 
         console.log({emp})
+        console.log({adm})
+
 
 
 
@@ -105,7 +107,7 @@ const verifyEmployee = async (req, res) => {
                         data: registered,
                         token: token,
                     })
-           return;
+                return;
 
         } else if (adm){
             let admin = await Admin.findOne({ email: req.payload.email });

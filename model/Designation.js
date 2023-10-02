@@ -11,7 +11,7 @@ const DesignationSchema = new mongoose.Schema({
        leaveName: { type: String},
        noOfLeaveDays: {
             type: String,
-        },
+        }
     }],
     hmoPackages:
     [{

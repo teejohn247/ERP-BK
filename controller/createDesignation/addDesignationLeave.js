@@ -26,16 +26,6 @@ const addDesignationLeave = async (req, res) => {
         
         const { leaveName, noOfDays, paid } = req.body;
 
-        // const check = await Employee.findOne({ _id: req.params.roleId, "leaveTypes.$.leaveName": leaveName })
-
-        // if (check) {
-        //     res.status(400).json({
-        //         status: 400,
-        //         error: "Leave Name already exist"
-        //     })
-        //     return;
-        // }
-
         let check = await Employee.find({ _id: req.params.id },
             { leaveTypes: { $elemMatch: { leaveName: leaveName} } })
 

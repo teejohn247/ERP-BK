@@ -33,7 +33,6 @@ const updateEmployee = async (req, res) => {
             $set: { 
                 password,
                 status: "Accepted"
-
             }
        },
             function (

@@ -36,10 +36,7 @@ const fetchEmployees = async (req, res) => {
         
         const employeeTable = await EmployeeTable.find()
 
-
-
         const count = await Employee.find().countDocuments()
-
 
         if(!employee){
             res.status(404).json({
