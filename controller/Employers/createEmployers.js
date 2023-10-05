@@ -40,8 +40,8 @@ const inviteEmployee = async (req, res) => {
 
 
 
-        console.log({company});
-        if (company.length < 1){
+        console.log({checkDesignation});
+        if (!company){
             return res.status(400).json({
                 status: 400,
                 error: `Company does not exist`
@@ -49,12 +49,11 @@ const inviteEmployee = async (req, res) => {
            
         }
 
-        if (checkDesignation.length < 1){
+        if (!checkDesignation){
             return res.status(400).json({
                 status: 400,
                 error: `Designation does not exist`
             })
-           
         }
 
 
@@ -100,6 +99,19 @@ const inviteEmployee = async (req, res) => {
         let last = lastName.charAt(0);
 
 
+        let leaveType = []
+
+        // return;
+
+
+        // if(checkDesignation.leaveTypes){
+        //     leaveType.push({
+        //         leaveTypeId: checkDesignation.leaveTypes.leaveTypeId,
+        //         leaveName:  checkDesignation.leaveTypes.leaveName,
+        //         noOfLeaveDays:  checkDesignation.leaveTypes.noOfLeaveDays,
+        //     });
+        // }
+
        let employee = new Employee({
             companyName: company[0].companyName,
             companyId: req.payload.id,
@@ -119,8 +131,10 @@ const inviteEmployee = async (req, res) => {
                 department: checkDept.departmentName,
                 employmentType,
                 employmentStartDate,
-                // reportingToName: ` ${checkName && checkName.firstName} ${checkName && checkName.lastName}}` ,
+                managerId:  checkDept.managerId && checkDept.managerId,
+                managerName: checkDept.managerName && checkDept.managerName,
                 email,
+                leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes
         })
 
 

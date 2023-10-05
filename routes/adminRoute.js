@@ -49,6 +49,12 @@ import updateEmployee from '../controller/Employers/updateEmployee';
 import updateDesignation from '../controller/createDesignation/updateDesignation';
 import deleteDesignation from '../controller/createDesignation/deleteDesignation';
 import deleteLeave from '../controller/Leave/deleteLeave';
+import assignManager from '../controller/Department/assignManager';
+import assignManagerEmployee from '../controller/Employers/assignManagerEmployee';
+import leaveApplication from '../controller/Employers/leaveApplication';
+import leaveAction from '../controller/Employers/leaveAction';
+import getLeaveRecords from '../controller/Employers/getLeaveRecords';
+import assignDesignation from '../controller/createDesignation/assignDesignation';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -155,6 +161,10 @@ router.post("/verifyEmail", verifyNewUser);
 router.post("/decodeEmail", verifyToken);
 router.post("/setPassword", auth, verifyEmployee);
 router.post("/createLeave", auth, createLeave);
+
+router.patch("/assignDepartmentManager", auth, assignManager);
+router.patch("/assignManager", auth, assignManagerEmployee);
+
 router.delete("/deleteLeave/:id", auth, deleteLeave);
 
 router.patch("/updateLeave/:id", auth, updateLeave);
@@ -163,10 +173,11 @@ router.get("/fetchLeave/:id", auth, fetchLeavesDetails);
 router.patch("/updateDesignation/:id", auth, updateDesignation);
 router.delete("/deleteDesignation/:id", auth, deleteDesignation);
 
+router.post("/leaveApplication", auth, leaveApplication);
+router.patch("/leaveAction", auth, leaveAction);
+router.get("/getLeaveRecords", auth, getLeaveRecords);
 
-
-
-
+router.patch("/assignBulkDesignation", auth, assignDesignation);
 
 
 

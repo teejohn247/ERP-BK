@@ -2,6 +2,8 @@
 import dotenv from 'dotenv';
 import Department from '../../model/Department';
 import Company from '../../model/Company';
+import Employee from '../../model/Employees';
+
 
 
 
@@ -20,9 +22,10 @@ const addDepartment = async (req, res) => {
 
     try {
 
-        const {departmentName} = req.body;
+        const {departmentName, managerId} = req.body;
         let departmentN = await Department.findOne({ companyId: req.payload.id, departmentName: departmentName });
         let companyName = await Company.findOne({ _id: req.payload.id });
+        const employee = await Employee.findOne({_id: managerId})
 
 
 
@@ -38,8 +41,9 @@ const addDepartment = async (req, res) => {
        let department = new Department({
             departmentName,
             companyId: req.payload.id,
-            companyName: companyName.companyName
-            
+            companyName: companyName.companyName,
+            managerName: employee && `${employee.firstName} ${employee.lastName}`,
+            managerId: managerId
         })
 
 

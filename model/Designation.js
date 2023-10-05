@@ -5,13 +5,26 @@ const DesignationSchema = new mongoose.Schema({
     description: { type: String},
     companyId: { type: String, required: true },
     companyName: { type: String, required: true },
+    grade: { type: Number, required: true },
     leaveTypes:
     [{
        leaveTypeId: { type: String},
        leaveName: { type: String},
        noOfLeaveDays: {
             type: String,
+        },
+        description:{
+            type: String,
         }
+    }],
+    expenseCard:
+    [{
+        cardCurrency: {
+            type: String,
+            required: true
+        },
+        cardLimit: { type: String, required: true},
+        cardExpiryDate: { type: String, required: true },
     }],
     hmoPackages:
     [{

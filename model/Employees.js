@@ -35,7 +35,7 @@ const EmployeeSchema = new mongoose.Schema({
         dateOfBirth: { type: String, trim: true  },
         personalEmail: { type: String },
         phoneNumber: { type: String,  trim: true  },
-        profilePic: { type: String },
+        profilePic: { type: String, default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKoUT6kaiW2c9qcsxtXXDLJWsHwDvTNgaIkSzH7d0mNg&s" },
         address: { type: String, trim: true  },
         gender: { type: String, trim: true },
         nextOfKinFullName: {
@@ -71,8 +71,8 @@ const EmployeeSchema = new mongoose.Schema({
         designationName: { type: String, trim: true  },
         roleName: { type: String, trim: true },
         employmentStartDate: { type: String, trim: true  },
-        reportingToId: { type: String , trim: true },
-        reportingToName: { type: String,trim: true  },
+        managerId: { type: String , trim: true },
+        managerName: { type: String,trim: true  },
         companyRole: { type: String,trim: true  },
         roles:{
          humanResources: [
@@ -142,33 +142,61 @@ const EmployeeSchema = new mongoose.Schema({
         ],
      
     },
+    leaveAssignment: 
+    [{
+        leaveTypeId: {
+            type: String,
+        },
+        leaveName: {
+            type: String,
+        },
+        noOfLeaveDays: {
+            type: String,
+        },
+        description: {
+            type: String,
+        },
+        leaveStart: {
+            type: String,
+        },
+        leaveEndDate: {
+            type: String,
+        },
+        comments:{
+            type: String,
+        },
+        leaveApproved:{
+            type: Boolean,
+            default: false
+        }
+    }],
     officialInformation:[{
-        leave: [{
-            leaveName: {
-                type: String,
-            },
-            noOfDays: {
-                type: String,
-            },
-            paid: {
-                type:Boolean,
-            },
-            leaveType: {
-                type: String,
-            },
-            leaveStart: {
-                type: String,
-            },
-            leaveEndDate: {
-                type: String,
-            },
-            daysUsed: {
-                type: String,
-            },
-            leaveApproved: {
-                type: Boolean,
-            }
-        }],
+        // leave: [{
+        //     leaveName: {
+        //         type: String,
+        //     },
+        //     noOfDays: {
+        //         type: String,
+        //     },
+        //     paid: {
+        //         type:Boolean,
+        //     },
+        //     leaveType: {
+        //         type: String,
+        //     },
+        //     leaveStart: {
+        //         type: String,
+        //     },
+        //     leaveEndDate: {
+        //         type: String,
+        //     },
+        //     daysUsed: {
+        //         type: String,
+        //     },
+        //     leaveApproved: {
+        //         type: Boolean,
+        //     }
+        // }],
         // leave:
         // [{
         //     leaveTypeId: {

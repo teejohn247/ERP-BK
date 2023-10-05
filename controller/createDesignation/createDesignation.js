@@ -12,7 +12,7 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 const createDesignation = async (req, res) => {
   try {
-    const { designationName, description, leaveAssignment } = req.body;
+    const { designationName, description, leaveAssignment, grade, expenseCard } = req.body;
 
     let company = await Company.findOne({ _id: req.payload.id });
 
@@ -45,6 +45,7 @@ const createDesignation = async (req, res) => {
         companyId: req.payload.id,
         companyName: company.companyName,
         description,
+        grade
       });
 
       await designations
@@ -124,6 +125,7 @@ const createDesignation = async (req, res) => {
         leaveTypeId: data,
         leaveName: check.leaveName,
         noOfLeaveDays: leaveAssignment[index].noOfLeaveDays,
+        description: check.description
       });
     });
 
@@ -139,6 +141,8 @@ const createDesignation = async (req, res) => {
           companyName: company.companyName,
           description,
           leaveTypes: leaveTypes && leaveTypes,
+          expenseCard,
+          grade
         });
 
         await designations

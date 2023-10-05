@@ -144,18 +144,55 @@ const updateDesignation = async (req, res) => {
                     return;
     
                 } else {
-                    res.status(200).json({
-                        status: 200,
-                        success: true,
-                        data: "Update Successful"
-                      });
-                      return;
-    
-                }})
+               
+                  await Employee.find({ companyId:  req.payload.id},
+                    { leaveAssignment: { $elemMatch: { leaveTypeId: data }}}, {
+                      $set: { 
+                        "leaveTypes.$[i].leaveName": leaveTypes.leaveName && leaveTypes.leaveName,
+                        "leaveTypes.$[i].noOfDays": leaveTypes.noOfLeaveDays && leaveTypes.noOfLeaveDays,
+                        "leaveTypes.$[i].paid": leaveTypes.paid && leaveTypes.paid
+                    }
+               },
+               { 
+                arrayFilters: [
+                    {
+                        "i.leaveTypeId": data
+                    }
+                ]},
+               
+                  async function (
+                      err,
+                      result
+                  ) {
+                      if (err) {
+                          res.status(401).json({
+                              status: 401,
+                              success: false,
+                              error: err
+                          })
+                          return;
+                      }else{
+                        res.status(200).json({
+                          status: 200,
+                          success: true,
+                          data: "Update Successful"
+                        });
+                        return;
+                      };
 
-             return;
+                
 
-
+              })
+            }
+          });
+        }).catch((err) => {
+          res.status(500).json({
+            status: 500,
+            success: false,
+            error: err,
+          });
+      })
+    }
         // let designations = await new Designation({
         //   designationName,
         //   companyId: req.payload.id,
@@ -185,17 +222,12 @@ const updateDesignation = async (req, res) => {
 
         //     return;
         //   });
-      })
-
+      
 
   
 
 
-      .catch((error) => {
-        // Handle errors from the promises
-        console.error("Error:", error);
-      });
-  } catch (error) {
+ catch (error) {
     res.status(500).json({
       status: 500,
       success: false,

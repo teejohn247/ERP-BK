@@ -31,10 +31,10 @@ const updateEmployeeAdmin = async (req, res) => {
         // employmentType} = req.body;
 
         const { firstName, lastName, email, phoneNumber, dateOfBirth, companyRole, gender, departmentId, companyRoleId, designationId,  employmentStartDate,
-            employmentType, reportingTo } = req.body;
+            employmentType } = req.body;
 
         let company = await Company.find({ _id: req.payload.id });
-        console.log(company)
+        console.log({company})
 
         if (!req.params.id) {
             res.status(400).json({
@@ -49,14 +49,27 @@ const updateEmployeeAdmin = async (req, res) => {
         // let checkRole = await Roles.findOne({_id: companyRoleId});
         if(designationId){
             var checkDesignation = await Designation.findOne({_id: designationId});
+
+            if (!checkDesignation) {
+                res.status(400).json({
+                    status: 400,
+                    error: "Designation doesn't exist"
+                });
+                return;
+            }
         }
         if(departmentId){
            var checkDept = await Department.findOne({_id: departmentId});
-        }
-        if(reportingTo){
-            var checkName= await Employee.findOne({_id: reportingTo });
-         }
 
+           if (!checkDept) {
+            res.status(400).json({
+                status: 400,
+                error: "Department doesn't exist"
+            });
+            return;
+        }
+        }
+      
         if (!check) {
             res.status(400).json({
                 status: 400,
@@ -74,15 +87,12 @@ const updateEmployeeAdmin = async (req, res) => {
                     gender: gender && gender,
                     phoneNumber: phoneNumber && phoneNumber,
                     companyRole: companyRole && companyRole,
-                    designationId: designationId && designationId,
+                    designation: checkDesignation && checkDesignation.designationName,
                     department: checkDept && checkDept.departmentName,
-                    designationName: checkDesignation && checkDesignation.designationName,
                     departmentId: departmentId && departmentId,
                     employmentType: employmentType && employmentType,
-                    reportingToId: reportingTo && reportingTo,
-                    reportingToName: reportingTo && `${checkName.firstName} ${checkName.lastName}`
-
-                    
+                    managerId: checkDept && checkDept.managerId,
+                    managerName: checkDept && checkDept.managerName,
                 }
        },
             function (

@@ -51,6 +51,56 @@ const signin = async (req, res) => {
         console.log({employee})
         console.log(admin)
 
+
+        if(admin && employee){
+            console.log('ii')
+            const isMatch = await bcrypt.compare(password, employee.password);
+
+            console.log({isMatch})
+            if (!isMatch) {
+                res.status(404).json({
+                    status: 404,
+                    success: false,
+                    error: 'Invalid login credentials'
+                })
+                return;
+            }
+            console.log(employee.firstTimeLogin)
+
+
+            if (employee.firstTimeLogin == undefined) {
+            console.log("here")
+                await employee.updateOne({
+                    firstTimeLogin: true, 
+                });
+            }else if (employee.firstTimeLogin == true){
+                await employee.updateOne({
+                    firstTimeLogin: false, 
+                });
+
+            }
+            else if (employee.firstTimeLogin == false){
+                await employee.updateOne({
+                    firstTimeLogin: false, 
+                });
+            }
+
+            let company = await Employee.findOne({ email: email });
+
+            console.log('po')
+
+            const token = utils.encodeToken(employee._id, false, email);
+
+            res.status(200).json({
+                status: 200,
+                data: company,
+                token: token,
+            })
+
+            return
+
+         } 
+
         if (admin){
             const isMatch = await bcrypt.compare(password, admin.password);
             if (!isMatch) {

@@ -12,9 +12,9 @@ const assignManager = async (req, res) => {
 
     try {
 
-        const {managerId} = req.body;
-        const department = await Department.find({_id: req.params.id})
-        const employee = await Employee.findOne({_id: req.params.managerId})
+        const {managerId, departmentId} = req.body;
+        const department = await Department.find({_id: departmentId})
+        const employee = await Employee.findOne({_id: managerId})
 
         if(!managerId){
             res.status(404).json({
@@ -44,14 +44,13 @@ const assignManager = async (req, res) => {
             return
         }
 
-        Department.findOneAndUpdate({ _id: req.params.id}, { 
+        Department.findOneAndUpdate({ _id: departmentId}, { 
             $set: { 
                 managerName: employee && `${employee.firstName} ${employee.lastName}`,
                 managerId: managerId
-
             }
-       },
-            function (
+       },{ upsert: true },
+            async function (
                 err,
                 result
             ) {
@@ -63,6 +62,36 @@ const assignManager = async (req, res) => {
                     })
 
                 } else {
+
+                   Employee.updateMany({department: department.departmentName}, { 
+                    $set: { 
+                        managerName: employee && `${employee.firstName} ${employee.lastName}`,
+                        managerId: managerId
+                    }
+               },
+                    async function (
+                        err,
+                        result
+                    ) {
+                        if (err) {
+                            res.status(401).json({
+                                status: 401,
+                                success: false,
+                                error: err
+                            })
+        
+                        } else {
+        
+                            res.status(200).json({
+                                status: 200,
+                                success: true,
+                                data: "Update Successful"
+                            })
+        
+                        }
+                    })
+
+
                     res.status(200).json({
                         status: 200,
                         success: true,
