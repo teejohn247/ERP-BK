@@ -49,6 +49,8 @@ const leaveAction = async (req, res) => {
             return;
         }
 
+        console.log(leaveType.userId)
+
         await leaveType.updateOne({
             approved
         }).then(async (app) => {
@@ -56,13 +58,16 @@ const leaveAction = async (req, res) => {
 
             Employee.findOneAndUpdate({ _id: leaveType.userId }, { 
                 $set: { 
-                    "leaveAssignment.$[i].approved": approved && approved,
+                    "leaveAssignment.$[i].leaveApproved": approved && approved,
+                    "leaveAssignment.$[i].leaveStartDate": leaveType.leaveStartDate && leaveType.leaveStartDate,
+                    "leaveAssignment.$[i].leaveEndDate": leaveType.leaveEndDate && leaveType.leaveEndDate,
+
                 }
            },
            { 
             arrayFilters: [
                 {
-                    "i._id": leaveType.leaveTypeId
+                    "i.leaveTypeId": leaveType.leaveTypeId
                 }
             ]},
                 async function (

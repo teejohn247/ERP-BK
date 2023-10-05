@@ -156,7 +156,7 @@ const EmployeeSchema = new mongoose.Schema({
         description: {
             type: String,
         },
-        leaveStart: {
+        leaveStartDate: {
             type: String,
         },
         leaveEndDate: {
