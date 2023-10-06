@@ -72,7 +72,8 @@ const verifyEmployee = async (req, res) => {
                 console.log(salt, hashed)
                 await employee.updateOne({
     
-                    password: password && hashed
+                    password: password && hashed,
+                    status: "Active"
                 
                 });
         

@@ -313,6 +313,10 @@ const EmployeeSchema = new mongoose.Schema({
     //             type: String,
     //         },
     //     }],
+    isSuperAdmin: {
+        type: Boolean,
+        default: false
+    },
 
 })
 

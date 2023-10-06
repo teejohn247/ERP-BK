@@ -40,7 +40,7 @@ const createCompany = async (req, res) => {
                 companyName: companyName && companyName,
                 companyAddress: companyAddress && companyAddress,
                 generalSettings: generalSettings && generalSettings,
-                activeStatus: true,
+                status: true,
             }
        },
             function (
@@ -71,7 +71,7 @@ const createCompany = async (req, res) => {
                             email: req.payload.email,
                             companyAddress: companyAddress && companyAddress,
                             generalSettings: generalSettings && generalSettings,
-                            activeStatus: true,
+                            status: true,
                         }
                     })
                      return
