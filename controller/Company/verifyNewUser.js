@@ -43,6 +43,8 @@ const verifyNewUser = async (req, res) => {
             })
          } else {
 
+            console.log(payload.email)
+
             let admin = await Company.findOne({ email: payload.email });
 
             console.log({admin})

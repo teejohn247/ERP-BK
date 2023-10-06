@@ -55,6 +55,7 @@ import leaveApplication from '../controller/Employers/leaveApplication';
 import leaveAction from '../controller/Employers/leaveAction';
 import getLeaveRecords from '../controller/Employers/getLeaveRecords';
 import assignDesignation from '../controller/createDesignation/assignDesignation';
+import signDecode from '../middleware/signDecode';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -159,7 +160,7 @@ router.get('/listAuditTrails', auth, listAudits);
 router.post("/uploadBulkEmployees", auth, mult.single("csv"), bulkEmployee);
 router.post("/verifyEmail", verifyNewUser);
 router.post("/decodeEmail", verifyToken);
-router.post("/setPassword", auth, verifyEmployee);
+router.post("/setPassword", signDecode, verifyEmployee);
 router.post("/createLeave", auth, createLeave);
 
 router.patch("/assignDepartmentManager", auth, assignManager);
