@@ -33,23 +33,33 @@ const fetchLeaves= async (req, res) => {
 
         console.log(role)
 
-        if(!role){
-            res.status(404).json({
-                status:404,
-                success: false,
-                error:'No leave Found'
-            })
-            return
+        res.status(200).json({
+            status: 200,
+            success: true,
+            data: role,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page
+        })
+
+        return;
+
+        // if(!role){
+        //     res.status(404).json({
+        //         status:404,
+        //         success: false,
+        //         error:'No leave Found'
+        //     })
+        //     return
         
-        }else{
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: role,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page
-            })
-        }
+        // }else{
+        //     res.status(200).json({
+        //         status: 200,
+        //         success: true,
+        //         data: role,
+        //         totalPages: Math.ceil(count / limit),
+        //         currentPage: page
+        //     })
+        // }
     } catch (error) {
         res.status(500).json({
             status: 500,

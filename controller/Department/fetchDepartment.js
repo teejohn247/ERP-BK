@@ -27,24 +27,32 @@ const fetchDepartment = async (req, res) => {
         .exec();
 
         const count = await Department.find({companyId: req.payload.id}).countDocuments()
+        res.status(200).json({
+            status: 200,
+            success: true,
+            data: department,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page
+        })
 
+        return;
 
-        if(department.length < 1){
-            res.status(404).json({
-                status:404,
-                success: false,
-                error:'No department Found'
-            })
-            return
-        }else{
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: department,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page
-            })
-        }
+        // if(department.length < 1){
+        //     res.status(404).json({
+        //         status:404,
+        //         success: false,
+        //         error:'No department Found'
+        //     })
+        //     return
+        // }else{
+        //     res.status(200).json({
+        //         status: 200,
+        //         success: true,
+        //         data: department,
+        //         totalPages: Math.ceil(count / limit),
+        //         currentPage: page
+        //     })
+        // }
 
     } catch (error) {
         res.status(500).json({

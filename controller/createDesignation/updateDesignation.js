@@ -109,7 +109,7 @@ const updateDesignation = async (req, res) => {
       leaveTypes.push({
         leaveTypeId: data,
         leaveName: check.leaveName,
-        noOfLeaveDays: leaveAssignment[index].noOfLeaveDays,
+        noOfLeaveDays: Number(leaveAssignment[index].noOfLeaveDays),
       });
     });
 
@@ -179,9 +179,6 @@ const updateDesignation = async (req, res) => {
                         });
                         return;
                       };
-
-                
-
               })
             }
           });

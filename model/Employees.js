@@ -151,10 +151,16 @@ const EmployeeSchema = new mongoose.Schema({
             type: String,
         },
         noOfLeaveDays: {
-            type: String,
+            type: Number,
         },
         description: {
             type: String,
+        },
+        assignedNoOfDays: {
+            type: Number,
+        },
+        daysUsed: {
+            type: Number,
         },
         leaveStartDate: {
             type: String,

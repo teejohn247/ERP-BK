@@ -38,20 +38,16 @@ const LeaveRecordsSchema = new mongoose.Schema({
        required:true
 
     },
-    // resumption: {
-    //     type: String,
-    // },
-    // daysUsed: {
-    //     type: String,
-    // },
+    assignedNoOfDays: {
+        type: Number,
+    },
+    daysUsed: {
+        type: Number,
+    },
     approved:{
         type: Boolean,
         default: false
     },
-    // attendedTo:{
-    //     type: Boolean,
-    //     default: false
-    // },
     department:{
         type:String,
     },

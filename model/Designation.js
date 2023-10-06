@@ -11,7 +11,7 @@ const DesignationSchema = new mongoose.Schema({
        leaveTypeId: { type: String},
        leaveName: { type: String},
        noOfLeaveDays: {
-            type: String,
+            type:Number,
         },
         description:{
             type: String,

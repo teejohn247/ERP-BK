@@ -25,7 +25,7 @@ const leaveAction = async (req, res) => {
     try {
       
 
-        const { leaveId, approved, employeeId } = req.body;
+        const { leaveId, approved,  assignedNoOfDays, employeeId } = req.body;
 
         let company = await Company.findOne({ _id: req.payload.id });
         const leaveType = await LeaveRecords.findOne({ _id: leaveId});
@@ -54,14 +54,13 @@ const leaveAction = async (req, res) => {
         await leaveType.updateOne({
             approved
         }).then(async (app) => {
-
-
+            
             Employee.findOneAndUpdate({ _id: leaveType.userId }, { 
                 $set: { 
                     "leaveAssignment.$[i].leaveApproved": approved && approved,
                     "leaveAssignment.$[i].leaveStartDate": leaveType.leaveStartDate && leaveType.leaveStartDate,
                     "leaveAssignment.$[i].leaveEndDate": leaveType.leaveEndDate && leaveType.leaveEndDate,
-
+                    "leaveAssignment.$[i].assignedNoOfDays": leaveType.assignedNoOfDays && leaveType.assignedNoOfDays,
                 }
            },
            { 

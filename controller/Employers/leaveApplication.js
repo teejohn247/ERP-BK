@@ -36,11 +36,6 @@ const leaveApplication = async (req, res) => {
         const check = await Employee.findOne({ _id: req.payload.id });
 
         console.log({check})
-        const leaveType = await Leave.findOne({ _id: leaveTypeId });
-        let company = await Company.findOne({ _id: check.companyId});
-
-     
-        console.log({company})
         if (!check) {
             res.status(400).json({
                 status: 400,
@@ -48,6 +43,12 @@ const leaveApplication = async (req, res) => {
             });
             return;
         }
+        const leaveType = await Leave.findOne({ _id: leaveTypeId });
+        let company = await Company.findOne({ _id: check.companyId});
+
+     
+        console.log({company})
+       
 
         if (!company) {
             res.status(400).json({

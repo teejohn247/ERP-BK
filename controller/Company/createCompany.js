@@ -41,7 +41,6 @@ const createCompany = async (req, res) => {
                 companyAddress: companyAddress && companyAddress,
                 generalSettings: generalSettings && generalSettings,
                 activeStatus: true,
-
             }
        },
             function (
