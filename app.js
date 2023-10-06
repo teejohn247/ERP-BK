@@ -10,6 +10,8 @@ import multer from 'multer';
 import DeviceDetector from 'node-device-detector';
 import middlewareDetect from './middleware/middlewareDetect'
 import { cloudinaryConfig } from './config/cloudinary';
+import { sendEmail } from './config/email';
+import { emailTemp } from './emailTemplate';
 
 const upload = multer()
 const app = express();
@@ -84,7 +86,32 @@ connectDb()
 
 let hostname = '0.0.0.0'
 
-app.get('/test', (req, res) => {
+app.get('/test', async (req, res) => {
+
+  let data = `<div>
+            <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+            Hi 
+            </p> 
+    
+            <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
+    
+            You have been invited to join <a href="http://localhost:4200/set-password">SILO ERP Platform</a> as an employee 
+    
+            <br><br>
+            </p>
+            
+            <div>`
+    
+           let resp = emailTemp(data, 'Employee Invitation')
+
+
+           const receivers = [
+            {
+              email: 'teejohn247@gmail.com'
+            }
+          ]
+    
+            await sendEmail(req, res, 'teejohn247@gmail.com', receivers, 'Employee Invitation', resp);
   res.json({
     message: 'Welcome to silo ERP Api'
   });

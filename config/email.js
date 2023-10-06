@@ -42,7 +42,13 @@ export const sendEmail = async (
       name: 'SILO'
     }
     
-    console.log('Email here');
+    console.log(({
+      sender: senders,
+      to: receivers,
+      from: process.env.EMAIL_FROM, // Sender's email address
+      subject, // Email subject
+      htmlContent: html, // HTML version of the email (optional)
+    }));
     
     await apiInstance.sendTransacEmail({
       sender: senders,
@@ -50,8 +56,10 @@ export const sendEmail = async (
       from: process.env.EMAIL_FROM, // Sender's email address
       subject, // Email subject
       htmlContent: html, // HTML version of the email (optional)
-    });
-    console.log('Email sent successfully.');
+    }).then((res) => {
+      console.log('Email sent successfully.', res);
+
+    })
   } catch (error) {
     console.error('Error sending email:', error);
     throw error;

@@ -40,39 +40,32 @@ const deleteEmployee = async (req, res) => {
                 }
                 else {
 
-                    AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
-                        {
-                            $push: {
-                                humanResources: {
+                    // AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
+                    //     {
+                    //         $push: {
+                    //             humanResources: {
 
-                                    userName: `${employee.personalInformation[0].firstName} ${employee.personalInformation[0].lastName}`,
-                                    email: employee.officialInformation[0].officialEmail,
-                                    action: `Super admin deleted ${employee.personalInformation[0].firstName} ${employee.personalInformation[0].lastName} as an employee`,
-                                    dateTime: new Date()
-                                }
-                            }
-                        },
-                        function (
-                            err,
-                            result
-                        ) {
-                            if (err) {
-                                res.status(401).json({
-                                    status: 401,
-                                    success: false,
-                                    error: err
+                    //                 userName: `${employee.personalInformation[0].firstName} ${employee.personalInformation[0].lastName}`,
+                    //                 email: employee.officialInformation[0].officialEmail,
+                    //                 action: `Super admin deleted ${employee.personalInformation[0].firstName} ${employee.personalInformation[0].lastName} as an employee`,
+                    //                 dateTime: new Date()
+                    //             }
+                    //         }
+                    //     },
+                    //     function (
+                    //         err,
+                    //         result
+                    //     ) {
+                    //         if (err) {
+                    //             res.status(401).json({
+                    //                 status: 401,
+                    //                 success: false,
+                    //                 error: err
 
-                                })
+                    //             })
 
-                            } else {
+                    //         } else {
 
-
-                                // res.status(200).json({
-                                //     status: 200,
-                                //     success: true,
-                                //     data: "Update Successful"
-                                // })
-                                
 
 
                                 res.status(200).json({
@@ -80,9 +73,9 @@ const deleteEmployee = async (req, res) => {
                                     success: true,
                                     data: "Employee Deleted successfully!"
                                 })
-                            }
+                            // }
 
-                        })
+                    //     })
 
 
 
