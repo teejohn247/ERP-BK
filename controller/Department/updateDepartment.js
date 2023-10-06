@@ -1,6 +1,7 @@
 
 import dotenv from 'dotenv';
 import Department from '../../model/Department';
+import Employee from '../../model/Employees';
 
 
 const sgMail = require('@sendgrid/mail')
@@ -18,8 +19,9 @@ const updateDepartment = async (req, res) => {
 
     try {
 
-        const {departmentName} = req.body;
+        const {departmentName, managerId} = req.body;
         const department = await Department.find({_id: req.params.id})
+        const employee = await Employee.findOne({_id: managerId})
 
         if(!department){
             res.status(404).json({
@@ -33,6 +35,8 @@ const updateDepartment = async (req, res) => {
         Department.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
                 departmentName: departmentName && departmentName,
+                managerName: employee && `${employee.firstName} ${employee.lastName}`,
+                managerId: managerId
             }
        },
             function (
