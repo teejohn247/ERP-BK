@@ -23,8 +23,10 @@ const verifyEmployee = async (req, res) => {
        
         const {password} = req.body;
 
+        console.log(req.decode.email)
+
         let emp = await Company.findOne({ email: req.decode.email });
-        let adm = await Admin.findOne({ email: req.deocde.email });
+        let adm = await Admin.findOne({ email: req.decode.email });
 
    
 
@@ -52,7 +54,7 @@ const verifyEmployee = async (req, res) => {
         
            
     
-                let employee = await Company.findOne({ email: req.payload.email });
+                let employee = await Company.findOne({ email: req.decode.email });
     
                 console.log({employee})
     
@@ -60,7 +62,7 @@ const verifyEmployee = async (req, res) => {
         
                     res.status(400).json({
                         status: 400,
-                        error: `User with email: ${req.payload.email} does not exist`
+                        error: `User with email: ${req.decode.email} does not exist`
                     })
                     return;
                 }
@@ -94,7 +96,7 @@ const verifyEmployee = async (req, res) => {
                         });
                     }
     
-                   let registered = await Company.findOne({ email: req.payload.email });
+                   let registered = await Company.findOne({ email: req.decode.email });
         
                     const token = utils.encodeToken(employee._id, false, employee.email);
         
@@ -106,7 +108,7 @@ const verifyEmployee = async (req, res) => {
                 return;
 
         } else if (adm){
-            let admin = await Admin.findOne({ email: req.payload.email });
+            let admin = await Admin.findOne({ email: req.decode.email });
 
 
             if(password.length < 1){
@@ -136,7 +138,7 @@ const verifyEmployee = async (req, res) => {
         
                     res.status(400).json({
                         status: 400,
-                        error: `User with email: ${req.payload.email} does not exist`
+                        error: `User with email: ${req.decode.email} does not exist`
                     })
                     return;
                 }
@@ -150,7 +152,7 @@ const verifyEmployee = async (req, res) => {
         
                 await admin.save();
     
-                let registered = await Admin.findOne({ email: req.payload.email });
+                let registered = await Admin.findOne({ email: req.decode.email });
         
                 const token = utils.encodeToken(admin._id, true, admin.email);
         
