@@ -15,6 +15,10 @@ const DesignationSchema = new mongoose.Schema({
         },
         description:{
             type: String,
+        },
+        daysUsed:{
+            type:Number,
+            default: 0
         }
     }],
     expenseCard:

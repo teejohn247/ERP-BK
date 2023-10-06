@@ -44,6 +44,13 @@ const assignManagerEmployee = async (req, res) => {
 
         console.log({employees});
 
+      
+        const approval = [{
+            approvalType: 'leave',
+            approval: `${check.firstName} ${check.lastName}`,
+            approvalId: managerId
+        }]
+
         // let checks_sch = await School.find({ _id: { $in : ids }},
         //     { notification_types: { $elemMatch: { notification_id: notificationId } } })
             
@@ -51,6 +58,7 @@ const assignManagerEmployee = async (req, res) => {
             $set: { 
                 managerId:  managerId,
                 managerName: check && `${check.firstName} ${check.lastName}`,
+                approvals: approval
             }
        },{ upsert: true },
             async function (
@@ -68,6 +76,77 @@ const assignManagerEmployee = async (req, res) => {
                     return;
 
                 } else {
+
+
+                    Employee.updateOne({ _id: managerId }, { 
+                        $set: { 
+                            isManager: true
+                        }
+                   },{ upsert: true },
+                        async function (
+                            err,
+                            result
+                        ) {
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    success: false,
+                                    error: err
+            
+                                })
+            
+                                return;
+            
+                            } else {
+            
+                                // await check.updateOne({
+                                //     paymentInformation: paymentInformation && paymentInformation, 
+                                // });
+                                // const checkUpdated = Employee.findOne({ _id: req.params.id })
+                                // AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
+                                //     { $push: { humanResources: { 
+                    
+                                //         userName: checkUpdated.firstName && checkUpdated.lastName,
+                                //         email: checkUpdated.email && checkUpdated.email,
+                                //         action: `Super admin updated ${checkUpdated.firstName} ${checkUpdated.lastName} records`,
+                                //         dateTime: new Date()
+            
+                                //      }}
+                                //    },
+                                //         function (
+                                //             err,
+                                //             result
+                                //         ) {
+                                //             if (err) {
+                                //                 res.status(401).json({
+                                //                     status: 401,
+                                //                     success: false,
+                                //                     error: err
+                            
+                                //                 })
+                                //                 return;
+                            
+                                //             } else {
+                            
+                            
+                                                // res.status(200).json({
+                                                //     status: 200,
+                                                //     success: true,
+                                                //     data: "Update Successful"
+                                                // })
+                                                // return;
+                            
+                                //             }
+                                //         })
+            
+                                res.status(200).json({
+                                    status: 200,
+                                    success: true,
+                                    data: "Update Successful"
+                                })
+                                return;
+                            }
+                        })
 
                     // await check.updateOne({
                     //     paymentInformation: paymentInformation && paymentInformation, 
@@ -109,12 +188,12 @@ const assignManagerEmployee = async (req, res) => {
                     //             }
                     //         })
 
-                    res.status(200).json({
-                        status: 200,
-                        success: true,
-                        data: "Update Successful"
-                    })
-                    return;
+                    // res.status(200).json({
+                    //     status: 200,
+                    //     success: true,
+                    //     data: "Update Successful"
+                    // })
+                    // return;
                 }
             })
 

@@ -74,6 +74,19 @@ const EmployeeSchema = new mongoose.Schema({
         managerId: { type: String , trim: true },
         managerName: { type: String,trim: true  },
         companyRole: { type: String,trim: true  },
+        approvals: [
+            {
+                approvalType: {
+                    type: String,
+                },
+                approval: {
+                    type: String
+                },
+                approvalId: {
+                    type: String
+                },
+            }
+        ],
         roles:{
          humanResources: [
             {
@@ -161,6 +174,7 @@ const EmployeeSchema = new mongoose.Schema({
         },
         daysUsed: {
             type: Number,
+            default: 0
         },
         leaveStartDate: {
             type: String,
@@ -313,6 +327,10 @@ const EmployeeSchema = new mongoose.Schema({
     //             type: String,
     //         },
     //     }],
+    isManager:{
+        type: Boolean,
+        default: false
+    },
     isSuperAdmin: {
         type: Boolean,
         default: false

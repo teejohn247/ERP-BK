@@ -6,6 +6,9 @@ const LeaveRecordsSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    employeeImage:{
+        type:String,
+    },
     companyId:{
         type:String,
         required:true
@@ -13,7 +16,7 @@ const LeaveRecordsSchema = new mongoose.Schema({
      companyName:{
         type:String,
         required:true
-     },
+    },
     userId:{
        type:String,
        required:true
@@ -31,18 +34,24 @@ const LeaveRecordsSchema = new mongoose.Schema({
     leaveStartDate: {
         type: String,
        required:true
-
     },
     leaveEndDate: {
         type: String,
        required:true
-
     },
     assignedNoOfDays: {
         type: Number,
     },
     daysUsed: {
         type: Number,
+    },
+    leaveApproval: {
+        type: String,
+        required:true
+    },
+    leaveApprovalName: {
+        type: String,
+        required:true
     },
     approved:{
         type: Boolean,
@@ -54,7 +63,7 @@ const LeaveRecordsSchema = new mongoose.Schema({
     companyRole:{
         type:String,
     },
-    creationDate:{
+    requestDate:{
         type: Date,
         default: new Date()
     }

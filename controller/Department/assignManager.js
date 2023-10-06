@@ -80,15 +80,27 @@ const assignManager = async (req, res) => {
                                 error: err
                             })
         
-                        } else {
-        
-                            res.status(200).json({
-                                status: 200,
-                                success: true,
-                                data: "Update Successful"
+                        } 
+                    })
+
+
+                   Employee.updateOne({_id: managerId}, { 
+                    $set: { 
+                        isManager: true
+                    }
+               },
+                    async function (
+                        err,
+                        result
+                    ) {
+                        if (err) {
+                            res.status(401).json({
+                                status: 401,
+                                success: false,
+                                error: err
                             })
         
-                        }
+                        } 
                     })
 
 

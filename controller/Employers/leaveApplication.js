@@ -66,6 +66,12 @@ const leaveApplication = async (req, res) => {
             return;
         }
 
+        const approve = check.approvals.filter(obj => obj.approvalType === "leave");
+
+        console.log({approve});
+
+
+
         const exists = check.leaveAssignment.some(obj => obj.leaveTypeId === leaveTypeId);
 
         if (!exists) {
@@ -75,6 +81,14 @@ const leaveApplication = async (req, res) => {
         });
         return;
         }
+
+        if (!approve && check.managerId) {
+            res.status(400).json({
+                status: 400,
+                error: "You have not been assigned a manager yet"
+            });
+            return;
+            }
 
         if (!leaveStartDate) {
             res.status(400).json({
@@ -92,16 +106,20 @@ const leaveApplication = async (req, res) => {
             return;
         }
 
-     
+       
         let leave = new LeaveRecords({
                 userId:req.payload.id,
                 companyName: check.companyName,
                 companyId: check.companyId,
                 fullName:`${check.firstName} ${check.lastName}`,
+                employeeImage:`${check.profilePic}`,
+                fullName:`${check.firstName} ${check.lastName}`,
                 leaveTypeId,
                 leaveTypeName: leaveType.leaveName,
                 leaveStartDate,
                 leaveEndDate,
+                leaveApproval: approve ? approve[0].approvalId : check.managerId,
+                leaveApprovalName: approve ? approve[0].approval : check.managerName,
                 companyRole: check.companyRole && check.companyRole,
                 department: check.department && check.department,
 
@@ -150,7 +168,6 @@ const leaveApplication = async (req, res) => {
                 "leaveAssignment.$[i].comments": comments && comments,
                 "leaveAssignment.$[i].leaveStartDate": leaveStartDate && leaveStartDate,
                 "leaveAssignment.$[i].leaveEndDate": leaveEndDate && leaveEndDate
-
             }
        },
        { 
