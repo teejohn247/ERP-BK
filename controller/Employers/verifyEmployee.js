@@ -73,7 +73,7 @@ const verifyEmployee = async (req, res) => {
                 await employee.updateOne({
     
                     password: password && hashed,
-                    status: "Active"
+                    activeStatus: true
                 
                 });
         

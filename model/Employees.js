@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 const EmployeeSchema = new mongoose.Schema({
     companyName: { type: String, required: true },
     companyId:{ type: String, required: true },
-    status: { type: String, default: 'Pending'},
+    activeStatus: { type: Boolean, default: false},
     password: { type: String},
     firstTimeLogin: { type: Boolean },
     // personalInformation:[{
