@@ -51,7 +51,7 @@ const assignManagerEmployee = async (req, res) => {
             approvalId: managerId
         },
         {
-            approvalType: 'leave',
+            approvalType: 'reimbursement',
             approval: `${check.firstName} ${check.lastName}`,
             approvalId: managerId
         }]
