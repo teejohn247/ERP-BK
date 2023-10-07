@@ -49,6 +49,11 @@ const assignManagerEmployee = async (req, res) => {
             approvalType: 'leave',
             approval: `${check.firstName} ${check.lastName}`,
             approvalId: managerId
+        },
+        {
+            approvalType: 'leave',
+            approval: `${check.firstName} ${check.lastName}`,
+            approvalId: managerId
         }]
 
         // let checks_sch = await School.find({ _id: { $in : ids }},

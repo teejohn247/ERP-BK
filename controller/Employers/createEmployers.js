@@ -31,16 +31,23 @@ const inviteEmployee = async (req, res) => {
 
         let total = await Employee.find();
 
+        console.log(req.body)
 
-        let checkRole = await Roles.findOne({_id: companyRoleId})
+
+        // let checkRole = await Roles.findOne({_id: companyRoleId})
         let checkDesignation = await Designation.findOne({_id: designationId})
+        console.log({checkDesignation});
+
         let checkDept= await Department.findOne({_id: departmentId})
-        let checkName= await Employee.findOne({_id: reportingTo })
+        // let checkName= await Employee.findOne({_id: reportingTo })
+        console.log({checkDept});
+
         let company = await Company.find({ _id: req.payload.id });
 
+        console.log({company});
 
+        // const check = await Employee.findOne({ _id: managerId });
 
-        console.log({checkDesignation});
         if (!company){
             return res.status(400).json({
                 status: 400,
@@ -111,6 +118,20 @@ const inviteEmployee = async (req, res) => {
         //         noOfLeaveDays:  checkDesignation.leaveTypes.noOfLeaveDays,
         //     });
         // }
+        const approval = [{
+            approvalType: 'leave',
+            approval: checkDept.managerName,
+            approvalId: checkDept.managerId
+        },
+        {
+            approvalType: 'reimbursement',
+            approval: checkDept.managerName,
+            approvalId: checkDept.managerId
+        },
+    ]
+
+    console.log({approval})
+
 
        let employee = new Employee({
             companyName: company[0].companyName,
@@ -135,7 +156,8 @@ const inviteEmployee = async (req, res) => {
                 managerId:  checkDept.managerId && checkDept.managerId,
                 managerName: checkDept.managerName && checkDept.managerName,
                 email,
-                leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes
+                leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
+                approvals: approval
         })
 
 
