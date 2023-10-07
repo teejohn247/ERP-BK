@@ -32,6 +32,7 @@ const EmployeeSchema = new mongoose.Schema({
     //  }],
         firstName: { type: String, required: true , trim: true },
         lastName: { type: String, required: true, trim: true  },
+        fullName: { type: String, trim: true  },
         dateOfBirth: { type: String, trim: true  },
         personalEmail: { type: String },
         phoneNumber: { type: String,  trim: true  },

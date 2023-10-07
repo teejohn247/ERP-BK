@@ -120,6 +120,7 @@ const inviteEmployee = async (req, res) => {
                 dateOfBirth,
                 gender,
                 phoneNumber,
+                fullName: `${firstName} ${lastName}`,
                 employeeCode: `EMP-${year}-${letter}${last}${total.length + 1}`,
                 // role: companyRoleId,
                 companyRole: companyRole,
@@ -168,12 +169,9 @@ const inviteEmployee = async (req, res) => {
             {
               email: email
             }
-          
           ]
     
             await sendEmail(req, res, email, receivers, 'Employee Invitation', resp);
-    
-       
     
             console.log('{employee}2')
     

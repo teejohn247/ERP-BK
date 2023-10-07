@@ -104,10 +104,12 @@ const assignManager = async (req, res) => {
                     })
 
 
+                    const manager = await Employee.findOne({_id: managerId});
+
                     res.status(200).json({
                         status: 200,
                         success: true,
-                        data: "Update Successful"
+                        data: manager
                     })
 
                 }

@@ -39,7 +39,7 @@ const updateDepartment = async (req, res) => {
                 managerId: managerId
             }
        },
-            function (
+            async function (
                 err,
                 result
             ) {
@@ -51,6 +51,47 @@ const updateDepartment = async (req, res) => {
                     })
 
                 } else {
+
+
+                   Employee.updateMany({department: department.departmentName}, { 
+                    $set: { 
+                        managerName: employee && `${employee.firstName} ${employee.lastName}`,
+                        managerId: managerId
+                    }
+               },
+                    async function (
+                        err,
+                        result
+                    ) {
+                        if (err) {
+                            res.status(401).json({
+                                status: 401,
+                                success: false,
+                                error: err
+                            })
+        
+                        } 
+                    })
+
+
+                   Employee.updateOne({_id: managerId}, { 
+                    $set: { 
+                        isManager: true
+                    }
+               },
+                    async function (
+                        err,
+                        result
+                    ) {
+                        if (err) {
+                            res.status(401).json({
+                                status: 401,
+                                success: false,
+                                error: err
+                            })
+        
+                        } 
+                    })
                     res.status(200).json({
                         status: 200,
                         success: true,

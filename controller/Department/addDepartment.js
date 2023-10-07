@@ -49,13 +49,63 @@ const addDepartment = async (req, res) => {
 
         await department.save().then((adm) => {
 
+                       Employee.updateMany({department: department.departmentName}, { 
+                        $set: { 
+                            managerName: employee && `${employee.firstName} ${employee.lastName}`,
+                            managerId: managerId
+                        }
+                   },
+                        async function (
+                            err,
+                            result
+                        ) {
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    success: false,
+                                    error: err
+                                })
+            
+                            } 
+                        })
+    
+    
+                       Employee.updateOne({_id: managerId}, { 
+                        $set: { 
+                            isManager: true
+                        }
+                   },
+                        async function (
+                            err,
+                            result
+                        ) {
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    success: false,
+                                    error: err
+                                })
+            
+                            } 
+                        })
+    
+    
+                        res.status(200).json({
+                            status: 200,
+                            success: true,
+                            data: adm
+                        })
+    
+                    
+               
+
             // sgMail.send(msg)
             console.log(adm)
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: adm
-            })
+            // res.status(200).json({
+            //     status: 200,
+            //     success: true,
+            //     data: adm
+            // })
         }).catch((err) => {
                 console.error(err)
                 res.status(400).json({
