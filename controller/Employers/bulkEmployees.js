@@ -244,13 +244,12 @@ const bulkEmployee = async (req, res) => {
     
                         <p style="font-size: 16px; text-align:left !important; font-weight: 300;">
     
-                        You have been invited to join <a href="http://localhost:4200/set-password/${token}">SILO ERP Platform</a> as an employee 
+                        You have been invited to join <a href="https://xped8-ca9291a9a7e0.herokuapp.com/set-password/${token}">SILO ERP Platform</a> as an employee 
     
                         <br><br>
                         </p>
                         
                         <div>`
-    
     
                         let resp = emailTemp(data, 'Employee Invitation')
                         await sendEmail(req, res, mail, receivers, 'Employee Invitation', resp);
