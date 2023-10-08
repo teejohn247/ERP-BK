@@ -92,6 +92,7 @@ const bulkEmployee = async (req, res) => {
 
         let total = await Employee.find();
 
+console.log(req.file.path)
 
         let emails = [];
         let departments = [];
@@ -135,7 +136,8 @@ const bulkEmployee = async (req, res) => {
                     let designation = new Designation({
                         designationName: data,
                         companyId: req.payload.id,
-                        companyName: companyName.companyName
+                        companyName: companyName.companyName,
+                        grade: 0
                     })
             
                     await designation.save().then(async (adm) => {
