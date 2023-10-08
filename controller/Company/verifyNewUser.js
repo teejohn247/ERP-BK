@@ -31,6 +31,8 @@ const verifyNewUser = async (req, res) => {
     
             return;
          }
+
+         console.log('here')
     
          const payload = jwt_decode(token);
 
@@ -73,22 +75,6 @@ const verifyNewUser = async (req, res) => {
             let registered = await Company.findOne({ email: payload.email });
 
             console.log({registered})
-    
-            // if (company.firstTimeLogin == undefined) {
-            //         await registered.updateOne({
-            //             firstTimeLogin: true, 
-            //         });
-            //     }else if (registered.firstTimeLogin == true){
-            //         await registered.updateOne({
-            //             firstTimeLogin: false, 
-            //         });
-    
-            //     }
-            //     else if (registered.firstTimeLogin == false){
-            //         await registered.updateOne({
-            //             firstTimeLogin: false, 
-            //         });
-            //     }
     
                 const token = utils.encodeToken(company._id, company.isSuperAdmin, company.email);
     

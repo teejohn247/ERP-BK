@@ -25,7 +25,7 @@ const leaveAction = async (req, res) => {
     try {
       
 
-        const { leaveId, approved,  assignedNoOfDays, employeeId } = req.body;
+        const { leaveId, leaveStatus, assignedNoOfDays, employeeId } = req.body;
 
         let company = await Company.findOne({ _id: req.payload.id });
         const leaveType = await LeaveRecords.findOne({ _id: leaveId});
@@ -52,12 +52,13 @@ const leaveAction = async (req, res) => {
         console.log(leaveType.userId)
 
         await leaveType.updateOne({
-            approved
+            leaveStatus
         }).then(async (app) => {
             
             Employee.findOneAndUpdate({ _id: leaveType.userId }, { 
                 $set: { 
-                    "leaveAssignment.$[i].leaveApproved": approved && approved,
+                    "leaveAssignment.$[i].leaveApproved": leaveStatus && `${leaveStatus == "Accepted" ? true:false}`,
+                    "leaveAssignment.$[i].leaveStatus": leaveStatus && leaveStatus,
                     "leaveAssignment.$[i].leaveStartDate": leaveType.leaveStartDate && leaveType.leaveStartDate,
                     "leaveAssignment.$[i].leaveEndDate": leaveType.leaveEndDate && leaveType.leaveEndDate,
                     "leaveAssignment.$[i].assignedNoOfDays": leaveType.assignedNoOfDays && leaveType.assignedNoOfDays,
@@ -84,12 +85,12 @@ const leaveAction = async (req, res) => {
                     } else {
                         let data = `<div>
                         <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
-                        Hi ${check.fullName},
+                        Hi ${check.firstName},
                         </p> 
                 
                         <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
                         
-                         Your leave request has been ${approved == true ? 'approved' : 'declined'}
+                         Your leave request has been ${leaveStatus}
                        
                         <br><br>
                         </p>
@@ -97,7 +98,6 @@ const leaveAction = async (req, res) => {
                         <div>`
                 
                        let resp = emailTemp(data, 'Leave Application Notification')
-            
             
                        const receivers = [
                         {

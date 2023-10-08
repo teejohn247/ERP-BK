@@ -32,6 +32,8 @@ const getAdminRecords = async (req, res) => {
         .skip((page - 1) * limit)
         .exec();
 
+        console.log({employee})
+
         
 
         const count = await Employee.find().countDocuments()

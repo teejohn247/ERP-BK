@@ -49,13 +49,17 @@ const LeaveRecordsSchema = new mongoose.Schema({
         type: String,
         required:true
     },
-    leaveApprovalName: {
+    approval: {
         type: String,
         required:true
     },
     approved:{
         type: Boolean,
         default: false
+    },
+    leaveStatus:{
+        type: String,
+        default: "Pending"
     },
     department:{
         type:String,

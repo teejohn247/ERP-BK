@@ -119,14 +119,18 @@ const leaveApplication = async (req, res) => {
                 leaveStartDate,
                 leaveEndDate,
                 leaveApproval: approve ? approve[0].approvalId : check.managerId,
-                leaveApprovalName: approve ? approve[0].approval : check.managerName,
+                approval: approve ? approve[0].approval : check.managerName,
                 companyRole: check.companyRole && check.companyRole,
                 department: check.department && check.department,
 
         })
+
+        let details;
         await leave.save().then(async(adm) => {
 
             console.log({adm})
+
+            details = adm
 
 
             let data = `<div>
@@ -136,7 +140,7 @@ const leaveApplication = async (req, res) => {
     
             <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
 
-             ${adm} has made a leave request. 
+             ${adm.fullName} has made a leave request. 
              Log in to your account to accept or reject.
            
             <br><br>
@@ -156,6 +160,34 @@ const leaveApplication = async (req, res) => {
           console.log('heeheh')
     
             await sendEmail(req, res, company.email, receivers, 'Leave Application Notification', resp);
+
+            let employeeData = `<div>
+            <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+            Hi ${adm.fullName},
+            </p> 
+    
+            <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
+
+             ${adm.companyName} has received your leave request. 
+             A decision would be made soon.
+           
+            <br><br>
+            </p>
+            
+            <div>`
+    
+           let respEmployee = emailTemp( employeeData, 'Leave Application Notification')
+           console.log('heeheh1')
+
+
+           const receiverEmployee = [
+            {
+              email: check.email
+            }
+          ]
+          console.log('heeheh')
+    
+            await sendEmail(req, res, check.email, receiverEmployee, 'Leave Application Notification', respEmployee);
 
 
         })
@@ -194,7 +226,7 @@ const leaveApplication = async (req, res) => {
                     res.status(200).json({
                         status: 200,
                         success: true,
-                        data: "Application sent!"
+                        data: details
                     })
 
                 }

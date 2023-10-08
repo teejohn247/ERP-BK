@@ -28,7 +28,9 @@ const verifyEmployee = async (req, res) => {
         let emp = await Company.findOne({ email: req.decode.email });
         let adm = await Admin.findOne({ email: req.decode.email });
 
-   
+   console.log(emp)
+   console.log(adm)
+
 
         if(emp){
 
