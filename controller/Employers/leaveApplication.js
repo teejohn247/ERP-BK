@@ -34,6 +34,9 @@ const leaveApplication = async (req, res) => {
         
 
         const check = await Employee.findOne({ _id: req.payload.id });
+        const checkManager = await Employee.findOne({ _id: check.managerId});
+
+
 
         console.log({check})
         if (!check) {
@@ -135,12 +138,12 @@ const leaveApplication = async (req, res) => {
 
             let data = `<div>
             <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
-            Hi ${adm.companyName},
+            Hi,
             </p> 
     
             <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
 
-             ${adm.fullName} has made a leave request. 
+             ${adm.firstName} has made a leave request. 
              Log in to your account to accept or reject.
            
             <br><br>
@@ -154,21 +157,21 @@ const leaveApplication = async (req, res) => {
 
            const receivers = [
             {
-              email: company.email
+              email: checkManager.email
             }
           ]
           console.log('heeheh')
     
-            await sendEmail(req, res, company.email, receivers, 'Leave Application Notification', resp);
+            await sendEmail(req, res, checkManager.email, receivers, 'Leave Application Notification', resp);
 
             let employeeData = `<div>
             <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
-            Hi ${adm.fullName},
+            Hi,
             </p> 
     
             <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
 
-             ${adm.companyName} has received your leave request. 
+             Your leave approval has received your leave request. 
              A decision would be made soon.
            
             <br><br>
@@ -188,7 +191,6 @@ const leaveApplication = async (req, res) => {
           console.log('heeheh')
     
             await sendEmail(req, res, check.email, receiverEmployee, 'Leave Application Notification', respEmployee);
-
 
         })
     
