@@ -144,7 +144,7 @@ console.log(approve[0].approvalId, approve[0].approval)
     
             <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
 
-             ${adm.firstName} has made a leave request. 
+             ${adm.firstName ? adm.firstName : adm.fullName} has made a leave request. 
              Log in to your account to accept or reject.
            
             <br><br>
