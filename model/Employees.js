@@ -199,12 +199,16 @@ const EmployeeSchema = new mongoose.Schema({
 
         },
         expenseHistory: [{
-            totalSpent: {
-                type: Number,
-            },
-            date: {
-                type:String,
-            }
+            expenseTypeId: { type: String, required: true },
+            expenseTypeName: { type: String, required: true },
+            expenseDate: { type: String, required: true },
+            currency: { type: String },
+            amount: { type: String, required: true },
+            attachment: { type: String },
+            approver: { type: String },
+            approverId: { type: String },
+            dateRemitted: { type: String, default: Date.now() },
+            description: { type: String }
         }]
     },
     leaveAssignment: 

@@ -137,6 +137,7 @@ const assignDesignation = async (req, res) => {
                             "expenseDetails.expenseTypeId":check.expenseCard[0].expenseTypeId,
                             "expenseDetails.cardCurrency": check.expenseCard[0].cardCurrency,
                             "expenseDetails.cardLimit": check.expenseCard[0].cardLimit,
+                            "expenseDetails.cardBalance": check.expenseCard[0].cardLimit,
                             "expenseDetails.cardExpiry": check.expenseCard[0].cardExpiry,
                          }
                        },

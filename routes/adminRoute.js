@@ -65,6 +65,8 @@ import updateExpense from '../controller/Expense/updateExpense';
 import searchEmployee from '../controller/Employers/searchEmployee';
 import updateLeaveApplication from '../controller/Employers/updateLeaveApplication';
 import deleteLeaveApplication from '../controller/Employers/deleteLeaveApplication';
+import createExpenseRequest from '../controller/Employers/expenseRequests';
+import fetchExpenseReqs from '../controller/Employers/fetchLeaveRequests';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -133,10 +135,6 @@ router.post("/upload-cv", mult.single("csv"), (req, res) => {
 router.get('/forgotPassword', forgotPassword);
 router.patch('/changePassword', auth, changePassword);
 router.patch('/verifyPassword', verifyToken);
-
-
-
-
 router.post("/addImage", auth, upload.single("my_file"), imageUploader, addImage);
 router.post('/addEmployee', auth, inviteEmployee);
 router.patch('/addLeaveType/:roleId', auth, addLeave);
@@ -171,14 +169,12 @@ router.post("/verifyEmail", verifyNewUser);
 router.post("/decodeEmail", verifyToken);
 router.post("/setPassword", signDecode, verifyEmployee);
 router.post("/createLeave", auth, createLeave);
-
 router.post("/createExpense", auth, createExpense);
 router.get("/getExpense/:id", auth, fetchExpenseDetails);
 router.get("/getExpense", auth,fetchExpense);
 router.delete("/deleteExpense/:id", auth,deleteExpense);
 router.patch("/updateExpense/:id", auth,updateExpense);
 router.get("/searchEmployee", auth, searchEmployee);
-
 router.patch("/assignDepartmentManager", auth, assignManager);
 router.patch("/assignManager", auth, assignManagerEmployee);
 router.delete("/deleteLeave/:id", auth, deleteLeave);
@@ -192,15 +188,10 @@ router.patch("/leaveAction", auth, leaveAction);
 router.get("/getLeaveRecords", auth, getLeaveRecords);
 router.patch("/assignBulkDesignation", auth, assignDesignation);
 router.get("/fetchRequestedLeaves", auth, getAdminRecords);
-
 router.patch("/updateLeaveApplication/:id", auth, updateLeaveApplication);
 router.delete("/deleteLeaveApplication/:id", auth, deleteLeaveApplication);
-
-
-
-
-
-
+router.post("/createExpenseRequest", auth, upload.single("attachment"), imageUploader, createExpenseRequest);
+router.get("/fetchExpenseRequests", auth, fetchExpenseReqs);
 
 
 

@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
-import Role from "../../model/Role";
 import Company from "../../model/Company";
 import Designation from "../../model/Designation";
 import Leave from "../../model/Leaves";
+import Expense from "../../model/Expense";
+import Employee from "../../model/Employees";
+
+
 
 const sgMail = require("@sendgrid/mail");
 
@@ -12,7 +15,7 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 const updateDesignation = async (req, res) => {
   try {
-    const { designationName, description, leaveAssignment } = req.body;
+    const { designationName, description, leaveAssignment, expenseCard } = req.body;
 
     let company = await Company.findOne({ _id: req.payload.id });
 
@@ -75,10 +78,13 @@ const updateDesignation = async (req, res) => {
 
                 }})
 
-        return;
+      return
     } 
     let leaves = [];
     var leaveTypes = [];
+    var exp = [];
+    var expenseTypes = [];
+
 
     leaveAssignment.map((data, index) => {
       if (!data) {
@@ -94,26 +100,65 @@ const updateDesignation = async (req, res) => {
     console.log({ leaves });
 
     const leavePromises = leaves.map(async (data, index) => {
-      const check = await Leave.findOne({ _id: data });
+      const check1 = await Leave.findOne({ _id: data });
+
+
+      // if (!check1) {
+      // console.log( check1 );
+
+      // return  res.status(400).json({
+      //     status: 400,
+      //     success: false,
+      //     error: "Leave type does not exist",
+      //   });
+      // }else{
+      //   leaveTypes.push({
+      //     leaveTypeId: data,
+      //     leaveName: check1.leaveName,
+      //     noOfLeaveDays: Number(leaveAssignment[index].noOfLeaveDays),
+      //   });
+      // }
+
+     
+    })
+console.log({expenseCard})
+    await expenseCard.map((data, index) => {
+      if (!data) {
+        res.status(400).json({
+          status: 400,
+          error: "Expense id field is compulsory",
+        });
+        return;
+      }
+      exp.push(data.expenseTypeId);
+    });
+
+    console.log({ exp });
+    const expensePromises = exp.map(async (data, index) => {
+      const check = await Expense.findOne({ _id: data });
 
       console.log({ check });
 
       if (!check) {
+         
         res.status(400).json({
           status: 400,
-          error: "Leave type does not exist",
+          error: "Expense type does not exist",
         });
-        return Promise.reject("Leave type does not exist");
+        return 
       }
 
-      leaveTypes.push({
-        leaveTypeId: data,
-        leaveName: check.leaveName,
-        noOfLeaveDays: Number(leaveAssignment[index].noOfLeaveDays),
+      expenseTypes.push({
+        expenseTypeId: data,
+        expenseCardName: check.expenseCardName,
+        cardCurrency: expenseCard[index].cardCurrency,
+        cardBalance: expenseCard[index].cardLimit,
+        cardExpiryDate: expenseCard[index].cardExpiryDate,
+        cardLimit: expenseCard[index].cardLimit,
       });
     });
 
-    Promise.all(leavePromises)
+    Promise.all(expensePromises, leavePromises)
       .then(async () => {
         console.log({ leaveTypes });
 
@@ -126,7 +171,8 @@ const updateDesignation = async (req, res) => {
                 companyId: req.payload.id,
                 companyName: company.companyName && company.companyName,
                 description: description && description,
-                leaveTypes: leaveTypes && leaveTypes
+                leaveTypes: leaveTypes && leaveTypes,
+                expenseCard: expenseTypes && expenseTypes
             }
        },
             async function (
@@ -145,20 +191,22 @@ const updateDesignation = async (req, res) => {
     
                 } else {
                
-                  await Employee.find({ companyId:  req.payload.id},
-                    { leaveAssignment: { $elemMatch: { leaveTypeId: data }}}, {
-                      $set: { 
-                        "leaveTypes.$[i].leaveName": leaveTypes.leaveName && leaveTypes.leaveName,
-                        "leaveTypes.$[i].noOfDays": leaveTypes.noOfLeaveDays && leaveTypes.noOfLeaveDays,
-                        "leaveTypes.$[i].paid": leaveTypes.paid && leaveTypes.paid
-                    }
-               },
-               { 
-                arrayFilters: [
+                  await Employee.update(
+                    { companyId: req.payload.id, "leaveAssignment.leaveTypeId": { $in: leaves } },
                     {
-                        "i.leaveTypeId": data
-                    }
-                ]},
+                      $set: {
+                        "leaveAssignment.$.leaveTypeId.leaveName": leaveTypes.leaveName && leaveTypes.leaveName,
+                        "leaveAssignment.$.leaveTypeId.noOfDays": leaveTypes.noOfLeaveDays && leaveTypes.noOfLeaveDays ,
+                        "leaveAssignment.$.leaveTypeId.paid": leaveTypes.paid && leaveTypes.paid ,
+                      },
+                    },
+                  
+              //  { 
+              //   arrayFilters: [
+              //       {
+              //           "i.leaveTypeId":  { $in: leaves }
+              //       }
+              //   ]},
                
                   async function (
                       err,
