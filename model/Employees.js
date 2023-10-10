@@ -156,6 +156,57 @@ const EmployeeSchema = new mongoose.Schema({
         ],
      
     },
+    expenseDetails: 
+    {
+        expenseTypeId: {
+            type: String,
+        },
+        cardNo: {
+            type: String,
+        },
+        cardHolder: {
+            type: String,
+        },
+        dateIssued: {
+            type: String,
+        },
+        expiryDate: {
+            type: String,
+            default: ""
+        },
+        cardLimit: {
+            type: Number,
+            default: 0
+
+        },
+        cardBalance: {
+            type: Number,
+            default: 0
+        },
+        totalSpent: {
+            type: Number,
+            default: 0
+
+        },
+        currentSpent: {
+            type: Number,
+            default: 0
+
+        },
+        currentExpense: {
+            type: Number,
+            default: 0
+
+        },
+        expenseHistory: [{
+            totalSpent: {
+                type: Number,
+            },
+            date: {
+                type:String,
+            }
+        }]
+    },
     leaveAssignment: 
     [{
         leaveTypeId: {

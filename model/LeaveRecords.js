@@ -45,11 +45,11 @@ const LeaveRecordsSchema = new mongoose.Schema({
     daysUsed: {
         type: Number,
     },
-    leaveApproval: {
+    leaveApprover: {
         type: String,
         required:true
     },
-    approval: {
+    approver: {
         type: String,
         required:true
     },
@@ -62,6 +62,9 @@ const LeaveRecordsSchema = new mongoose.Schema({
         default: "Pending"
     },
     department:{
+        type:String,
+    },
+    comments:{
         type:String,
     },
     companyRole:{

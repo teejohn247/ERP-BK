@@ -9,7 +9,6 @@ import Roles from '../../model/Roles';
 import utils from '../../config/utils';
 
 import { emailTemp } from '../../emailTemplate';
-import LeaveRecords from '../../model/LeaveRecords';
 
 
 const sgMail = require('@sendgrid/mail')
@@ -17,26 +16,31 @@ const sgMail = require('@sendgrid/mail')
 dotenv.config();
 
 
+
+
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
 
-const getAdminRecords = async (req, res) => {
+const searchEmployee = async (req, res) => {
 
     try {
 
-        const { page, limit } = req.query;
+        const { name } = req.query;
 
-        const employee = await LeaveRecords.find({leaveApprover: req.payload.id})
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
+        const query = {
+            $or: [
+              { firstName : new RegExp(name, 'i')},
+              { lastName : new RegExp(name, 'i') }
+            ]
+          };
 
-        console.log({employee})
+        const employee = await Employee.find(query)
+       
 
         
+        const employeeTable = await EmployeeTable.find()
 
-        const count = await Employee.find().countDocuments()
 
         if(!employee){
             res.status(404).json({
@@ -50,8 +54,7 @@ const getAdminRecords = async (req, res) => {
                 status: 200,
                 success: true,
                 data: employee,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page
+               
             })
         }
 
@@ -63,7 +66,4 @@ const getAdminRecords = async (req, res) => {
         })
     }
 }
-export default getAdminRecords;
-
-
-
+export default searchEmployee;

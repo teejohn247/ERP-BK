@@ -14,6 +14,8 @@ import { sendEmail } from '../../config/email';
 import utils from '../../config/utils';
 
 import { emailTemp } from '../../emailTemplate';
+import { date } from 'joi';
+import moment from 'moment/moment';
 
 
 const sgMail = require('@sendgrid/mail')
@@ -118,7 +120,7 @@ const inviteEmployee = async (req, res) => {
         //         noOfLeaveDays:  checkDesignation.leaveTypes.noOfLeaveDays,
         //     });
         // }
-        const approval = [{
+        const approver = [{
             approvalType: 'leave',
             approval: checkDept.managerName,
             approvalId: checkDept.managerId
@@ -130,9 +132,48 @@ const inviteEmployee = async (req, res) => {
         },
     ]
 
-    console.log({approval})
+    console.log({approver})
 
+    // expenseDetails: 
+    // [{
+    //     cardNo: {
+    //         type: String,
+    //     },
+    //     cardHolder: {
+    //         type: String,
+    //     },
+    //     dateIssued: {
+    //         type: String,
+    //     },
+    //     expiryDate: {
+    //         type: String,
+    //     },
+    //     cardLimit: {
+    //         type: Number,
+    //     },
+    //     cardBalance: {
+    //         type: Number,
+    //     },
+    //     totalSpent: {
+    //         type: Number,
+    //     },
+    //     currentSpent: {
+    //         type: Number,
+    //     },
+    //     currentExpense: {
+    //         type: Number,
+    //     },
+    //     expenseHistory: [{
+    //         totalSpent: {
+    //             type: Number,
+    //         },
+    //         date:{
+    //             type:String,
+    //         }
+    //     }]
+    // }],console.lo
 
+    console.log(checkDesignation, 'it')
        let employee = new Employee({
             companyName: company[0].companyName,
             companyId: req.payload.id,
@@ -157,7 +198,16 @@ const inviteEmployee = async (req, res) => {
                 managerName: checkDept.managerName && checkDept.managerName,
                 email,
                 leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
-                approvals: approval
+                approvals: approver,
+                expenseDetails: {
+                    cardNo: Date.now(),
+                    cardHolder: `${firstName} ${lastName}`,
+                    dateIssued:  moment().format('L'),
+                    cardLimit: checkDesignation?.expenseCard[0]?.cardLimit ? checkDesignation.expenseCard[0].cardLimit : 0,
+                    cardCurrency: checkDesignation?.expenseCard[0]?.cardCurrency ? checkDesignation.expenseCard[0].cardCurrency : "",
+                    cardLExpiryDate: checkDesignation?.expenseCard[0]?.cardExpiryDate ? checkDesignation.expenseCard[0].cardExpiryDate : "",
+                    expenseTypeId: checkDesignation?.expenseCard[0]?.expenseTypeId ? checkDesignation.expenseCard[0].expenseTypeId : "",
+                }
         })
 
 

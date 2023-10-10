@@ -23,6 +23,8 @@ const DesignationSchema = new mongoose.Schema({
     }],
     expenseCard:
     [{
+        expenseTypeId: { type: String},
+        expenseCardName: { type: String},
         cardCurrency: {
             type: String,
             required: true

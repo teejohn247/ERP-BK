@@ -38,7 +38,7 @@ const leaveApplication = async (req, res) => {
 
 
 
-        console.log({check})
+        console.log({checkManager})
         if (!check) {
             res.status(400).json({
                 status: 400,
@@ -108,7 +108,7 @@ const leaveApplication = async (req, res) => {
             });
             return;
         }
-
+console.log(approve[0].approvalId, approve[0].approval)
        
         let leave = new LeaveRecords({
                 userId:req.payload.id,
@@ -121,10 +121,11 @@ const leaveApplication = async (req, res) => {
                 leaveTypeName: leaveType.leaveName,
                 leaveStartDate,
                 leaveEndDate,
-                leaveApproval: approve ? approve[0].approvalId : check.managerId,
-                approval: approve ? approve[0].approval : check.managerName,
+                leaveApprover: approve ? approve[0].approvalId : check.managerId,
+                approver: approve ? approve[0].approval : check.managerName,
                 companyRole: check.companyRole && check.companyRole,
                 department: check.department && check.department,
+                comments: comments
 
         })
 
@@ -171,7 +172,7 @@ const leaveApplication = async (req, res) => {
     
             <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
 
-             Your leave approval has received your leave request. 
+             Your leave approver has received your leave request. 
              A decision would be made soon.
            
             <br><br>

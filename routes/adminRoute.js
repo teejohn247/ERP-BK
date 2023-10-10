@@ -57,6 +57,14 @@ import getLeaveRecords from '../controller/Employers/getLeaveRecords';
 import assignDesignation from '../controller/createDesignation/assignDesignation';
 import signDecode from '../middleware/signDecode';
 import getAdminRecords from '../controller/Employers/getAdminRecords';
+import createExpense from '../controller/Expense/createExpense';
+import fetchExpenseDetails from '../controller/Expense/fetchExpenseDetails';
+import fetchExpense from '../controller/Expense/fetchExpense';
+import deleteExpense from '../controller/Expense/deleteExpense';
+import updateExpense from '../controller/Expense/updateExpense';
+import searchEmployee from '../controller/Employers/searchEmployee';
+import updateLeaveApplication from '../controller/Employers/updateLeaveApplication';
+import deleteLeaveApplication from '../controller/Employers/deleteLeaveApplication';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -164,9 +172,15 @@ router.post("/decodeEmail", verifyToken);
 router.post("/setPassword", signDecode, verifyEmployee);
 router.post("/createLeave", auth, createLeave);
 
+router.post("/createExpense", auth, createExpense);
+router.get("/getExpense/:id", auth, fetchExpenseDetails);
+router.get("/getExpense", auth,fetchExpense);
+router.delete("/deleteExpense/:id", auth,deleteExpense);
+router.patch("/updateExpense/:id", auth,updateExpense);
+router.get("/searchEmployee", auth, searchEmployee);
+
 router.patch("/assignDepartmentManager", auth, assignManager);
 router.patch("/assignManager", auth, assignManagerEmployee);
-
 router.delete("/deleteLeave/:id", auth, deleteLeave);
 router.patch("/updateLeave/:id", auth, updateLeave);
 router.get("/fetchLeave", auth, fetchLeaves);
@@ -178,6 +192,11 @@ router.patch("/leaveAction", auth, leaveAction);
 router.get("/getLeaveRecords", auth, getLeaveRecords);
 router.patch("/assignBulkDesignation", auth, assignDesignation);
 router.get("/fetchRequestedLeaves", auth, getAdminRecords);
+
+router.patch("/updateLeaveApplication/:id", auth, updateLeaveApplication);
+router.delete("/deleteLeaveApplication/:id", auth, deleteLeaveApplication);
+
+
 
 
 

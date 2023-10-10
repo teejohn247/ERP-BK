@@ -56,8 +56,6 @@ const assignManagerEmployee = async (req, res) => {
             approvalId: managerId
         }]
 
-        console.log(approval)
-
         // let checks_sch = await School.find({ _id: { $in : ids }},
         //     { notification_types: { $elemMatch: { notification_id: notificationId } } })
             

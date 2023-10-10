@@ -33,6 +33,7 @@ const assignDesignation = async (req, res) => {
 
         const check = await Designation.findOne({ _id: designationId });
         let company = await Company.findOne({ _id: req.payload.id });
+        let emp = await Employee.findOne({ _id: { $in : employees }});
 
 
 
@@ -47,12 +48,16 @@ const assignDesignation = async (req, res) => {
         console.log({employees});
 
         let ids = []
+        let ids2 = []
+
 
         check.leaveTypes.map((chk) => {
             ids.push(chk.leaveTypeId)
+        });
 
-        })
-
+        check.leaveTypes.map((chk) => {
+            ids2.push(chk.expenseTypeId)
+        });
 
         // let checks_sch = await School.find({ _id: { $in : ids }},
         //     { notification_types: { $elemMatch: { notification_id: notificationId } } })
@@ -74,18 +79,42 @@ const assignDesignation = async (req, res) => {
             })
 
 
-            console.log({dd})
-            if (dd.length > 0) {
+        let checks_expense = await Employee.find({ _id:  { $in: employees }},
+            { leaveAssignment: { $elemMatch: { expenseTypeId:  { $in: ids2 } }}})
+
+            console.log(checks_expense)
+
+            const dd2 = []
+
+            checks_notification.map((chk) => {
+                if(chk.leaveAssignment.length > 0){
+                    dd.push(chk.leaveAssignment)
+                }
+            })
+
+
+           
+            // if (dd.length > 0) {
+            //     res.status(400).json({
+            //         status: 400,
+            //         error: 'This leave type has already been assigned to one of the employees'
+            //     })
+            //     return
+            // }
+
+            if (dd2.length > 0) {
                 res.status(400).json({
                     status: 400,
-                    error: 'This leavetype has already been assigned to one of the employees'
+                    error: 'The expense type  has already been assigned to one of the employees'
                 })
                 return
             }
             
           Employee.updateMany({ _id: { $in : employees }}, { 
             $push: { 
-                leaveAssignment: check.leaveTypes
+                leaveAssignment: check.leaveTypes,
+                
+
             }
         },{ upsert: true },
             async function (
@@ -93,64 +122,56 @@ const assignDesignation = async (req, res) => {
                 result
             ) {
                 if (err) {
-
                     res.status(401).json({
                         status: 401,
                         success: false,
                         error: err
-
                     })
-
                     return;
 
                 } else {
+                    Employee.updateMany({ _id: { $in : employees }},
+                        { $set: {
+                            designationId: designationId,
+                            designationName: check.designationName,
+                            "expenseDetails.expenseTypeId":check.expenseCard[0].expenseTypeId,
+                            "expenseDetails.cardCurrency": check.expenseCard[0].cardCurrency,
+                            "expenseDetails.cardLimit": check.expenseCard[0].cardLimit,
+                            "expenseDetails.cardExpiry": check.expenseCard[0].cardExpiry,
+                         }
+                       },
+                            function (
+                                err,
+                                result
+                            ) {
+                                if (err) {
+                                    res.status(401).json({
+                                        status: 401,
+                                        success: false,
+                                        error: err
+                
+                                    })
+                                    return;
+                
+                                } else {
+                
+                
+                                    res.status(200).json({
+                                        status: 200,
+                                        success: true,
+                                        data: "Update Successful"
+                                    })
+                                    return;
+                
+                                }
+                            })
 
-                    // await check.updateOne({
-                    //     paymentInformation: paymentInformation && paymentInformation, 
-                    // });
-                    // const checkUpdated = Employee.findOne({ _id: req.params.id })
-                    // AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
-                    //     { $push: { humanResources: { 
-        
-                    //         userName: checkUpdated.firstName && checkUpdated.lastName,
-                    //         email: checkUpdated.email && checkUpdated.email,
-                    //         action: `Super admin updated ${checkUpdated.firstName} ${checkUpdated.lastName} records`,
-                    //         dateTime: new Date()
-
-                    //      }}
-                    //    },
-                    //         function (
-                    //             err,
-                    //             result
-                    //         ) {
-                    //             if (err) {
-                    //                 res.status(401).json({
-                    //                     status: 401,
-                    //                     success: false,
-                    //                     error: err
-                
-                    //                 })
-                    //                 return;
-                
-                    //             } else {
-                
-                
-                                    // res.status(200).json({
-                                    //     status: 200,
-                                    //     success: true,
-                                    //     data: "Update Successful"
-                                    // })
-                                    // return;
-                
-                    //             }
-                    //         })
-
-                    res.status(200).json({
-                        status: 200,
-                        success: true,
-                        data: "Update Successful"
-                    })
-                    return;
+                    // res.status(200).json({
+                    //     status: 200,
+                    //     success: true,
+                    //     data: "Update Successful"
+                    // })
+                    // return;
                 }
             })
 
