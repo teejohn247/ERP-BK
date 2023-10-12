@@ -1,6 +1,8 @@
 
 import dotenv from 'dotenv';
 import Role from '../../model/Leaves';
+import Employee from '../../model/Employees';
+
 
 
 import { emailTemp } from '../../emailTemplate';
@@ -24,10 +26,38 @@ const fetchLeaves= async (req, res) => {
         const { page, limit } = req.query;
 
 
+
+
         const role = await Role.find({companyId: req.payload.id})
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
+
+        console.log(role.length)
+
+        if(role.length < 1){
+
+        const emp= await Employee.findOne({_id: req.payload.id})
+        const empp = await Role.find({companyId: emp.companyId})
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec();
+
+        const counts = await Role.find({companyId: emp.companyId}).countDocuments()
+
+        console.log(role)
+
+        res.status(200).json({
+            status: 200,
+            success: true,
+            data: empp,
+            totalPages: Math.ceil(counts / limit),
+            currentPage: page
+        })
+
+        return;
+
+        }
 
         const count = await Role.find({companyId: req.payload.id}).countDocuments()
 
@@ -42,24 +72,6 @@ const fetchLeaves= async (req, res) => {
         })
 
         return;
-
-        // if(!role){
-        //     res.status(404).json({
-        //         status:404,
-        //         success: false,
-        //         error:'No leave Found'
-        //     })
-        //     return
-        
-        // }else{
-        //     res.status(200).json({
-        //         status: 200,
-        //         success: true,
-        //         data: role,
-        //         totalPages: Math.ceil(count / limit),
-        //         currentPage: page
-        //     })
-        // }
     } catch (error) {
         res.status(500).json({
             status: 500,

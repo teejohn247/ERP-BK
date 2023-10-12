@@ -25,7 +25,7 @@ const leaveAction = async (req, res) => {
     try {
       
 
-        const { leaveId, leaveStatus, assignedNoOfDays, employeeId } = req.body;
+        const { leaveId, leaveStatus, assignedNoOfDays, decisionMessage, employeeId } = req.body;
 
         let company = await Company.findOne({ _id: req.payload.id });
         const leaveType = await LeaveRecords.findOne({ _id: leaveId});
@@ -62,6 +62,8 @@ const leaveAction = async (req, res) => {
                     "leaveAssignment.$[i].leaveStartDate": leaveType.leaveStartDate && leaveType.leaveStartDate,
                     "leaveAssignment.$[i].leaveEndDate": leaveType.leaveEndDate && leaveType.leaveEndDate,
                     "leaveAssignment.$[i].assignedNoOfDays": leaveType.assignedNoOfDays && leaveType.assignedNoOfDays,
+                    "leaveAssignment.$[i].decisionMessage": decisionMessage && decisionMessage,
+
                 }
            },
            { 
@@ -83,36 +85,62 @@ const leaveAction = async (req, res) => {
                         })
     
                     } else {
-                        let data = `<div>
-                        <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
-                        Hi ${check.firstName},
-                        </p> 
-                
-                        <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
-                        
-                         Your leave request has been ${leaveStatus}
-                       
-                        <br><br>
-                        </p>
-                        
-                        <div>`
-                
-                       let resp = emailTemp(data, 'Leave Application Notification')
+
+
+
+                       LeaveRecords.findOneAndUpdate({ _id: leaveId }, { 
+                            $set: { 
+                               decisionMessage: decisionMessage
             
-                       const receivers = [
-                        {
-                          email: check.email
-                        }
-                      ]
+                            }
+                       },
+                            async function (
+                                err,
+                                result
+                            ) {
+                                if (err) {
+                                    res.status(401).json({
+                                        status: 401,
+                                        success: false,
+                                        error: err
                 
-                        await sendEmail(req, res, check.email, receivers, 'Leave Application Notification', resp);
-    
-                        res.status(200).json({
-                            status: 200,
-                            success: true,
-                            data: "Update Successful"
-                        })
-                       return
+                                    })
+                
+                                } else {
+            
+                                    let data = `<div>
+                                    <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+                                    Hi ${check.firstName},
+                                    </p> 
+                            
+                                    <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
+                                    
+                                     Your leave request has been ${leaveStatus}
+                                   
+                                    <br><br>
+                                    </p>
+                                    
+                                    <div>`
+                            
+                                   let resp = emailTemp(data, 'Leave Application Notification')
+                        
+                                   const receivers = [
+                                    {
+                                      email: check.email
+                                    }
+                                  ]
+                            
+                                    await sendEmail(req, res, check.email, receivers, 'Leave Application Notification', resp);
+                
+                                    res.status(200).json({
+                                        status: 200,
+                                        success: true,
+                                        data: "Update Successful"
+                                    })
+                                   return
+                                }
+                            })
+                       
                     }
                 })
          

@@ -191,13 +191,12 @@ const EmployeeSchema = new mongoose.Schema({
         currentSpent: {
             type: Number,
             default: 0
-
         },
         currentExpense: {
             type: Number,
             default: 0
-
         },
+        
         expenseHistory: [{
             expenseTypeId: { type: String, required: true },
             expenseTypeName: { type: String, required: true },
@@ -207,8 +206,10 @@ const EmployeeSchema = new mongoose.Schema({
             attachment: { type: String },
             approver: { type: String },
             approverId: { type: String },
-            dateRemitted: { type: String, default: Date.now() },
-            description: { type: String }
+            dateRemitted: { type: String},
+            dateOfApproval: { type: String},
+            description: { type: String },
+            dateRequested: { type: Date, default: Date.now() },
         }]
     },
     leaveAssignment: 
@@ -238,7 +239,10 @@ const EmployeeSchema = new mongoose.Schema({
         leaveEndDate: {
             type: String,
         },
-        comments:{
+        requestMessage:{
+            type: String,
+        },
+        decisionMessage:{
             type: String,
         },
         leaveApproved:{

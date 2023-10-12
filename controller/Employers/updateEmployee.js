@@ -29,7 +29,7 @@ const updateEmployee = async (req, res) => {
         // employmentType} = req.body;
 
         const { firstName, lastName, personalEmail, gender, phoneNumber, address, dateOfBirth,
-             paymentInformation, image } = req.body;
+             paymentInformation} = req.body;
 
 
              console.log({paymentInformation})
@@ -56,7 +56,6 @@ const updateEmployee = async (req, res) => {
                     address: address && address,
                     personalEmail: personalEmail && personalEmail,
                     phoneNumber: phoneNumber && phoneNumber,
-                    profilePic: image && image
             }
        },
             async function (

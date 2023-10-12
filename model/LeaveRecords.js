@@ -64,7 +64,10 @@ const LeaveRecordsSchema = new mongoose.Schema({
     department:{
         type:String,
     },
-    comments:{
+    requestMessage:{
+        type:String,
+    },
+    decisionMessage:{
         type:String,
     },
     companyRole:{

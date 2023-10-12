@@ -23,13 +23,13 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
 
-const getLeaveRecords = async (req, res) => {
+const getLeaveRecordsDetails = async (req, res) => {
 
     try {
 
         const { page, limit } = req.query;
 
-        const employee = await LeaveRecords.find({userId: req.payload.id})
+        const employee = await LeaveRecords.find({_id: req.params.id})
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
@@ -63,7 +63,7 @@ const getLeaveRecords = async (req, res) => {
         })
     }
 }
-export default getLeaveRecords;
+export default getLeaveRecordsDetails;
 
 
 

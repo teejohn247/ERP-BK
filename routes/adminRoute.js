@@ -67,6 +67,9 @@ import updateLeaveApplication from '../controller/Employers/updateLeaveApplicati
 import deleteLeaveApplication from '../controller/Employers/deleteLeaveApplication';
 import createExpenseRequest from '../controller/Employers/expenseRequests';
 import fetchExpenseReqs from '../controller/Employers/fetchLeaveRequests';
+import getLeaveRecordsDetails from '../controller/Employers/fetchLeaveRequestsDetails';
+import fetchExpenseReqDetails from '../controller/Employers/fetchLeaveReqDetails';
+import fetchExpenseReqsAdmin from '../controller/Employers/fetchLeaveRequestsAdmin';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -159,8 +162,8 @@ router.patch('/addPayment/:id',auth, addPayment);
 router.post('/updatePayment', auth, updatePayment);
 router.get('/fetchEmployees',auth,  fetchEmployees);
 router.get('/fetchEmployee/:id', auth, fetchSpecificEmployees);
-router.patch('/adminUpdateEmployee/:id', auth, upload.single("my_file"), imageUploader, updateEmployeeAdmin);
-router.patch('/updateEmployee', auth, upload.single("my_file"), imageUploader, updateEmployee);
+router.patch('/adminUpdateEmployee/:id', auth,  updateEmployeeAdmin);
+router.patch('/updateEmployee', auth,  updateEmployee);
 router.delete('/deleteEmployee/:id', auth, deleteEmployee);
 router.get('/fetchDesignations', auth, fetchDesignation);
 router.get('/listAuditTrails', auth, listAudits);
@@ -192,6 +195,11 @@ router.patch("/updateLeaveApplication/:id", auth, updateLeaveApplication);
 router.delete("/deleteLeaveApplication/:id", auth, deleteLeaveApplication);
 router.post("/createExpenseRequest", auth, upload.single("attachment"), imageUploader, createExpenseRequest);
 router.get("/fetchExpenseRequests", auth, fetchExpenseReqs);
+router.get("/getLeaveRecords/:id", auth, getLeaveRecordsDetails);
+
+router.get("/fetchApprovalExpenseRequest", auth, fetchExpenseReqsAdmin);
+
+
 
 
 

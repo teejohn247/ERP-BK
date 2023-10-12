@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import moment from 'moment';
 
 const ExpenseRequestsSchema = new mongoose.Schema({
     employeeId: { type: String, required: true },
@@ -11,10 +12,13 @@ const ExpenseRequestsSchema = new mongoose.Schema({
     attachment: { type: String },
     approver: { type: String },
     approverId: { type: String },
-    dateRemitted: { type: String, default: Date.now() },
+    dateRemitted: { type: String },
     description: { type: String },
     companyId: { type: String, required: true },
     companyName: { type: String, required: true },
+    status: { type: String, default: "Pending" },
+    dateRequested: { type: String, default: moment().format('L') },
+    dateOfApproval: { type: String},
 });
 
 module.exports = mongoose.model("ExpenseRequests", ExpenseRequestsSchema);

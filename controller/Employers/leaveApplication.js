@@ -29,7 +29,7 @@ const leaveApplication = async (req, res) => {
     try {
       
 
-        const { leaveTypeId, leaveStartDate, leaveEndDate, comments, noOfLeaveDays } = req.body;
+        const { leaveTypeId, leaveStartDate, leaveEndDate, requestMessage, noOfLeaveDays } = req.body;
 
         
 
@@ -108,7 +108,7 @@ const leaveApplication = async (req, res) => {
             });
             return;
         }
-console.log(approve[0].approvalId, approve[0].approval)
+       console.log(approve[0].approvalId, approve[0].approval)
        
         let leave = new LeaveRecords({
                 userId:req.payload.id,
@@ -125,7 +125,8 @@ console.log(approve[0].approvalId, approve[0].approval)
                 approver: approve ? approve[0].approval : check.managerName,
                 companyRole: check.companyRole && check.companyRole,
                 department: check.department && check.department,
-                comments: comments
+                requestMessage: requestMessage,
+                decisionMessage: ""
 
         })
 
@@ -183,7 +184,6 @@ console.log(approve[0].approvalId, approve[0].approval)
            let respEmployee = emailTemp( employeeData, 'Leave Application Notification')
            console.log('heeheh1')
 
-
            const receiverEmployee = [
             {
               email: check.email
@@ -194,13 +194,12 @@ console.log(approve[0].approvalId, approve[0].approval)
             await sendEmail(req, res, check.email, receiverEmployee, 'Leave Application Notification', respEmployee);
 
         })
-    
-       
 
         Employee.findOneAndUpdate({ _id: req.payload.id}, { 
             $set: { 
                 "leaveAssignment.$[i].noOfLeaveDays": noOfLeaveDays && noOfLeaveDays,
-                "leaveAssignment.$[i].comments": comments && comments,
+                "leaveAssignment.$[i].requestMessage": requestMessage && requestMessage,
+                "leaveAssignment.$[i].decisionMessage": "",
                 "leaveAssignment.$[i].leaveStartDate": leaveStartDate && leaveStartDate,
                 "leaveAssignment.$[i].leaveEndDate": leaveEndDate && leaveEndDate
             }
