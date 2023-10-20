@@ -59,10 +59,6 @@ const assignDesignation = async (req, res) => {
             ids2.push(chk.expenseTypeId)
         });
 
-        // let checks_sch = await School.find({ _id: { $in : ids }},
-        //     { notification_types: { $elemMatch: { notification_id: notificationId } } })
-            
-
         let checks_notification = await Employee.find({ _id:  { $in: employees }},
             { leaveAssignment: { $elemMatch: { leaveTypeId:  { $in: ids } }}})
 
@@ -73,11 +69,8 @@ const assignDesignation = async (req, res) => {
             checks_notification.map((chk) => {
                 if(chk.leaveAssignment.length > 0){
                     dd.push(chk.leaveAssignment)
-
                 }
-    
             })
-
 
         let checks_expense = await Employee.find({ _id:  { $in: employees }},
             { leaveAssignment: { $elemMatch: { expenseTypeId:  { $in: ids2 } }}})
@@ -91,16 +84,6 @@ const assignDesignation = async (req, res) => {
                     dd.push(chk.leaveAssignment)
                 }
             })
-
-
-           
-            // if (dd.length > 0) {
-            //     res.status(400).json({
-            //         status: 400,
-            //         error: 'This leave type has already been assigned to one of the employees'
-            //     })
-            //     return
-            // }
 
             if (dd2.length > 0) {
                 res.status(400).json({

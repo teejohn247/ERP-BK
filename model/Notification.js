@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import moment from 'moment/moment';
 
 
 const NotificationsSchema = new mongoose.Schema({

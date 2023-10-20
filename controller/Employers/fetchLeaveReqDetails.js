@@ -4,7 +4,7 @@ import Role from '../../model/ExpenseRequests';
 
 
 import { emailTemp } from '../../emailTemplate';
-import fetchLeavesDetails from '../Leave/fetchLeaveDetails';
+import fetchLeavesDetails from '../../model/LeaveRecords';
 
 
 const sgMail = require('@sendgrid/mail')

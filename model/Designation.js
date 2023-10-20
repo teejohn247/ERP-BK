@@ -30,7 +30,6 @@ const DesignationSchema = new mongoose.Schema({
             required: true
         },
         cardLimit: { type: String, required: true},
-        // cardBalance: { type: String, required: true},
         cardExpiryDate: { type: String, required: true },
     }],
     hmoPackages:

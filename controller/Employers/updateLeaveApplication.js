@@ -51,8 +51,6 @@ const updateLeaveApplication = async (req, res) => {
         const leaveType = await Leave.findOne({ _id: leaveTypeId });
 
      
-       
-
         if (!leaveType) {
             res.status(400).json({
                 status: 400,
@@ -61,12 +59,7 @@ const updateLeaveApplication = async (req, res) => {
             return;
         }
         const approve = check.approvals.filter(obj => obj.approvalType === "leave");
-
-        console.log({approve})
-
-       ;
-
-
+        console.log({approve});
 
         const exists = check.leaveAssignment.some(obj => obj.leaveTypeId === leaveTypeId);
 

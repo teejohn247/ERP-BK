@@ -1,9 +1,7 @@
 
 import dotenv from 'dotenv';
-import Role from '../../model/Expense';
+import Role from '../../model/Rating';
 
-
-import { emailTemp } from '../../emailTemplate';
 
 
 const sgMail = require('@sendgrid/mail')
@@ -17,7 +15,7 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
 
-const fetchExpense= async (req, res) => {
+const fetchRatings = async (req, res) => {
 
     try {
 
@@ -39,10 +37,25 @@ const fetchExpense= async (req, res) => {
             data: role,
             totalPages: Math.ceil(count / limit),
             currentPage: page
-        })
+        });
 
-        return;
-
+        // if(!role){
+        //     res.status(404).json({
+        //         status:404,
+        //         success: false,
+        //         error:'No role Found'
+        //     })
+        //     return
+        
+        // }else{
+        //     res.status(200).json({
+        //         status: 200,
+        //         success: true,
+        //         data: role,
+        //         totalPages: Math.ceil(count / limit),
+        //         currentPage: page
+        //     })
+        // }
     } catch (error) {
         res.status(500).json({
             status: 500,
@@ -51,7 +64,7 @@ const fetchExpense= async (req, res) => {
         })
     }
 }
-export default fetchExpense;
+export default fetchRatings;
 
 
 

@@ -32,7 +32,7 @@ const verifyNewUser = async (req, res) => {
             return;
          }
 
-         console.log('here')
+
     
          const payload = jwt_decode(token);
 

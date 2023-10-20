@@ -13,7 +13,7 @@ const CompanySchema = new mongoose.Schema({
     status: { type: Boolean, default: false },
     isSuperAdmin: { type: Boolean },
     systemRoles:{
-        humanResources: [
+        employeeManagement: [
             {
                 email: { type: String },
                 userName: { type: String },

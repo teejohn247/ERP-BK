@@ -36,6 +36,8 @@ const updateEmployee = async (req, res) => {
         
 
         const check = await Employee.findOne({ _id: req.payload.id });
+        console.log({check})
+
      
         let company = await Company.find({ _id: check.companyId});
 
@@ -52,10 +54,12 @@ const updateEmployee = async (req, res) => {
                     firstName: firstName && firstName,
                     lastName: lastName && lastName,
                     dateOfBirth: dateOfBirth && dateOfBirth,
-                    gender: gender && gender,
+                    gender: gender && gender,  
                     address: address && address,
-                    personalEmail: personalEmail && personalEmail,
+                    // personalEmail: personalEmail && personalEmail,
                     phoneNumber: phoneNumber && phoneNumber,
+                    profilePic: req.body.image && req.body.image,
+
             }
        },
             async function (

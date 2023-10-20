@@ -70,6 +70,32 @@ import fetchExpenseReqs from '../controller/Employers/fetchLeaveRequests';
 import getLeaveRecordsDetails from '../controller/Employers/fetchLeaveRequestsDetails';
 import fetchExpenseReqDetails from '../controller/Employers/fetchLeaveReqDetails';
 import fetchExpenseReqsAdmin from '../controller/Employers/fetchLeaveRequestsAdmin';
+import createGroup from '../controller/Appraisal/CreateGroup';
+import createKPI from '../controller/Appraisal/createKPI';
+import createRating from '../controller/Appraisal/createRating';
+import createPeriod from '../controller/Appraisal/appraisalPeriod';
+import createFinal from '../controller/Appraisal/createFinal';
+import assignKpis from '../controller/Appraisal/assignKpisToGroups';
+import fetchGroups from '../controller/Appraisal/fetchGroups';
+import fetchKPIs from '../controller/Appraisal/fetchKPIs';
+import fetchRatings from '../controller/Appraisal/fetchRatings';
+import fetchFinal from '../controller/Appraisal/fetchFinal';
+import updateKPI from '../controller/Appraisal/updateKpi';
+import updatePeriod from '../controller/Appraisal/updatePeriod';
+import updateRating from '../controller/Appraisal/updateRating';
+import updateGroup from '../controller/Appraisal/updateGroup';
+import updateFinal from '../controller/Appraisal/updateFinal';
+import fetchPeriod from '../controller/Appraisal/fetchPeriod';
+import deleteFinal from '../controller/Appraisal/deleteFinal';
+import deleteGroup from '../controller/Appraisal/deleteGroup';
+import deletePeriod from '../controller/Appraisal/deletePeriod';
+import deleteRating from '../controller/Appraisal/deleteRating';
+import deleteKPI from '../controller/Appraisal/deleteKPI';
+import createRole from '../controller/systemRoles.js/createRole';
+import createPermissions from '../controller/systemRoles.js/createPermissions';
+import fetchPermissions from '../controller/systemRoles.js/fetchPermissions';
+import fetchRoles from '../controller/systemRoles.js/fetchRoles';
+import assignRole from '../controller/systemRoles.js/assignRoles';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -163,7 +189,7 @@ router.post('/updatePayment', auth, updatePayment);
 router.get('/fetchEmployees',auth,  fetchEmployees);
 router.get('/fetchEmployee/:id', auth, fetchSpecificEmployees);
 router.patch('/adminUpdateEmployee/:id', auth,  updateEmployeeAdmin);
-router.patch('/updateEmployee', auth,  updateEmployee);
+router.patch('/updateEmployee', auth, upload.single("my_file"), imageUploader,  updateEmployee);
 router.delete('/deleteEmployee/:id', auth, deleteEmployee);
 router.get('/fetchDesignations', auth, fetchDesignation);
 router.get('/listAuditTrails', auth, listAudits);
@@ -196,8 +222,55 @@ router.delete("/deleteLeaveApplication/:id", auth, deleteLeaveApplication);
 router.post("/createExpenseRequest", auth, upload.single("attachment"), imageUploader, createExpenseRequest);
 router.get("/fetchExpenseRequests", auth, fetchExpenseReqs);
 router.get("/getLeaveRecords/:id", auth, getLeaveRecordsDetails);
-
 router.get("/fetchApprovalExpenseRequest", auth, fetchExpenseReqsAdmin);
+router.post("/createAppraisalGroups", auth, createGroup);
+router.post("/createKPIs", auth, createKPI);
+router.post("/createRating", auth, createRating);
+router.post("/createAppraisalPeriod", auth, createPeriod);
+router.post("/createAppraisal", auth, createFinal);
+router.patch("/assignKpis", auth, assignKpis);
+router.get("/fetchAppraisalGroups", auth, fetchGroups);
+router.get("/fetchKPIs", auth, fetchKPIs);
+router.get("/fetchRatings", auth, fetchRatings);
+router.get("/fetchAppraisals", auth, fetchFinal);
+router.get("/fetchPeriod", auth, fetchPeriod);
+
+
+router.patch("/updateKPIs/:id", auth, updateKPI);
+router.patch("/updatePeriod/:id", auth, updatePeriod);
+router.patch("/updateRating/:id", auth, updateRating);
+router.patch("/updateGroup/:id", auth, updateGroup);
+router.patch("/updateAppraisal/:id", auth, updateFinal);
+
+
+router.delete("/deleteKPI/:id", auth, deleteKPI);
+router.delete("/deletePeriod/:id", auth, deletePeriod);
+router.delete("/deleteRating/:id", auth, deleteRating);
+router.delete("/deleteGroup/:id", auth, deleteGroup);
+router.delete("/deleteAppraisal/:id", auth, deleteFinal);
+
+
+
+
+
+
+
+router.post("/createRole", auth, createRole);
+router.post("/createPermissions", auth, createPermissions);
+router.get("/fetchPermissions", auth, fetchPermissions);
+router.patch("/assignRole", auth, assignRole);
+router.get("/fetchRoles", auth, fetchRoles);
+
+
+
+
+
+
+
+
+
+
+
 
 
 
