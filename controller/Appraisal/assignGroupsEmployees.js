@@ -2,31 +2,29 @@
 import dotenv from 'dotenv';
 import Kpi from '../../model/Kpi';
 import AppraisalGroup from '../../model/AppraisalGroup';
-import addDepartment from '../../model/Department';
-
+import Employee from '../../model/Employees';
 
 
 dotenv.config();
 
 
-const assignGroupsDepartment = async (req, res) => {
+const assignGroupsEmployees = async (req, res) => {
 
     try {
 
-        const { departments, appraisalId } = req.body;
+        const { employees, appraisalId } = req.body;
         const appraisal = await AppraisalGroup.findOne({_id: appraisalId})
 
         console.log({appraisal})
 
-        if(departments.length < 1){
+        if(employees.length < 1){
             res.status(404).json({
                 status:404,
                 success: false,
-                error:'departmentId is required'
+                error:'employeesId is required'
             })
             return
         }
-
 
 
         if(!appraisalId){
@@ -61,7 +59,7 @@ const assignGroupsDepartment = async (req, res) => {
 
             console.log('here')
 
-         let checks_group = await addDepartment.find({ _id:  { $in: departments }},
+         let checks_group = await Employee.find({ _id:  { $in: employees }},
             {assignedAppraisals: { $elemMatch: { appraisalId: appraisalId } } })
 
                     checks_group.map((chk) => {
@@ -77,7 +75,7 @@ const assignGroupsDepartment = async (req, res) => {
                 res.status(404).json({
                     status:404,
                     success: false,
-                    error:'Appraisal has already been assigned to department'
+                    error:'Appraisal has already been assigned to employee'
                 })
                 return
             }
@@ -85,17 +83,17 @@ const assignGroupsDepartment = async (req, res) => {
 
             let groups = [];
     
-            for (const groupId of departments) {
+            for (const groupId of employees) {
                 console.log({ groupId });
         
                 try {
-                    const group = await addDepartment.findOne({ _id: groupId });
+                    const group = await Employee.findOne({ _id: groupId });
 
                     console.log({group})
                     
                     groups.push({
-                        department_id: groupId,
-                        department_name: group.departmentName,
+                        employee_id: groupId,
+                        employee_name: group.employeeName,
                     });
                     console.log({ group });
                 } catch (err) {
@@ -104,7 +102,7 @@ const assignGroupsDepartment = async (req, res) => {
             }
 
         AppraisalGroup.findOneAndUpdate({ _id: appraisalId}, { 
-            $push: { assignedDepartments: groups
+            $push: { assignedEmployees: groups
             },
        },{ upsert: true },
             async function (
@@ -120,7 +118,7 @@ const assignGroupsDepartment = async (req, res) => {
 
                 } else {
 
-                    addDepartment.findOneAndUpdate({ _id:  { $in: departments }}, { 
+                    Employee.findOneAndUpdate({ _id:  { $in: employees }}, { 
                         $push: { assignedAppraisals: {
                             appraisalId,
                             appraisalName: appraisal.groupName,
@@ -161,4 +159,4 @@ const assignGroupsDepartment = async (req, res) => {
         })
     }
 }
-export default assignGroupsDepartment;
+export default assignGroupsEmployees;

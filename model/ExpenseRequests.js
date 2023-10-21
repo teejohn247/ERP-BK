@@ -7,7 +7,6 @@ const ExpenseRequestsSchema = new mongoose.Schema({
     expenseTypeId: { type: String, required: true },
     expenseTypeName: { type: String, required: true },
     expenseDate: { type: String, required: true },
-    currency: { type: String },
     amount: { type: String, required: true },
     attachment: { type: String },
     approver: { type: String },
@@ -18,6 +17,7 @@ const ExpenseRequestsSchema = new mongoose.Schema({
     companyName: { type: String, required: true },
     status: { type: String, default: "Pending" },
     dateRequested: { type: String, default: moment().format('L') },
+    comment: { type: String },
     dateOfApproval: { type: String},
 });
 

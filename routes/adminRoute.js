@@ -96,6 +96,10 @@ import createPermissions from '../controller/systemRoles.js/createPermissions';
 import fetchPermissions from '../controller/systemRoles.js/fetchPermissions';
 import fetchRoles from '../controller/systemRoles.js/fetchRoles';
 import assignRole from '../controller/systemRoles.js/assignRoles';
+import assignGroupsDepartment from '../controller/Appraisal/assignGroupsDepartment';
+import assignGroupsDesignation from '../controller/Appraisal/assignGroupsDesignation';
+import assignGroupsEmployees from '../controller/Appraisal/assignGroupsEmployees';
+import approveExpense from '../controller/Expense/approveExpenseRequests';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -241,6 +245,12 @@ router.patch("/updatePeriod/:id", auth, updatePeriod);
 router.patch("/updateRating/:id", auth, updateRating);
 router.patch("/updateGroup/:id", auth, updateGroup);
 router.patch("/updateAppraisal/:id", auth, updateFinal);
+router.patch("/assignAppraisalToDepartment", auth, assignGroupsDepartment);
+router.patch("/assignAppraisalToDesignations", auth, assignGroupsDesignation);
+router.patch("/assignAppraisalToEmployees", auth, assignGroupsEmployees);
+
+router.patch("/approveExpenseRequests", auth, approveExpense);
+
 
 
 router.delete("/deleteKPI/:id", auth, deleteKPI);

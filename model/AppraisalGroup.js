@@ -57,6 +57,18 @@ const AppraisalGroupSchema = new mongoose.Schema({
             default: moment().format('L') 
         }
     }],
+    assignedEmployees:  [{
+        employee_id: {
+            type: String,
+        },
+        employee_name: {
+            type: String
+        },
+        date_assigned: {
+            type: Date,
+            default: moment().format('L') 
+        }
+    }],
 
 
 }, { timestamps: true });

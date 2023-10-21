@@ -1,5 +1,6 @@
 import { string } from "joi";
 import mongoose from "mongoose";
+import moment from "moment";
 
 const EmployeeSchema = new mongoose.Schema({
   companyName: { type: String, required: true },
@@ -115,6 +116,17 @@ const EmployeeSchema = new mongoose.Schema({
   managerId: { type: String, trim: true },
   managerName: { type: String, trim: true },
   companyRole: { type: String, trim: true },
+  assignedAppraisals:[
+    {
+        appraisalId: { type: String, required: true },
+        appraisalName: { type: String, required: true },
+        dateAssigned: {
+            type: Date,
+            default: moment().format('L') 
+        }
+
+    }
+],
   approvals: [
     {
       approvalType: {
@@ -167,17 +179,7 @@ const EmployeeSchema = new mongoose.Schema({
       type: Number,
       default: 0,
     },
-    assignedAppraisals:[
-        {
-            appraisalId: { type: String, required: true },
-            appraisalName: { type: String, required: true },
-            dateAAssigned: {
-                type: Date,
-                // default: moment().format('L') 
-            }
-
-        }
-    ],
+ 
     expenseHistory: [
       {
         expenseTypeId: { type: String, required: true },

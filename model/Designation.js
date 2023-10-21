@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import moment from 'moment'
 
 const DesignationSchema = new mongoose.Schema({
     designationName: { type: String, required: true },
@@ -44,5 +45,16 @@ const DesignationSchema = new mongoose.Schema({
             type: String,
         }
     }],
+    assignedAppraisals:[
+        {
+            appraisalId: { type: String },
+            appraisalName: { type: String },
+            dateAssigned: {
+                type: Date,
+                default: moment().format('L') 
+            }
+
+        }
+    ],
 });
 module.exports = mongoose.model("Designation", DesignationSchema);

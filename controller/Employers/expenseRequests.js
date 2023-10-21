@@ -14,7 +14,7 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 const createExpenseRequest = async (req, res) => {
   try {
-    const { expenseTypeId, expenseDate, currency, amount, image, description } =
+    const { expenseTypeId, expenseDate, amount, image, description } =
       req.body;
 
 
@@ -69,7 +69,6 @@ const createExpenseRequest = async (req, res) => {
       attachment: image,
       approver: approve[0].approval,
       approverId: approve[0].approvalId,
-      currency,
       amount,
       image,
       description,
@@ -118,7 +117,6 @@ const createExpenseRequest = async (req, res) => {
                         attachment: image,
                         approver: approve[0].approval,
                         approverId: approve[0].approvalId,
-                        currency,
                         amount,
                         image,
                         description,

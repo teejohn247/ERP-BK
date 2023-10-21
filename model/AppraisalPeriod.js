@@ -11,6 +11,10 @@ const AppraisalPeriodSchema = new mongoose.Schema({
     endDate: { type: String },
     activeDate: { type: String },
     inactiveDate: { type: String },
+    active: { type: Boolean,
+    default: false },
+
+    
 
 }, { timestamps: true });
 
