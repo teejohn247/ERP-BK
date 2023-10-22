@@ -25,7 +25,7 @@ const createKPI = async (req, res) => {
 
     try {
        
-        const { name, description, groups} = req.body;
+        const { name, description, group} = req.body;
 
 
         let company = await Company.findOne({ _id: req.payload.id });
@@ -51,7 +51,7 @@ const createKPI = async (req, res) => {
             return;
         }
 
-       let group = new AppraisalGroup({
+       let groups = new AppraisalGroup({
             kpiName: name,
             companyId: req.payload.id,
             companyName: company.companyName,
@@ -60,10 +60,10 @@ const createKPI = async (req, res) => {
 
 
         const dd = []
-        await group.save().then(async (adm) => {
+        await groups.save().then(async (adm) => {
             console.log(adm)
 
-            let checks_group = await AppraisalGroup.find({ _id:  { $in: groups }},
+            let checks_group = await AppraisalGroup.find({ _id:  group},
                 {groupKpis: { $elemMatch: { kpiId: adm._id } } })
     
                         checks_group.map((chk) => {
@@ -82,7 +82,7 @@ const createKPI = async (req, res) => {
                     return
                 }
     
-            Group.updateMany({ _id: { $in : groups }}, { 
+            Group.findOneAndUpdate({ _id: group }, { 
                 $push: { groupKpis: {
                     kpiId: adm._id,
                     kpiName: name,

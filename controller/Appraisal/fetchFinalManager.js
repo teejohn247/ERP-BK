@@ -38,24 +38,6 @@ const fetchFinalManager = async (req, res) => {
             totalPages: Math.ceil(count / limit),
             currentPage: page
         });
-
-        // if(!role){
-        //     res.status(404).json({
-        //         status:404,
-        //         success: false,
-        //         error:'No role Found'
-        //     })
-        //     return
-        
-        // }else{
-        //     res.status(200).json({
-        //         status: 200,
-        //         success: true,
-        //         data: role,
-        //         totalPages: Math.ceil(count / limit),
-        //         currentPage: page
-        //     })
-        // }
     } catch (error) {
         res.status(500).json({
             status: 500,
