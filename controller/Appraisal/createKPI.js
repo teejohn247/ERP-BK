@@ -4,6 +4,8 @@ import Role from '../../model/Role';
 import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import AppraisalGroup from '../../model/Kpi';
+import Group from '../../model/AppraisalGroup';
+
 
 
 
@@ -23,7 +25,7 @@ const createKPI = async (req, res) => {
 
     try {
        
-        const { name, description } = req.body;
+        const { name, description, groups} = req.body;
 
 
         let company = await Company.findOne({ _id: req.payload.id });
@@ -56,8 +58,63 @@ const createKPI = async (req, res) => {
             description,
         })
 
-        await group.save().then((adm) => {
+
+        const dd = []
+        await group.save().then(async (adm) => {
             console.log(adm)
+
+            let checks_group = await AppraisalGroup.find({ _id:  { $in: groups }},
+                {groupKpis: { $elemMatch: { kpiId: adm._id } } })
+    
+                        checks_group.map((chk) => {
+                            if(chk.groupKpis.length > 0){
+                                dd.push(chk.groupKpis)
+                            }
+                        })
+    
+    
+                if(dd.length > 0){
+                    res.status(404).json({
+                        status:404,
+                        success: false,
+                        error:'kpi has already been assigned to group'
+                    })
+                    return
+                }
+    
+            Group.updateMany({ _id: { $in : groups }}, { 
+                $push: { groupKpis: {
+                    kpiId: adm._id,
+                    kpiName: name,
+                    kpiDescription: description,
+                    "remarks.employeeComment": "",
+                    "remarks.managerName": "",
+                    "remarks.employeeName": "",
+                    "remarks.managerComment": "",
+                    "remarks.managerRatingId": "",
+                    "remarks.employeeRatingId": "",
+    
+    
+                }},
+           },{ upsert: true },
+                async function (
+                    err,
+                    result
+                ) {
+                    if (err) {
+                        res.status(401).json({
+                            status: 401,
+                            success: false,
+                            error: err
+                        })
+    
+                    } else {
+
+                        console.log({result})
+    
+    
+                    }
+                })
             res.status(200).json({
                 status: 200,
                 success: true,

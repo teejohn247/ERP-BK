@@ -96,7 +96,19 @@ const EmployeeSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  nextOfKinRelationship: {
+    type: String,
+    trim: true,
+  },
   email: { type: String, required: true, unique: true, trim: true },
+
+  nationality: { type: String, required: true, unique: true, trim: true },
+    country: { type: String, required: true, unique: true, trim: true },
+    city: { type: String, required: true, unique: true, trim: true },
+
+
+
+
   department: { type: String, required: true, trim: true },
   employmentType: { type: String, required: true, trim: true },
   employeeCode: { type: String, required: true, trim: true },

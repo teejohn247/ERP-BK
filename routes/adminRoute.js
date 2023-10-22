@@ -100,6 +100,11 @@ import assignGroupsDepartment from '../controller/Appraisal/assignGroupsDepartme
 import assignGroupsDesignation from '../controller/Appraisal/assignGroupsDesignation';
 import assignGroupsEmployees from '../controller/Appraisal/assignGroupsEmployees';
 import approveExpense from '../controller/Expense/approveExpenseRequests';
+import fetchGroupsByEmployee from '../controller/Appraisal/fetchGroupsByEmployee';
+import fetchGroupsByDesignations from '../controller/Appraisal/fetchGroupsByDesignation';
+import fetchGroupsByDepartment from '../controller/Appraisal/fetchGroupsByDeparment';
+import fillAppraisal from '../controller/Appraisal/fillAppraisal';
+import fetchFinalManager from '../controller/Appraisal/fetchFinalManager';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -238,6 +243,14 @@ router.get("/fetchKPIs", auth, fetchKPIs);
 router.get("/fetchRatings", auth, fetchRatings);
 router.get("/fetchAppraisals", auth, fetchFinal);
 router.get("/fetchPeriod", auth, fetchPeriod);
+router.get("/fetchGroupByEmployee", auth, fetchGroupsByEmployee);
+router.get("/fetchGroupByDesignation/:designation", auth, fetchGroupsByDesignations);
+router.get("/fetchGroupByDepartment/:department", auth, fetchGroupsByDepartment);
+
+router.get("/fetchAppraisalRequests", auth, fetchFinalManager);
+
+
+
 
 
 router.patch("/updateKPIs/:id", auth, updateKPI);
@@ -250,6 +263,9 @@ router.patch("/assignAppraisalToDesignations", auth, assignGroupsDesignation);
 router.patch("/assignAppraisalToEmployees", auth, assignGroupsEmployees);
 
 router.patch("/approveExpenseRequests", auth, approveExpense);
+
+router.post("/employeeFillAppraisal", auth, fillAppraisal);
+
 
 
 

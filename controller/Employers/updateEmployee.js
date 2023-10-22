@@ -28,7 +28,9 @@ const updateEmployee = async (req, res) => {
         // const { firstName, lastName, dateOfBirth, departmentId , companyRole, designationId, phoneNumber, gender,
         // employmentType} = req.body;
 
-        const { firstName, lastName, personalEmail, gender, phoneNumber, address, dateOfBirth,
+       
+        
+        const { firstName, lastName, personalEmail, personalPhone, nextOfKinFullName, nextOfKinPhoneNumber, nextOfKinGender, nextOfKinRelationship, nextOfKinAddress,  nationality, country, city, gender, phoneNumber, address, dateOfBirth,
              paymentInformation} = req.body;
 
 
@@ -48,7 +50,7 @@ const updateEmployee = async (req, res) => {
             });
             return;
         }
-        Employee.findOneAndUpdate({ _id: req.params.id}, { 
+        Employee.findOneAndUpdate({ _id: req.payload.id}, { 
             $set: { 
 
                     firstName: firstName && firstName,
@@ -56,9 +58,19 @@ const updateEmployee = async (req, res) => {
                     dateOfBirth: dateOfBirth && dateOfBirth,
                     gender: gender && gender,  
                     address: address && address,
-                    // personalEmail: personalEmail && personalEmail,
+                    personalEmail: personalEmail && personalEmail,
                     phoneNumber: phoneNumber && phoneNumber,
                     profilePic: req.body.image && req.body.image,
+                    nationality: nationality && nationality,
+                    personalPhone: personalPhone && personalEmail,
+                    nextOfKinRelationship: nextOfKinRelationship && nextOfKinRelationship,
+                    country: country && country,
+                    city: city && city,
+                    nextOfKinFullName: nextOfKinFullName && nextOfKinFullName,
+                    nextOfKinAddress: nextOfKinAddress && nextOfKinAddress,
+                    nextOfKinGender: nextOfKinGender && nextOfKinGender,
+                    nextOfKinPhoneNumber: nextOfKinPhoneNumber && nextOfKinPhoneNumber,
+                    nextOfKinRelationship: nextOfKinRelationship && nextOfKinRelationship
 
             }
        },

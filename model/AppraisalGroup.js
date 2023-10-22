@@ -33,6 +33,10 @@ const AppraisalGroupSchema = new mongoose.Schema({
              },
         }
     ],
+    // potentialRating: { type: String },
+    // overallPerformanceRating: { type: String },
+    // generalRemarks: { type: String },
+
     assignedDesignations:  [{
         designation_id: {
             type: String,
@@ -69,6 +73,7 @@ const AppraisalGroupSchema = new mongoose.Schema({
             default: moment().format('L') 
         }
     }],
+
 
 
 }, { timestamps: true });
