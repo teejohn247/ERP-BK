@@ -20,6 +20,7 @@ import { emailTemp } from '../../emailTemplate';
 const sgMail = require('@sendgrid/mail')
 const csv = require('csvtojson');
 
+
 dotenv.config();
 
 sgMail.setApiKey(process.env.SENDGRID_KEY);

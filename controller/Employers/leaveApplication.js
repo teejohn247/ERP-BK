@@ -36,9 +36,17 @@ const leaveApplication = async (req, res) => {
         const check = await Employee.findOne({ _id: req.payload.id });
         const checkManager = await Employee.findOne({ _id: check.managerId});
 
-
+        console.log(check.managerId)
 
         console.log({checkManager})
+
+        if (!checkManager) {
+            res.status(400).json({
+                status: 400,
+                error: "Employee has not been assigned manager"
+            });
+            return;
+        }
         if (!check) {
             res.status(400).json({
                 status: 400,
@@ -182,7 +190,7 @@ const leaveApplication = async (req, res) => {
             <div>`
     
            let respEmployee = emailTemp( employeeData, 'Leave Application Notification')
-           console.log('heeheh1')
+           console.log('heeheh2')
 
            const receiverEmployee = [
             {

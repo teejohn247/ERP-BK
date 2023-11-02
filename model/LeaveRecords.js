@@ -44,6 +44,7 @@ const LeaveRecordsSchema = new mongoose.Schema({
     },
     daysUsed: {
         type: Number,
+        default: 0
     },
     leaveApprover: {
         type: String,

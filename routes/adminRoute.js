@@ -105,6 +105,21 @@ import fetchGroupsByDesignations from '../controller/Appraisal/fetchGroupsByDesi
 import fetchGroupsByDepartment from '../controller/Appraisal/fetchGroupsByDeparment';
 import fillAppraisal from '../controller/Appraisal/fillAppraisal';
 import fetchFinalManager from '../controller/Appraisal/fetchFinalManager';
+import createCredits from '../controller/Payroll/createCredits';
+import createDebits from '../controller/Payroll/createDebit';
+import payrollPeriod from '../controller/Payroll/payrollPeriod';
+import fetchCredits from '../controller/Payroll/fetchCredits';
+import fetchDebits from '../controller/Payroll/fetchDebits';
+import fetchPayrollPeriod from '../controller/Payroll/fetchPayrollPeriod';
+import updateCredits from '../controller/Payroll/updateCredit';
+import updateDebits from '../controller/Payroll/updateDebits';
+import updatePayrollPeriod from '../controller/Payroll/updatePayrollPeriod';
+import createPayroll from '../controller/Payroll/createPayroll';
+import fetchPayroll from '../controller/Payroll/fetchPayroll';
+import fetchEmployeesByDepartment from '../controller/Employers/fetchEmployeesByDepartment';
+import fetchRequests from '../controller/Requests/fetchRequests';
+import approvedRequests from '../controller/Requests/approvedRequests';
+import getAdminApprovedRecords from '../controller/Employers/getAdminApprovedRecords';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -125,6 +140,17 @@ cloudinary.config({
     storage,
   });
 
+  const storagecsv = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  });
+  
+  const uploadcsv = multer({ storage: storagecsv });
+
   async function handleUpload(file) {
     const res = await cloudinary.uploader.upload(file, {
       resource_type: "auto",
@@ -134,7 +160,7 @@ cloudinary.config({
 
 const router = express.Router();
 
-router.post("/upload-cv", mult.single("csv"), (req, res) => {
+router.post("/upload-cv", upload.single("payroll"), (req, res) => {
   console.log(req.file)
   //convert csvfile to jsonArray
   
@@ -248,6 +274,8 @@ router.get("/fetchGroupByDesignation/:designation", auth, fetchGroupsByDesignati
 router.get("/fetchGroupByDepartment/:department", auth, fetchGroupsByDepartment);
 
 router.get("/fetchAppraisalRequests", auth, fetchFinalManager);
+router.get("/fetchApprovedLeaveRequests/:id", auth, getAdminApprovedRecords);
+
 
 
 
@@ -266,6 +294,13 @@ router.patch("/approveExpenseRequests", auth, approveExpense);
 
 router.post("/employeeFillAppraisal", auth, fillAppraisal);
 
+router.get("/fetchApprovalRequests/:id", auth, fetchRequests);
+router.get("/fetchEmployeesByDepartment", auth, fetchEmployeesByDepartment);
+router.get("/fetchApprovedLeaveRequests", auth, approvedRequests);
+
+  
+
+
 
 
 
@@ -274,21 +309,31 @@ router.delete("/deletePeriod/:id", auth, deletePeriod);
 router.delete("/deleteRating/:id", auth, deleteRating);
 router.delete("/deleteGroup/:id", auth, deleteGroup);
 router.delete("/deleteAppraisal/:id", auth, deleteFinal);
-
-
-
-
-
-
-
 router.post("/createRole", auth, createRole);
 router.post("/createPermissions", auth, createPermissions);
 router.get("/fetchPermissions", auth, fetchPermissions);
 router.patch("/assignRole", auth, assignRole);
 router.get("/fetchRoles", auth, fetchRoles);
 
+router.post("/createCredits", auth, createCredits);
+router.post("/createDebits", auth, createDebits);
+router.post("/createPayrollPeriod", auth, payrollPeriod);
 
+router.get("/fetchCredits", auth, fetchCredits);
+router.get("/fetchDebits", auth, fetchDebits);
+router.get("/fetchPayrollPeriods", auth, fetchPayrollPeriod);
 
+router.patch("/updateCredits/:id", auth, updateCredits);
+router.patch("/updateDebits/:id", auth, updateDebits);
+router.patch("/updatePayrollPeriod/:id", auth, updatePayrollPeriod);
+
+router.post("/createPermissions", auth, createPermissions);
+router.get("/fetchPermissions", auth, fetchPermissions);
+router.patch("/assignRole", auth, assignRole);
+router.get("/fetchRoles", auth, fetchRoles);
+router.get("/fetchPayroll", auth, fetchPayroll);
+router.get("/fetchEmployeesByDepartment", auth, fetchEmployeesByDepartment);
+router.post("/uploadPayroll", auth, mult.single("csv"), createPayroll);
 
 
 
