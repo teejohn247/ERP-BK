@@ -40,7 +40,14 @@ const updateRating = async (req, res) => {
             })
             return;
         }
-
+        if (appraisal && String(appraisal._id) !== req.params.id) {
+            res.status(400).json({
+                status: 400,
+                error: 'This rating name already exist'
+            })
+            return;
+        }
+ 
      
         AppraisalGroup.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 

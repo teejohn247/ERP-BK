@@ -27,7 +27,7 @@ const createRating = async (req, res) => {
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  kpiName: name });
+        let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  ratingName: name });
 
         console.log({appraisal})
 

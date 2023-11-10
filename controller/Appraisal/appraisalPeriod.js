@@ -27,7 +27,7 @@ const createPeriod = async (req, res) => {
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  name: name });
+        let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  appraisalPeriodName: name });
 
         console.log({appraisal})
 

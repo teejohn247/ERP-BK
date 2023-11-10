@@ -28,7 +28,7 @@ const updateKPI = async (req, res) => {
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  groupName: name });
+        let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  kpiName: name });
 
         console.log({appraisal})
 
@@ -41,9 +41,18 @@ const updateKPI = async (req, res) => {
         }
 
 
+        if (appraisal && String(appraisal._id) !== req.params.id) {
+            res.status(400).json({
+                status: 400,
+                error: 'This kpi name already exist'
+            })
+            return;
+        }
+
+
         AppraisalGroup.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
-                groupName: name && name,
+                kpiName: name && name,
                 companyId: req.payload.id,
                 companyName: company.companyName,
                 description: description && description,

@@ -29,7 +29,7 @@ const updateGroup = async (req, res) => {
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let appraisal = await Leave.findOne({ companyId:company._id,  kpiName: name });
+        let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  groupName: name });
 
         console.log({appraisal})
 
@@ -37,6 +37,15 @@ const updateGroup = async (req, res) => {
             res.status(400).json({
                 status: 400,
                 error: 'No company has been created for this account'
+            })
+            return;
+        }
+
+
+        if (appraisal && String(appraisal._id) !== req.params.id) {
+            res.status(400).json({
+                status: 400,
+                error: 'This appraisal name already exist on another group'
             })
             return;
         }

@@ -52,52 +52,50 @@ const signin = async (req, res) => {
         console.log(admin)
 
 
-        if(admin && employee){
-            console.log('ii')
-            const isMatch = await bcrypt.compare(password, employee.password);
 
-            console.log({isMatch})
-            if (!isMatch) {
-                res.status(404).json({
-                    status: 404,
+        if(admin && employee){
+            // console.log('ii')
+            // const isMatch = await bcrypt.compare(password, employee.password);
+
+                res.status(400).json({
+                    status: 400,
                     success: false,
-                    error: 'Invalid login credentials'
+                    error: 'This email already exist either as a company email or employee email'
                 })
                 return;
-            }
-            console.log(employee.firstTimeLogin)
+            // console.log(employee.firstTimeLogin)
 
 
-            if (employee.firstTimeLogin == undefined) {
-            console.log("here")
-                await employee.updateOne({
-                    firstTimeLogin: true, 
-                });
-            }else if (employee.firstTimeLogin == true){
-                await employee.updateOne({
-                    firstTimeLogin: false, 
-                });
+            // if (employee.firstTimeLogin == undefined) {
+            // console.log("here")
+            //     await employee.updateOne({
+            //         firstTimeLogin: true, 
+            //     });
+            // }else if (employee.firstTimeLogin == true){
+            //     await employee.updateOne({
+            //         firstTimeLogin: false, 
+            //     });
 
-            }
-            else if (employee.firstTimeLogin == false){
-                await employee.updateOne({
-                    firstTimeLogin: false, 
-                });
-            }
+            // }
+            // else if (employee.firstTimeLogin == false){
+            //     await employee.updateOne({
+            //         firstTimeLogin: false, 
+            //     });
+            // }
 
-            let company = await Employee.findOne({ email: email });
+            // let company = await Employee.findOne({ email: email });
 
-            console.log('po')
+            // console.log('po')
 
-            const token = utils.encodeToken(employee._id, false, email);
+            // const token = utils.encodeToken(employee._id, false, email);
 
-            res.status(200).json({
-                status: 200,
-                data: company,
-                token: token,
-            })
+            // res.status(200).json({
+            //     status: 200,
+            //     data: company,
+            //     token: token,
+            // })
 
-            return
+            // return
 
          } 
 

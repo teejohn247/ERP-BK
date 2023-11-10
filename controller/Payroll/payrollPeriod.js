@@ -27,7 +27,7 @@ const payrollPeriod = async (req, res) => {
       
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let appraisal = await PayrollPeriod.findOne({ companyId:company._id,  name: payrollPeriodName });
+        let appraisal = await PayrollPeriod.findOne({ companyId:company._id,  payrollPeriodName: payrollPeriodName });
 
         console.log({appraisal})
 

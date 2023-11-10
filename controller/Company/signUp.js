@@ -61,7 +61,7 @@ const signUp = async (req, res) => {
         <div>`
 
 
-        let resp = emailTemp(data, 'Employee Invitation')
+        let resp = emailTemp(data, 'Complete Registration')
         console.log({token})
 
         await sendEmail(req, res, email, receivers, 'Email Confirmation', resp);

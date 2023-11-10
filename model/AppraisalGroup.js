@@ -7,7 +7,7 @@ import moment from 'moment/moment';
 const AppraisalGroupSchema = new mongoose.Schema({
     companyName: { type: String },
     companyId: { type: String },
-    groupName: { type: String },
+    groupName: { type: String, unique: true },
     description: { type: String },
     appraisalPeriodId: { type: String },
     appraisalPeriodName: { type: String },

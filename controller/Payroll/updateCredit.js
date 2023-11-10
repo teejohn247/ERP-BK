@@ -46,6 +46,15 @@ const updateCredits = async (req, res) => {
             })
             return;
         }
+
+        if (appraisal && String(appraisal._id) !== req.params.id) {
+            res.status(400).json({
+                status: 400,
+                error: 'This credit name already exist'
+            })
+            return;
+        }
+
         Credits.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
                 name: name && name,

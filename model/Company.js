@@ -10,7 +10,7 @@ const CompanySchema = new mongoose.Schema({
         of: mongoose.Schema.Types.Mixed,
     },
     firstTimeLogin: { type: Boolean },
-    status: { type: Boolean, default: false },
+    activeStatus: { type: Boolean, default: false },
     isSuperAdmin: { type: Boolean },
     systemRoles:{
         employeeManagement: [
