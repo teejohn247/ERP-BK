@@ -120,6 +120,8 @@ import fetchEmployeesByDepartment from '../controller/Employers/fetchEmployeesBy
 import fetchRequests from '../controller/Requests/fetchRequests';
 import approvedRequests from '../controller/Requests/approvedRequests';
 import getAdminApprovedRecords from '../controller/Employers/getAdminApprovedRecords';
+import deleteDebit from '../controller/Payroll/deleteDebit';
+import deleteCredit from '../controller/Payroll/deleteCredit';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -247,6 +249,10 @@ router.get("/fetchLeave", auth, fetchLeaves);
 router.get("/fetchLeave/:id", auth, fetchLeavesDetails);
 router.patch("/updateDesignation/:id", auth, updateDesignation);
 router.delete("/deleteDesignation/:id", auth, deleteDesignation);
+
+router.delete("/deleteDebit/:id", auth, deleteDebit);
+router.delete("/deleteCredit/:id", auth, deleteCredit);
+
 router.post("/leaveApplication", auth, leaveApplication);
 router.patch("/leaveAction", auth, leaveAction);
 router.get("/getLeaveRecords", auth, getLeaveRecords);
@@ -258,8 +264,8 @@ router.post("/createExpenseRequest", auth, upload.single("attachment"), imageUpl
 router.get("/fetchExpenseRequests", auth, fetchExpenseReqs);
 router.get("/getLeaveRecords/:id", auth, getLeaveRecordsDetails);
 router.get("/fetchApprovalExpenseRequest", auth, fetchExpenseReqsAdmin);
-router.post("/createAppraisalGroups", auth, createGroup);
-router.post("/createKPIs", auth, createKPI);
+router.post("/createKpiGroups", auth, createGroup);
+router.post("/createKpis", auth, createKPI);
 router.post("/createRating", auth, createRating);
 router.post("/createAppraisalPeriod", auth, createPeriod);
 router.post("/createAppraisal", auth, createFinal);
@@ -272,15 +278,8 @@ router.get("/fetchPeriod", auth, fetchPeriod);
 router.get("/fetchGroupByEmployee", auth, fetchGroupsByEmployee);
 router.get("/fetchGroupByDesignation/:designation", auth, fetchGroupsByDesignations);
 router.get("/fetchGroupByDepartment/:department", auth, fetchGroupsByDepartment);
-
 router.get("/fetchAppraisalRequests", auth, fetchFinalManager);
 router.get("/fetchApprovedLeaveRequests/:id", auth, getAdminApprovedRecords);
-
-
-
-
-
-
 router.patch("/updateKPIs/:id", auth, updateKPI);
 router.patch("/updatePeriod/:id", auth, updatePeriod);
 router.patch("/updateRating/:id", auth, updateRating);
@@ -297,12 +296,6 @@ router.post("/employeeFillAppraisal", auth, fillAppraisal);
 router.get("/fetchApprovalRequests/:id", auth, fetchRequests);
 router.get("/fetchEmployeesByDepartment", auth, fetchEmployeesByDepartment);
 router.get("/fetchApprovedLeaveRequests", auth, approvedRequests);
-
-  
-
-
-
-
 
 router.delete("/deleteKPI/:id", auth, deleteKPI);
 router.delete("/deletePeriod/:id", auth, deletePeriod);

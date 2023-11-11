@@ -5,6 +5,7 @@ import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import AppraisalGroup from '../../model/AppraisalGroup';
 import Period from '../../model/AppraisalPeriod';
+import addDepartment from '../../model/Department';
 
 
 
@@ -20,7 +21,7 @@ const createGroup = async (req, res) => {
 
     try {
        
-        const { name, description, appraisalPeriodId } = req.body;
+        const { name, description, appraisalPeriodId, departments } = req.body;
 
         let company = await Company.findOne({ _id: req.payload.id });
 
@@ -49,6 +50,40 @@ const createGroup = async (req, res) => {
             return;
         }
 
+        // assignedDepartments:  [{
+        //     department_id: {
+        //         type: String,
+        //     },
+        //     department_name: {
+        //         type: String
+        //     },
+        //     date_assigned: {
+        //         type: Date,
+        //         default: moment().format('L') 
+        //     }
+        // }],
+
+        let groups = [];
+
+        for (const groupId of departments) {
+            console.log({ groupId });
+    
+            try {
+                const group = await addDepartment.findOne({ _id: groupId });
+
+                console.log({group})
+    
+                groups.push({
+                    department_id: groupId,
+                    department_name: group.departmentName,
+                });
+    
+                console.log({ group });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
        let group = new AppraisalGroup({
             groupName: name,
             companyId: req.payload.id,
@@ -64,11 +99,69 @@ const createGroup = async (req, res) => {
 
         await group.save().then((adm) => {
             console.log(adm)
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: adm
-            })
+
+
+
+            AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
+                $push: { assignedDepartments: groups
+                },
+           },{ upsert: true },
+                async function (
+                    err,
+                    result
+                ) {
+                    if (err) {
+                        res.status(401).json({
+                            status: 401,
+                            success: false,
+                            error: err
+                        })
+    
+                    } else {
+    
+                        addDepartment.findOneAndUpdate({ _id:  { $in: departments }}, { 
+                            $push: { departments: {
+                                appraisalId: adm._id,
+                                appraisalName: adm.groupName,
+                            }},
+                       },{ upsert: true },
+                            async function (
+                                err,
+                                result
+                            ) {
+                                if (err) {
+                                    res.status(401).json({
+                                        status: 401,
+                                        success: false,
+                                        error: err
+                                    })
+                
+                                } else {
+                
+                                    const manager = await AppraisalGroup.findOne({_id: adm._id});
+                
+                                    res.status(200).json({
+                                        status: 200,
+                                        success: true,
+                                        data: manager
+                                    })
+                
+                                }
+                            })
+    
+    
+                    }
+                })
+
+
+
+
+
+            // res.status(200).json({
+            //     status: 200,
+            //     success: true,
+            //     data: adm
+            // })
         }).catch((err) => {
                 console.error(err)
                 res.status(400).json({
