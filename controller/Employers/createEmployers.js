@@ -27,7 +27,7 @@ const inviteEmployee = async (req, res) => {
 
     try {
 
-        const { firstName, lastName, email, phoneNumber, dateOfBirth, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
+        const { firstName, lastName, city, country, nationality, email, phoneNumber, dateOfBirth, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
         employmentType, reportingTo} = req.body;
 
 
@@ -45,11 +45,20 @@ const inviteEmployee = async (req, res) => {
         console.log({checkDept});
 
         let company = await Company.find({ _id: req.payload.id });
+        let checkUser = await Employee.findOne({ email });
 
-        console.log({company});
+
+        console.log(checkUser);
 
         // const check = await Employee.findOne({ _id: managerId });
 
+        if (checkUser){
+            return res.status(400).json({
+                status: 400,
+                error: 'Email already exist'
+            })
+           
+        }
         if (!company){
             return res.status(400).json({
                 status: 400,
@@ -101,8 +110,6 @@ const inviteEmployee = async (req, res) => {
         console.log('hgh')
         console.log(lastName)
         console.log(firstName)
-
-
 
         let letter = firstName.charAt(0);
         let last = lastName.charAt(0);
@@ -198,6 +205,9 @@ const inviteEmployee = async (req, res) => {
                 managerName: checkDept.managerName && checkDept.managerName,
                 email,
                 leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
+                city,
+                country,
+                nationality,
                 approvals: approver,
                 expenseDetails: {
                     cardNo: Date.now(),
