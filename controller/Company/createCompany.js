@@ -55,9 +55,6 @@ const createCompany = async (req, res) => {
                     })
 
                 } else {
-
-
-
                     new AuditTrail({
                         companyName: companyName,
                         companyId: company._id

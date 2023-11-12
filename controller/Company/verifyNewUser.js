@@ -93,6 +93,3 @@ const verifyNewUser = async (req, res) => {
     }
 }
 export default verifyNewUser;
-
-
-

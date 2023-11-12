@@ -1,7 +1,7 @@
 
 import dotenv from 'dotenv';
 import Role from '../../model/ExpenseRequests';
-import Leave from '../../model/LeaveRecords'
+import Leave from '../../model/LeaveRecords';
 
 
 import { emailTemp } from '../../emailTemplate';

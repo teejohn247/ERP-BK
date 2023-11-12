@@ -13,7 +13,48 @@ const rateKPI = async (req, res) => {
 
     try {
 
-        const { kpiId, employeeComment, employeeRatingId } = req.body;
+
+
+    //     employeeId: { type: String },
+    //     employeeName: { type: String },
+    //     managerId: { type: String },
+    //     managerName: { type: String },
+    //     companyName: { type: String },
+    //     companyId: { type: String },
+    //     appraisalPeriodId: { type: String },
+    //     appraisalPeriodName: { type: String },
+    //     appraisalPeriodStartDate: { type: String },
+    //     appraisalPeriodEndDate: { type: String },
+    //     appraisalPeriodActiveDate: { type: String },
+    //     appraisalPeriodInactiveDate: { type: String },
+    //     groupRating: [{ 
+    //     groupId: { type: String },
+    //     groupName: { type: String },
+    //     groupDescription: { type: String },
+    //     groupKpis:[
+    //         {
+    //             kpiId: { type: String },
+    //             kpiName: { type: String },
+    //             kpiDescription: { type: String },
+    //             // ratingId: { type: String },
+    //             // ratingName: { type: String },
+    //             // ratingDescription: { type: String },
+    //             remarks: { 
+    //                 employeeRatingId: { type: String },
+    //                 employeeName: { type: String },
+    //                 managerRatingId: { type: String },
+    //                 managerName: { type: String },
+    //                 employeeComment: { type: String },
+    //                 managerComment: { type: String }
+    //              },
+    //         }
+    //     ],
+    // }],
+    //     potentialRating: { type: String },
+    //     performanceRating: { type: String },
+    //     generalRemarks: { type: String },
+
+        const { groupId, groupKpis } = req.body;
         const kpi = await Kpi.findOne({_id: kpiId})
         let groups = [];
 
@@ -78,27 +119,26 @@ const rateKPI = async (req, res) => {
                     })
 
 
-            if(dd.length > 0){
-                res.status(404).json({
-                    status:404,
-                    success: false,
-                    error:'kpi has already been assigned to group'
-                })
-                return
-            }
+            // if(dd.length > 0){
+            //     res.status(404).json({
+            //         status:404,
+            //         success: false,
+            //         error:'kpi has already been assigned to group'
+            //     })
+            //     return
+            // }
 
         AppraisalGroup.updateMany({ _id: { $in : groups }}, { 
-            $push: { groupKpis: {
-                kpiId: kpiId,
-                kpiName: kpi.kpiName,
-                kpiDescription: kpi.kpiDescription,
+            $set: { groupKpis: {
+                // kpiId: kpiId,
+                // kpiName: kpi.kpiName,
+                // kpiDescription: kpi.kpiDescription,
                 "remarks.employeeComment": employeeComment,
                 "remarks.managerName": "",
                 "remarks.employeeName": employee ? employee.fullName : "",
                 "remarks.managerComment": "",
                 "remarks.managerRatingId": "",
                 "remarks.employeeRatingId": employeeRatingId,
-
 
             }},
        },{ upsert: true },

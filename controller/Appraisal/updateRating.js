@@ -57,7 +57,7 @@ const updateRating = async (req, res) => {
                 companyName: company.companyName,
                 description: description && description,
             }
-       },
+        },
             function (
                 err,
                 result

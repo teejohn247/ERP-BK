@@ -26,7 +26,7 @@ const updateDebits = async (req, res) => {
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let appraisal = await Debit.findOne({ companyId:company._id,  name: name });
+        let appraisal = await Debit.findOne({ companyId:company._id, name: name });
 
         console.log({appraisal})
 

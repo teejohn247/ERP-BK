@@ -12,7 +12,7 @@ const assignKpis = async (req, res) => {
 
     try {
 
-        const {groups, kpiId } = req.body;
+        const { groups, kpiId } = req.body;
         const kpi = await Kpi.findOne({_id: kpiId})
         const appraisal = await AppraisalGroup.findOne({_id: groups})
 

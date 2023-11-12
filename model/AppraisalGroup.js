@@ -73,9 +73,6 @@ const AppraisalGroupSchema = new mongoose.Schema({
             default: moment().format('L') 
         }
     }],
-
-
-
 }, { timestamps: true });
 
 

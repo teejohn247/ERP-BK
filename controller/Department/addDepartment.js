@@ -27,6 +27,8 @@ const addDepartment = async (req, res) => {
         let companyName = await Company.findOne({ _id: req.payload.id });
         const employee = await Employee.findOne({_id: managerId})
 
+        if(employee)
+
 
 
         if (departmentN) {
@@ -42,8 +44,8 @@ const addDepartment = async (req, res) => {
             departmentName,
             companyId: req.payload.id,
             companyName: companyName.companyName,
-            managerName: employee && `${employee.firstName} ${employee.lastName}`,
-            managerId: managerId
+            managerName: employee ? `${employee.firstName} ${employee.lastName}` : '',
+            managerId: managerId && managerId
         })
 
 
@@ -52,7 +54,7 @@ const addDepartment = async (req, res) => {
                        Employee.updateMany({department: department.departmentName}, { 
                         $set: { 
                             managerName: employee && `${employee.firstName} ${employee.lastName}`,
-                            managerId: managerId
+                            managerId: managerId && managerId
                         }
                    },
                         async function (
@@ -69,6 +71,7 @@ const addDepartment = async (req, res) => {
                             } 
                         })
     
+                        if(employee){
     
                        Employee.updateOne({_id: managerId}, { 
                         $set: { 
@@ -89,7 +92,7 @@ const addDepartment = async (req, res) => {
                             } 
                         })
     
-    
+                    }
                         res.status(200).json({
                             status: 200,
                             success: true,
