@@ -27,7 +27,7 @@ const inviteEmployee = async (req, res) => {
 
     try {
 
-        const { firstName, lastName, city, country, nationality, email, phoneNumber, dateOfBirth, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
+        const { firstName, lastName, email, phoneNumber, dateOfBirth, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
         employmentType, reportingTo} = req.body;
 
 
@@ -205,9 +205,7 @@ const inviteEmployee = async (req, res) => {
                 managerName: checkDept.managerName && checkDept.managerName,
                 email,
                 leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
-                city,
-                country,
-                nationality,
+               
                 approvals: approver,
                 expenseDetails: {
                     cardNo: Date.now(),

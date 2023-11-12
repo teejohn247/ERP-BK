@@ -102,9 +102,9 @@ const EmployeeSchema = new mongoose.Schema({
   },
   email: { type: String, required: true, unique: true, trim: true },
 
-  nationality: { type: String, required: true, trim: true },
-    country: { type: String, required: true, trim: true },
-    city: { type: String, required: true,trim: true },
+  nationality: { type: String, trim: true },
+    country: { type: String,  trim: true },
+    city: { type: String, trim: true },
   department: { type: String, required: true, trim: true },
   employmentType: { type: String, required: true, trim: true },
   employeeCode: { type: String, required: true, trim: true },
