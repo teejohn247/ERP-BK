@@ -45,31 +45,31 @@ const addDepartment = async (req, res) => {
             companyId: req.payload.id,
             companyName: companyName.companyName,
             managerName: employee ? `${employee.firstName} ${employee.lastName}` : '',
-            managerId: managerId && managerId
+            managerId: managerId ? managerId : ''
         })
 
 
         await department.save().then((adm) => {
 
-                       Employee.updateMany({department: department.departmentName}, { 
-                        $set: { 
-                            managerName: employee && `${employee.firstName} ${employee.lastName}`,
-                            managerId: managerId && managerId
-                        }
-                   },
-                        async function (
-                            err,
-                            result
-                        ) {
-                            if (err) {
-                                res.status(401).json({
-                                    status: 401,
-                                    success: false,
-                                    error: err
-                                })
+                //        Employee.updateMany({department: department.departmentName}, { 
+                //         $set: { 
+                //             managerName: employee && `${employee.firstName} ${employee.lastName}`,
+                //             managerId: managerId && managerId
+                //         }
+                //    },
+                //         async function (
+                //             err,
+                //             result
+                //         ) {
+                //             if (err) {
+                //                 res.status(401).json({
+                //                     status: 401,
+                //                     success: false,
+                //                     error: err
+                //                 })
             
-                            } 
-                        })
+                //             } 
+                //         })
     
                         if(employee){
     

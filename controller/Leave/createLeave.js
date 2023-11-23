@@ -27,6 +27,15 @@ const createLeave = async (req, res) => {
 
         let company = await Company.findOne({ _id: req.payload.id });
 
+        if(!leaveName || leaveName == ''){
+
+            res.status(400).json({
+                status: 400,
+                error: 'Leave Name is required'
+            })
+            return;
+        }
+
         let designation = await Leave.findOne({ companyId:company._id,  leaveName: leaveName });
 
         console.log({company})
