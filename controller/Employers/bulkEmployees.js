@@ -8,6 +8,7 @@ import Designation from '../../model/Designation';
 import AuditTrail from '../../model/AuditTrail';
 import { sendEmail } from '../../config/email';
 
+import moment from 'moment/moment';
 
 
 
@@ -93,7 +94,7 @@ const bulkEmployee = async (req, res) => {
 
         let total = await Employee.find();
 
-console.log(req.file.path)
+        console.log(req.file.path)
 
         let emails = [];
         let departments = [];
@@ -103,12 +104,26 @@ console.log(req.file.path)
             .then(async (jsonObj) => {
             console.log(jsonObj)
 
-            jsonObj.map((data, index) => {
+            jsonObj.map(async (data, index) => {
                 emails.push(data.email)
                 departments.push(data.department)
                 designations.push(data.designation)
+                let checkDesignation = await Designation.findOne({companyId: req.payload.id, designationName: data.designation})
+                console.log('de',checkDesignation)
 
-
+                const checkDept = await Department.findOne({companyId: req.payload.id, departmentName: data.department});
+               
+                const approver = [{
+                    approvalType: 'leave',
+                    approval: checkDept.managerName,
+                    approvalId: checkDept.managerId
+                },
+                {
+                    approvalType: 'reimbursement',
+                    approval: checkDept.managerName,
+                    approvalId: checkDept.managerId
+                },
+                ]
 
                 const d = new Date();
                 let year = d.getFullYear();
@@ -117,11 +132,24 @@ console.log(req.file.path)
                 data.companyName = companyName.companyName;
                 data.companyId = req.payload.id;
                 data.employeeCode = `EMP-${year}-${letter}${last}${total.length + 1}`;
+                data.approvals = approver;
+                data.expenseDetails = {
+                        cardNo: Date.now(),
+                        cardHolder: `${data.firstName} ${data.lastName}`,
+                        dateIssued:  moment().format('L'),
+                        cardLimit: checkDesignation?.expenseCard[0]?.cardLimit ? checkDesignation.expenseCard[0].cardLimit : 0,
+                        cardCurrency: checkDesignation?.expenseCard[0]?.cardCurrency ? checkDesignation.expenseCard[0].cardCurrency : "",
+                        cardLExpiryDate: checkDesignation?.expenseCard[0]?.cardExpiryDate ? checkDesignation.expenseCard[0].cardExpiryDate : "",
+                        expenseTypeId: checkDesignation?.expenseCard[0]?.expenseTypeId ? checkDesignation.expenseCard[0].expenseTypeId : "",
+                    }
                 total = total + 1
                 // receivers.push({email: data.officialEmail})
             })
 
+
             console.log(emails)
+
+            console.log({jsonObj})
 
             const uniqueDepartments = [...new Set(departments)]
             const uniqueDesignations = [...new Set(designations)]
@@ -131,7 +159,7 @@ console.log(req.file.path)
 
             uniqueDesignations.map(async (data, index) => {
                 const check = await Designation.findOne({companyId: req.payload.id, designationName: data});
-                console.log({check})
+                console.log({check}, 'logo2')
     
                 if(!check){
                     let designation = new Designation({
@@ -193,6 +221,18 @@ console.log(req.file.path)
             
     
               console.log({checkCompany})
+              console.log(req.payload.id)
+
+              if(!checkCompany){
+                res.status(400).json({
+                    status: 400,
+                    success: false,
+                    error: 'company does not exist'
+                })
+
+                return
+              }
+
             
                     var comp= false
     
