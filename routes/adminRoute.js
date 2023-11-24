@@ -230,7 +230,7 @@ router.patch('/updateEmployee', auth, upload.single("my_file"), imageUploader,  
 router.delete('/deleteEmployee/:id', auth, deleteEmployee);
 router.get('/fetchDesignations', auth, fetchDesignation);
 router.get('/listAuditTrails', auth, listAudits);
-router.post("/uploadBulkEmployees", auth, mult.single("csv"), bulkEmployee);
+router.post("/uploadBulkEmployees", auth, mult.single("file"), bulkEmployee);
 router.post("/verifyEmail", verifyNewUser);
 router.post("/decodeEmail", verifyToken);
 router.post("/setPassword", signDecode, verifyEmployee);
