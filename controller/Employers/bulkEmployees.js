@@ -92,6 +92,16 @@ const bulkEmployee = async (req, res) => {
 
         let companyName = await Company.findOne({ _id: req.payload.id });
 
+        if(!companyName){
+            res.status(400).json({
+                status: 400,
+                success: false,
+                error: 'Unauthorized, only an admin can upload employees'
+            })
+
+            return
+          }
+
         let total = await Employee.find();
 
         console.log(req.file.path)
@@ -221,7 +231,7 @@ const bulkEmployee = async (req, res) => {
             
     
               console.log({checkCompany})
-              console.log(req.payload.id)
+              console.log(req.payload)
 
               if(!checkCompany){
                 res.status(400).json({
