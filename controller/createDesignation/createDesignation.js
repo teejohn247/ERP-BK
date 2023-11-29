@@ -116,17 +116,17 @@ const createDesignation = async (req, res) => {
 
       console.log({ check });
 
-      if (!check) {
-        res.status(400).json({
-          status: 400,
-          error: "Expense type does not exist",
-        });
-        return 
-      }
+      // if (!check) {
+      //   res.status(400).json({
+      //     status: 400,
+      //     error: "Expense type does not exist",
+      //   });
+      //   return 
+      // }
 
       expenseTypes.push({
-        expenseTypeId: data,
-        expenseCardName: check.expenseCardName,
+        // expenseTypeId: data,
+        expenseCardName: "",
         cardCurrency: expenseCard[index].cardCurrency,
         cardBalance: expenseCard[index].cardLimit,
         cardExpiryDate: expenseCard[index].cardExpiryDate,
