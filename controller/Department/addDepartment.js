@@ -25,11 +25,19 @@ const addDepartment = async (req, res) => {
         const {departmentName, managerId} = req.body;
         let departmentN = await Department.findOne({ companyId: req.payload.id, departmentName: departmentName });
         let companyName = await Company.findOne({ _id: req.payload.id });
-        const employee = await Employee.findOne({_id: managerId})
 
-        if(employee)
+        if(managerId){
+            var employee = await Employee.findOne({_id: managerId})
 
+            if (!employee) {
 
+                res.status(400).json({
+                    status: 400,
+                    error: 'This employee does not exist'
+                })
+                return;
+            }
+        }
 
         if (departmentN) {
 
