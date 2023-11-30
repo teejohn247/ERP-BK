@@ -31,12 +31,31 @@ const leaveApplication = async (req, res) => {
 
         const { leaveTypeId, leaveStartDate, leaveEndDate, requestMessage, noOfLeaveDays } = req.body;
 
-        
+        console.log(req.payload.id)
 
         const check = await Employee.findOne({ _id: req.payload.id });
+
+        console.log({check})
+
+        if (!check) {
+            res.status(400).json({
+                status: 400,
+                error: "Only employee can request for leave"
+            });
+            return;
+        }
+
+        if (!check.managerId) {
+            res.status(400).json({
+                status: 400,
+                error: "Manager has not been assigned to employee"
+            });
+            return;
+        }
         const checkManager = await Employee.findOne({ _id: check.managerId});
 
-        console.log(check.managerId)
+
+        if(checkManager)
 
         console.log({checkManager})
 
