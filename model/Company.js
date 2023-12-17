@@ -11,6 +11,7 @@ const CompanySchema = new mongoose.Schema({
     },
     firstTimeLogin: { type: Boolean },
     activeStatus: { type: Boolean, default: false },
+    status: { type: Boolean, default: false },
     isSuperAdmin: { type: Boolean },
     systemRoles:{
         employeeManagement: [
