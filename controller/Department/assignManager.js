@@ -13,8 +13,9 @@ const assignManager = async (req, res) => {
     try {
 
         const {managerId, departmentId} = req.body;
-        const department = await Department.find({_id: departmentId})
+        const department = await Department.findOne({_id: departmentId})
         const employee = await Employee.findOne({_id: managerId})
+
 
         if(!managerId){
             res.status(404).json({
@@ -62,6 +63,7 @@ const assignManager = async (req, res) => {
                     })
 
                 } else {
+
 
                    Employee.updateMany({department: department.departmentName}, { 
                     $set: { 
