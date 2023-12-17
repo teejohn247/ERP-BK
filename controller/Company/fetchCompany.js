@@ -19,7 +19,7 @@ const fetchCompany = async (req, res) => {
 
     try {
        
-        let company = await Company.findOne({ _id: req.payload.id }, {_id: 1, companyName:1, companyAddress: 1, generalSettings: 1})
+        let company = await Company.findOne({ _id: req.payload.id }, {_id: 1, companyName:1, companyAddress: 1, generalSettings: 1, status: 1, activeStatus:1})
         console.log({company})
         if (!company.companyName) {
 
