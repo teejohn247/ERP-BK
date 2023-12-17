@@ -20,7 +20,7 @@ const updateDepartment = async (req, res) => {
     try {
 
         const {departmentName, managerId} = req.body;
-        const department = await Department.find({_id: req.params.id})
+        const department = await Department.findOne({_id: req.params.id})
         const employee = await Employee.findOne({_id: managerId})
 
         if(!department){
