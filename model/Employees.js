@@ -105,6 +105,7 @@ const EmployeeSchema = new mongoose.Schema({
   nationality: { type: String, trim: true },
     country: { type: String,  trim: true },
     city: { type: String, trim: true },
+  departmentId: { type: String,  trim: true },
   department: { type: String, required: true, trim: true },
   employmentType: { type: String, required: true, trim: true },
   employeeCode: { type: String, required: true, trim: true },

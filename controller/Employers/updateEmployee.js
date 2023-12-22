@@ -104,7 +104,7 @@ const updateEmployee = async (req, res) => {
 
                          }}
                        },
-                            function (
+                            async function (
                                 err,
                                 result
                             ) {
@@ -118,12 +118,14 @@ const updateEmployee = async (req, res) => {
                                     return;
                 
                                 } else {
-                
+
+
+                                    const updated = await Employee.findOneAndUpdate({ _id: req.payload.id})
                 
                                     res.status(200).json({
                                         status: 200,
                                         success: true,
-                                        data: "Update Successful"
+                                        data: updated
                                     })
                                     return;
                 

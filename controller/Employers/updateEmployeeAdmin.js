@@ -87,6 +87,7 @@ const updateEmployeeAdmin = async (req, res) => {
                     gender: gender && gender,
                     phoneNumber: phoneNumber && phoneNumber,
                     companyRole: companyRole && companyRole,
+                    designationId: designationId && designationId,
                     designation: checkDesignation && checkDesignation.designationName,
                     department: checkDept && checkDept.departmentName,
                     departmentId: departmentId && departmentId,
@@ -122,7 +123,7 @@ const updateEmployeeAdmin = async (req, res) => {
 
                          }}
                        },
-                            function (
+                            async function (
                                 err,
                                 result
                             ) {
@@ -136,12 +137,13 @@ const updateEmployeeAdmin = async (req, res) => {
                                     return;
                 
                                 } else {
-                
+                  
+                                    const updated = await Employee.findOneAndUpdate({ _id: req.params.id})
                 
                                     res.status(200).json({
                                         status: 200,
                                         success: true,
-                                        data: "Update Successful"
+                                        data: updated
                                     })
                                     return;
                 

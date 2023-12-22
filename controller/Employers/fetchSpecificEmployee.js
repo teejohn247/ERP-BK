@@ -1,6 +1,7 @@
 
 import dotenv from 'dotenv';
 import Employee from '../../model/Employees';
+import Department from '../../model/Department';
 
 
 
@@ -23,6 +24,12 @@ const fetchSpecificEmployees = async (req, res) => {
             })
             return
         }else{
+
+            if (!employee[0].departmentId && employee[0].department) {
+                const department = await Department.findOne({departmentName: employee[0].department})
+                employee[0].departmentId = department._id;
+            }
+
             res.status(200).json({
                 status: 200,
                 success: true,
