@@ -94,7 +94,7 @@ const updateEmployeeAdmin = async (req, res) => {
                     employmentType: employmentType && employmentType,
                     managerId: checkDept && checkDept.managerId,
                     managerName: checkDept && checkDept.managerName,
-                    profilePic: req.body.image
+                    profilePic: req.body.image && req.body.image
                 }
         },
             function (

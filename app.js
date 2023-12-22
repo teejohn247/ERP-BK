@@ -76,12 +76,12 @@ const allowCrossDomain = (req, res, next) => {
   next();
 };
 app.use(allowCrossDomain);
+connectDb()
 
 
 const port = process.env.PORT || 9000;
 const debug = Debug('http');
 
-connectDb()
 
 
 let hostname = '0.0.0.0'
@@ -119,6 +119,5 @@ app.get('/test', async (req, res) => {
 
 app.use('/api/v1', userRouter);
 
-server.listen(process.env.PORT || 1000, () => console.log(`Server has started. ${port}`));
-
+server.listen(process.env.PORT || 1000, () => console.log(`Server has started. ${port}`))
 export default app;
