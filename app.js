@@ -76,13 +76,13 @@ const allowCrossDomain = (req, res, next) => {
   next();
 };
 app.use(allowCrossDomain);
-connectDb()
 
 
 const port = process.env.PORT || 9000;
 const debug = Debug('http');
 
 
+connectDb()
 
 let hostname = '0.0.0.0'
 
