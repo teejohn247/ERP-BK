@@ -19,10 +19,10 @@ const deleteCompany = async (req, res) => {
         let employee = await Employee.findOne({ _id: req.params.id });
 
 
-        if (!employee) {
+        if (!company) {
             res.status(400).json({
                 status: 400,
-                error: 'Employee not found'
+                error: 'Company not found'
             })
             return;
         }
