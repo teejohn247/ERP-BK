@@ -30,7 +30,7 @@ const updateEmployee = async (req, res) => {
 
        
         
-        const { firstName, lastName, personalEmail, personalPhone, nextOfKinFullName, nextOfKinPhoneNumber, nextOfKinGender, nextOfKinRelationship, nextOfKinAddress,  nationality, country, city, gender, phoneNumber, address, dateOfBirth,
+        const { firstName, lastName, personalEmail, personalPhone,maritalStatus, nextOfKinFullName, nextOfKinPhoneNumber, nextOfKinGender, nextOfKinRelationship, nextOfKinAddress,  nationality, country, city, gender, phoneNumber, address, dateOfBirth,
              paymentInformation} = req.body;
 
 
@@ -42,6 +42,9 @@ const updateEmployee = async (req, res) => {
 
      
         let company = await Company.find({ _id: check.companyId});
+        console.log({company})
+
+        console.log('img', req.body.image)
 
         if (!check) {
             res.status(400).json({
@@ -53,17 +56,17 @@ const updateEmployee = async (req, res) => {
         Employee.findOneAndUpdate({ _id: req.payload.id}, { 
             $set: { 
 
-                    firstName: firstName && firstName,
-                    lastName: lastName && lastName,
-                    dateOfBirth: dateOfBirth && dateOfBirth,
-                    gender: gender && gender,  
+                    // firstName: firstName && firstName,
+                    // lastName: lastName && lastName,
+                    // dateOfBirth: dateOfBirth && dateOfBirth,
+                    // gender: gender && gender,  
                     address: address && address,
                     personalEmail: personalEmail && personalEmail,
                     phoneNumber: phoneNumber && phoneNumber,
                     profilePic: req.body.image && req.body.image,
                     nationality: nationality && nationality,
-                    personalPhone: personalPhone && personalEmail,
-                    nextOfKinRelationship: nextOfKinRelationship && nextOfKinRelationship,
+                    maritalStatus: maritalStatus && maritalStatus,
+                    // personalPhone: personalPhone && personalEmail,
                     country: country && country,
                     city: city && city,
                     nextOfKinFullName: nextOfKinFullName && nextOfKinFullName,
@@ -120,7 +123,7 @@ const updateEmployee = async (req, res) => {
                                 } else {
 
 
-                                    const updated = await Employee.findOneAndUpdate({ _id: req.payload.id})
+                                    const updated = await Employee.findOne({ _id: req.payload.id})
                 
                                     res.status(200).json({
                                         status: 200,

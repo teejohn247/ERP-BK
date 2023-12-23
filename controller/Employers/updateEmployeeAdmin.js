@@ -30,7 +30,7 @@ const updateEmployeeAdmin = async (req, res) => {
         // const { firstName, lastName, dateOfBirth, departmentId , companyRole, designationId, phoneNumber, gender,
         // employmentType} = req.body;
 
-        const { firstName, lastName, email, phoneNumber, dateOfBirth, companyRole, gender, departmentId, companyRoleId, designationId,  employmentStartDate,
+        const { firstName, lastName, email, phoneNumber, dateOfBirth, maritalStatus, nationality, nextOfKinAddress, nextOfKinFullName, nextOfKinGender, nextOfKinRelationship, nextOfKinPhoneNumber, city, country, address, personalEmail, companyRole, gender, departmentId, companyRoleId, designationId,  employmentStartDate,
             employmentType } = req.body;
 
         let company = await Company.find({ _id: req.payload.id });
@@ -81,11 +81,17 @@ const updateEmployeeAdmin = async (req, res) => {
         console.log({checkDept})
         Employee.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
-                    firstName: firstName && firstName,
-                    lastName: lastName && lastName,
-                    dateOfBirth: dateOfBirth && dateOfBirth,
+                    // firstName: firstName && firstName,
+                    // lastName: lastName && lastName,
+                    // dateOfBirth: dateOfBirth && dateOfBirth,
+                    address: address && address,
+                    personalEmail: personalEmail && personalEmail,
                     gender: gender && gender,
                     phoneNumber: phoneNumber && phoneNumber,
+                    country: country && country,
+                    city: city && city,
+                    maritalStatus: maritalStatus && maritalStatus,
+                    nationality: nationality && nationality,
                     companyRole: companyRole && companyRole,
                     designationId: designationId && designationId,
                     designation: checkDesignation && checkDesignation.designationName,
@@ -94,7 +100,12 @@ const updateEmployeeAdmin = async (req, res) => {
                     employmentType: employmentType && employmentType,
                     managerId: checkDept && checkDept.managerId,
                     managerName: checkDept && checkDept.managerName,
-                    profilePic: req.body.image && req.body.image
+                    profilePic: req.body.image && req.body.image,
+                    nextOfKinFullName: nextOfKinFullName && nextOfKinFullName,
+                    nextOfKinAddress: nextOfKinAddress && nextOfKinAddress,
+                    nextOfKinGender: nextOfKinGender && nextOfKinGender,
+                    nextOfKinPhoneNumber: nextOfKinPhoneNumber && nextOfKinPhoneNumber,
+                    nextOfKinRelationship: nextOfKinRelationship && nextOfKinRelationship
                 }
         },
             function (
@@ -138,7 +149,7 @@ const updateEmployeeAdmin = async (req, res) => {
                 
                                 } else {
                   
-                                    const updated = await Employee.findOneAndUpdate({ _id: req.params.id})
+                                    const updated = await Employee.findOne({ _id: req.params.id})
                 
                                     res.status(200).json({
                                         status: 200,
