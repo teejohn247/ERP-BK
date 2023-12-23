@@ -2,6 +2,7 @@
 import dotenv from 'dotenv';
 import Employee from '../../model/Employees';
 import Department from '../../model/Department';
+import Company from '../../model/Company';
 
 
 const sgMail = require('@sendgrid/mail')
@@ -21,21 +22,42 @@ const fetchDepartment = async (req, res) => {
 
         const { page, limit } = req.query;
 
-        const department = await Department.find({companyId: req.payload.id})
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
+      
 
-        const count = await Department.find({companyId: req.payload.id}).countDocuments()
-        res.status(200).json({
-            status: 200,
-            success: true,
-            data: department,
-            totalPages: Math.ceil(count / limit),
-            currentPage: page
-        })
+        const company = await Company.findOne({_id: req.payload.id})
+       
+      
 
-        return;
+        if(company){
+            const department = await Department.find({companyId: req.payload.id})
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .exec();
+            const count = await Department.find({companyId: req.payload.id}).countDocuments()
+
+            res.status(200).json({
+                status: 200,
+                success: true,
+                data: department,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page
+            })
+    
+            return;
+        }else{
+        const emp = await Employee.findOne({_id: req.payload.id})
+        const departmentUser = await Department.find({_id: emp.departmentId})
+
+
+            res.status(200).json({
+                status: 200,
+                success: true,
+                data: departmentUser,
+            })
+    
+            return;
+    }
+       
 
         // if(department.length < 1){
         //     res.status(404).json({
