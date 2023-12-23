@@ -244,7 +244,6 @@ const inviteEmployee = async (req, res) => {
     
            let resp = emailTemp(data, 'Employee Invitation')
 
-
            const receivers = [
             {
               email: email

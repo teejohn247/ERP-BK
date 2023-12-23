@@ -22,12 +22,12 @@ const createExpense = async (req, res) => {
 
     try {
        
-        const { expenseCardName, description } = req.body;
+        const {expenseType, description } = req.body;
 
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let designation = await Leave.findOne({ companyId:company._id,  expenseCardName: expenseCardName });
+        let designation = await Leave.findOne({ companyId:company._id, expenseType:expenseType });
 
         console.log({company})
 
@@ -45,13 +45,13 @@ const createExpense = async (req, res) => {
 
             res.status(400).json({
                 status: 400,
-                error: 'This expenseCardName already exist'
+                error: 'ThisexpenseType already exist'
             })
             return;
         }
 
        let leave = new Leave({
-        expenseCardName,
+       expenseType,
             companyId: req.payload.id,
             companyName: company.companyName,
             description,

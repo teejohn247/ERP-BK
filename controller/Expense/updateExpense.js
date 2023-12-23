@@ -23,7 +23,7 @@ const updateExpense = async (req, res) => {
 
     try {
    
-        const { expenseCardName, description  } = req.body;
+        const {expenseType, description  } = req.body;
 
         const check = await Employee.findOne({ _id: req.params.id })
         let company = await Company.find({ _id: req.payload.id });
@@ -40,7 +40,7 @@ const updateExpense = async (req, res) => {
 
         Employee.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
-                expenseCardName: expenseCardName && expenseCardName,
+               expenseType:expenseType &&expenseType,
                 description : description && description 
             }
        },
