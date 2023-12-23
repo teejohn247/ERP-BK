@@ -13,14 +13,20 @@ dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 const createExpenseRequest = async (req, res) => {
+  console.log('ere', req.body)
+
   try {
-    const { expenseTypeId, expenseDate, amount, image, description } =
-      req.body;
+    const { expenseTypeId, expenseDate, amount, image, description } = req.body;
 
 
     let expense = await Expense.findOne({ _id: expenseTypeId });
+    console.log({expense})
     let employee = await Employee.findOne({ _id: req.payload.id });
+    console.log({employee})
+
     let company = await Company.findOne({ _id: employee.companyId });
+    console.log({company})
+
 
     console.log({expense})
 
@@ -64,7 +70,7 @@ const createExpenseRequest = async (req, res) => {
       companyId: employee.companyId,
       companyName: employee.companyName,
       expenseTypeId,
-      expenseTypeName: expense.expenseCardName,
+      expenseTypeName: expense.expenseType,
       expenseDate,
       attachment: image,
       approver: approve[0].approval,

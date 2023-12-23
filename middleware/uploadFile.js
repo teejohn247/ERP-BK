@@ -14,10 +14,11 @@ const imageUploader = async (req, res, next) => {
       const b64 = Buffer.from(req.file.buffer).toString("base64");
       let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
       const cldRes = await handleUpload(dataURI);
-  
       console.log({cldRes})
       req.body.image = cldRes.secure_url;
     }
+
+    console.log('here12')
    
     next()
     // res.json(cldRes);

@@ -15,6 +15,7 @@ const assignManager = async (req, res) => {
         const {managerId, departmentId} = req.body;
         const department = await Department.findOne({_id: departmentId})
         const employee = await Employee.findOne({_id: managerId})
+        const check = await Employee.findOne({ _id: managerId });
 
 
         if(!managerId){
@@ -64,11 +65,23 @@ const assignManager = async (req, res) => {
 
                 } else {
 
+                    const approval = [{
+                        approvalType: 'leave',
+                        approval: `${check.firstName} ${check.lastName}`,
+                        approvalId: managerId
+                    },
+                    {
+                        approvalType: 'reimbursement',
+                        approval: `${check.firstName} ${check.lastName}`,
+                        approvalId: managerId
+                    }]
+
 
                    Employee.updateMany({department: department.departmentName}, { 
                     $set: { 
                         managerName: employee && `${employee.firstName} ${employee.lastName}`,
-                        managerId: managerId
+                        managerId: managerId,
+                        approvals: approval
                     }
                },
                     async function (
@@ -104,6 +117,8 @@ const assignManager = async (req, res) => {
         
                         } 
                     })
+
+                    
 
 
                     const manager = await Employee.findOne({_id: managerId});
