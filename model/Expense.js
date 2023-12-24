@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const ExpenseSchema = new mongoose.Schema({
-   expenseType: { type: String },
+    expenseType: { type: String },
     description: { type: String },
     companyId: { type: String, required: true },
     companyName: { type: String, required: true },
