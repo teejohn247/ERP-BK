@@ -45,7 +45,7 @@ const createExpense = async (req, res) => {
 
             res.status(400).json({
                 status: 400,
-                error: 'ThisexpenseType already exist'
+                error: 'This expenseType already exist'
             })
             return;
         }

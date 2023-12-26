@@ -123,6 +123,7 @@ import getAdminApprovedRecords from '../controller/Employers/getAdminApprovedRec
 import deleteDebit from '../controller/Payroll/deleteDebit';
 import deleteCredit from '../controller/Payroll/deleteCredit';
 import deleteCompany from '../controller/Company/deleteCompany';
+import deleteExpenseRequest from '../controller/Expense/deleteExpenseRequest';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -304,6 +305,8 @@ router.delete("/deleteRating/:id", auth, deleteRating);
 router.delete("/deleteGroup/:id", auth, deleteGroup);
 router.delete("/deleteAppraisal/:id", auth, deleteFinal);
 router.delete("/deleteCompany", auth, deleteCompany);
+router.delete("/deleteExpenseRequest/:id", auth, deleteExpenseRequest);
+
 
 router.post("/createRole", auth, createRole);
 router.post("/createPermissions", auth, createPermissions);

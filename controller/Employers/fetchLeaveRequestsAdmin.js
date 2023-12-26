@@ -24,7 +24,7 @@ const fetchExpenseReqsAdmin = async (req, res) => {
         const { page, limit } = req.query;
 
 
-        const role = await Role.find({approvalId: req.payload.id})
+        const role = await Role.find({approvalId: req.payload.id}).sort({ "dateRequested": -1 })
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
