@@ -51,8 +51,7 @@ const fetchDesignation = async (req, res) => {
     
         }else{
             const emp = await Employee.findOne({_id: req.payload.id})
-            const designationUser = await Role.find({_id: emp.designationId})
-    
+            const designationUser = await Role.find({companyId: emp.companyId})
     
                 res.status(200).json({
                     status: 200,

@@ -46,7 +46,7 @@ const fetchDepartment = async (req, res) => {
             return;
         }else{
         const emp = await Employee.findOne({_id: req.payload.id})
-        const departmentUser = await Department.find({_id: emp.departmentId})
+        const departmentUser = await Department.find({companyId: emp.companyId})
 
 
             res.status(200).json({
