@@ -6,6 +6,8 @@ import Designation from "../../model/Designation";
 import Company from "../../model/Company";
 import AuditTrail from "../../model/AuditTrail";
 import LeaveRecords from "../../model/LeaveRecords";
+import Leave from "../../model/Leaves";
+
 import Expense from "../../model/Expense";
 
 
@@ -37,6 +39,7 @@ const deleteCompany = async (req, res) => {
           await Department.deleteMany({ companyId: req.payload.id }),
           await Designation.deleteMany({ companyId: req.payload.id }),
           await LeaveRecords.deleteMany({ companyId: req.payload.id }),
+          await Leave.deleteMany({ companyId: req.payload.id }),
           await Expense.deleteMany({ companyId: req.payload.id }),
 
 

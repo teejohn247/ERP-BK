@@ -152,7 +152,7 @@ const leaveApplication = async (req, res) => {
                 approver: approve[0].approval ? approve[0].approval : check.managerName,
                 companyRole: check.companyRole && check.companyRole,
                 department: check.department && check.department,
-                requestMessage: requestMessage,
+                requestMessage: requestMessage && requestMessage,
                 decisionMessage: ""
 
         })

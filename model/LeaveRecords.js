@@ -67,6 +67,7 @@ const LeaveRecordsSchema = new mongoose.Schema({
     },
     requestMessage:{
         type:String,
+        default: ""
     },
     decisionMessage:{
         type:String,
