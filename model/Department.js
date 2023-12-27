@@ -13,7 +13,7 @@ const DepartmentSchema = new mongoose.Schema({
             appraisalName: { type: String },
             dateAssigned: {
                 type: Date,
-                default: moment().format('L') 
+                default: new Date().toISOString() 
             }
 
         }

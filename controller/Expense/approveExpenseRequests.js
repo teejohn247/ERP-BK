@@ -24,7 +24,7 @@ const approveExpense = async (req, res) => {
 
     try {
    
-        const { status, comment, requestId } = req.body;
+        const { status, comment, requestId, approved } = req.body;
 
         const check = await Employee.findOne({ _id: requestId })
         let company = await Company.find({ _id: req.payload.id });
@@ -41,7 +41,8 @@ const approveExpense = async (req, res) => {
         Employee.findOneAndUpdate({ _id: requestId}, { 
             $set: { 
                 status,
-                dateOfApproval:  moment().format('L'),
+                dateOfApproval:  new Date().toISOString(),
+                approved,
                 comment
             }
        },

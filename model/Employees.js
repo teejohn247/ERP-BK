@@ -132,7 +132,7 @@ const EmployeeSchema = new mongoose.Schema({
         appraisalName: { type: String, required: true },
         dateAssigned: {
             type: Date,
-            default: moment().format('L') 
+            default: new Date().toISOString() 
         }
 
     }

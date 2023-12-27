@@ -78,6 +78,10 @@ const LeaveRecordsSchema = new mongoose.Schema({
     requestDate:{
         type: Date,
         default: new Date()
+    },
+    employeeDetails: {
+        type: Map,
+        of: mongoose.Schema.Types.Mixed,
     }
 });
 

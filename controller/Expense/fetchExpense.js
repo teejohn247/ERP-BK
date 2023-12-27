@@ -33,6 +33,7 @@ const fetchExpense= async (req, res) => {
 
         if(company){
             const department = await Role.find({companyId: req.payload.id})
+            .sort({_id: -1})
             .limit(limit * 1)
             .skip((page - 1) * limit)
             .exec();
@@ -50,7 +51,6 @@ const fetchExpense= async (req, res) => {
         }else{
         const emp = await Employee.findOne({_id: req.payload.id})
         const departmentUser = await Role.find({companyId: emp.companyId})
-
 
             res.status(200).json({
                 status: 200,

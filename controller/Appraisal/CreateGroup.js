@@ -59,7 +59,7 @@ const createGroup = async (req, res) => {
         //     },
         //     date_assigned: {
         //         type: Date,
-        //         default: moment().format('L') 
+        //         default: new Date().toISOString() 
         //     }
         // }],
 

@@ -20,6 +20,7 @@ dotenv.config();
 
 
 
+
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
@@ -35,6 +36,11 @@ const leaveApplication = async (req, res) => {
 
         const check = await Employee.findOne({ _id: req.payload.id });
 
+
+        let employee = await Employee.findOne({ _id: req.payload.id })
+    
+        console.log(employee, 'ologo')
+    
         console.log({check})
 
         if (!check) {
@@ -136,7 +142,15 @@ const leaveApplication = async (req, res) => {
             return;
         }
        console.log(approve[0].approvalId, approve[0].approval)
-       
+       let data = {}
+
+       data.employeeName = employee.fullName
+       data.profilePic = employee.profilePic
+       data.department = employee.department
+       data.designationName = employee.designationName
+       data.managerName = employee.managerName
+   
+   
         let leave = new LeaveRecords({
                 userId:req.payload.id,
                 companyName: check.companyName,
@@ -153,8 +167,8 @@ const leaveApplication = async (req, res) => {
                 companyRole: check.companyRole && check.companyRole,
                 department: check.department && check.department,
                 requestMessage: requestMessage && requestMessage,
-                decisionMessage: ""
-
+                decisionMessage: "",
+                employeeDetails: data
         })
 
         let details;

@@ -16,9 +16,14 @@ const ExpenseRequestsSchema = new mongoose.Schema({
     companyId: { type: String, required: true },
     companyName: { type: String, required: true },
     status: { type: String, default: "Pending" },
-    dateRequested: { type: String, default: moment().format('L') },
+    approved: { type: Boolean, default: false },
+    dateRequested: { type: String, default: new Date().toISOString() },
     comment: { type: String },
     dateOfApproval: { type: String},
+        employeeDetails: {
+            type: Map,
+            of: mongoose.Schema.Types.Mixed,
+        }
 });
 
 module.exports = mongoose.model("ExpenseRequests", ExpenseRequestsSchema);

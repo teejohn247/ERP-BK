@@ -27,6 +27,7 @@ const inviteEmployee = async (req, res) => {
 
     try {
 
+        console.log(new Date().toISOString())
         const { firstName, lastName, email, phoneNumber, dateOfBirth, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
         employmentType, reportingTo} = req.body;
 
@@ -205,12 +206,11 @@ const inviteEmployee = async (req, res) => {
                 managerName: checkDept.managerName && checkDept.managerName,
                 email,
                 leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
-               
                 approvals: approver,
                 expenseDetails: {
                     cardNo: Date.now(),
                     cardHolder: `${firstName} ${lastName}`,
-                    dateIssued:  moment().format('L'),
+                    dateIssued:  new Date().toISOString(),
                     cardLimit: checkDesignation?.expenseCard[0]?.cardLimit ? checkDesignation.expenseCard[0].cardLimit : 0,
                     cardCurrency: checkDesignation?.expenseCard[0]?.cardCurrency ? checkDesignation.expenseCard[0].cardCurrency : "",
                     cardLExpiryDate: checkDesignation?.expenseCard[0]?.cardExpiryDate ? checkDesignation.expenseCard[0].cardExpiryDate : "",

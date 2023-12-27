@@ -124,6 +124,7 @@ import deleteDebit from '../controller/Payroll/deleteDebit';
 import deleteCredit from '../controller/Payroll/deleteCredit';
 import deleteCompany from '../controller/Company/deleteCompany';
 import deleteExpenseRequest from '../controller/Expense/deleteExpenseRequest';
+import updateExpenseRequest from '../controller/Expense/updateExpenseRequest';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -290,6 +291,8 @@ router.patch("/updateAppraisal/:id", auth, updateFinal);
 router.patch("/assignAppraisalToDepartment", auth, assignGroupsDepartment);
 router.patch("/assignAppraisalToDesignations", auth, assignGroupsDesignation);
 router.patch("/assignAppraisalToEmployees", auth, assignGroupsEmployees);
+router.patch("/updateExpenseRequest/:id", auth, upload.single("attachment"), imageUploader, updateExpenseRequest);
+
 
 router.patch("/approveExpenseRequests", auth, approveExpense);
 

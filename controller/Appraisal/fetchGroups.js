@@ -22,7 +22,7 @@ const fetchGroups = async (req, res) => {
         const { page, limit } = req.query;
 
 
-        const role = await Role.find({companyId: req.payload.id})
+        const role = await Role.find({companyId: req.payload.id}).sort({_id: -1})
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();

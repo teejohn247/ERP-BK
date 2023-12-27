@@ -30,6 +30,7 @@ const fetchDepartment = async (req, res) => {
 
         if(company){
             const department = await Department.find({companyId: req.payload.id})
+            .sort({_id: -1})
             .limit(limit * 1)
             .skip((page - 1) * limit)
             .exec();

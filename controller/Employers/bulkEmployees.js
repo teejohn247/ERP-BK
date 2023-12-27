@@ -88,7 +88,7 @@ const bulkEmployee = async (req, res) => {
                 data.expenseDetails = {
                     cardNo: Date.now(),
                     cardHolder: `${data.firstName} ${data.lastName}`,
-                    dateIssued: moment().format('L'),
+                    dateIssued: new Date().toISOString(),
                     cardLimit: checkDesignation?.expenseCard[0]?.cardLimit ? checkDesignation.expenseCard[0].cardLimit : 0,
                     cardCurrency: checkDesignation?.expenseCard[0]?.cardCurrency ? checkDesignation.expenseCard[0].cardCurrency : "",
                     cardLExpiryDate: checkDesignation?.expenseCard[0]?.cardExpiryDate ? checkDesignation.expenseCard[0].cardExpiryDate : "",

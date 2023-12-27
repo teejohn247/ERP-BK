@@ -20,9 +20,9 @@ const createExpenseRequest = async (req, res) => {
 
 
     let expense = await Expense.findOne({ _id: expenseTypeId });
-    console.log({expense})
-    let employee = await Employee.findOne({ _id: req.payload.id });
-    console.log({employee})
+    let employee = await Employee.findOne({ _id: req.payload.id })
+
+    console.log(employee, 'ologo')
 
     let company = await Company.findOne({ _id: employee.companyId });
     console.log({company})
@@ -59,6 +59,15 @@ const createExpenseRequest = async (req, res) => {
       return;
     }
 
+    let data = {}
+
+    data.employeeName = employee.fullName
+    data.profilePic = employee.profilePic
+    data.department = employee.department
+    data.designationName = employee.designationName
+    data.managerName = employee.managerName
+
+
     console.log('here')
     const approve = employee.approvals.filter(obj => obj.approvalType === "reimbursement");
 
@@ -78,7 +87,9 @@ const createExpenseRequest = async (req, res) => {
       amount,
       image,
       description,
+      employeeDetails: data
     });
+
 
     await expenseRequest
       .save()
@@ -131,7 +142,7 @@ const createExpenseRequest = async (req, res) => {
                 }
               );
 
-              
+
 
               console.log({ history });
               if (history) {
