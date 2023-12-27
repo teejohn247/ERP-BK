@@ -5,6 +5,8 @@ import Leave from "../../model/Expense";
 import Employee from "../../model/Employees";
 import Expense from "../../model/Expense";
 import ExpenseRequest from "../../model/ExpenseRequests";
+import { emailTemp } from '../../emailTemplate';
+import { sendEmail } from '../../config/email';
 
 const sgMail = require("@sendgrid/mail");
 
@@ -27,6 +29,7 @@ const createExpenseRequest = async (req, res) => {
     let company = await Company.findOne({ _id: employee.companyId });
     console.log({company})
 
+    const checkManager = await Employee.findOne({ _id: employee.managerId});
 
     console.log({expense})
 
@@ -146,6 +149,61 @@ const createExpenseRequest = async (req, res) => {
 
               console.log({ history });
               if (history) {
+
+                let data = `<div>
+                <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+                Hi,
+                </p> 
+        
+                <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
+    
+                 ${employee.firstName ? employee.firstName : employee.fullName} has made an expense request. 
+                 Log in to your account to accept or reject.
+               
+                <br><br>
+                </p>
+                
+                <div>`
+        
+               let resp = emailTemp(data, 'Expense Application Notification')
+               console.log('heeheh1')
+    
+    
+               const receivers = [
+                {
+                  email: checkManager.email
+                }
+              ]
+              console.log('heeheh')
+        
+                await sendEmail(req, res, checkManager.email, receivers, 'Expense Application Notification', resp);
+    
+                let employeeData = `<div>
+                <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+                Hi,
+                </p> 
+        
+                <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
+    
+                 Your expense approver has received your expense request. 
+                 A decision would be made soon.
+               
+                <br><br>
+                </p>
+                
+                <div>`
+        
+               let respEmployee = emailTemp( employeeData, 'Expense Application Notification')
+               console.log('heeheh2')
+    
+               const receiverEmployee = [
+                {
+                  email: employee.email
+                }
+              ]
+              console.log('heeheh')
+        
+                await sendEmail(req, res, employee.email, receiverEmployee, 'Expense Application Notification', respEmployee);
                 res.status(200).json({
                   status: 200,
                   success: true,

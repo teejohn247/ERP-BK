@@ -234,6 +234,7 @@ const leaveApplication = async (req, res) => {
     
             await sendEmail(req, res, check.email, receiverEmployee, 'Leave Application Notification', respEmployee);
 
+            
         })
 
         Employee.findOneAndUpdate({ _id: req.payload.id}, { 
