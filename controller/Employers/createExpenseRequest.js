@@ -24,7 +24,6 @@ const createExpenseRequest = async (req, res) => {
     let expense = await Expense.findOne({ _id: expenseTypeId });
     let employee = await Employee.findOne({ _id: req.payload.id })
 
-    console.log(employee, 'ologo')
 
     let company = await Company.findOne({ _id: employee.companyId });
     console.log({company})
