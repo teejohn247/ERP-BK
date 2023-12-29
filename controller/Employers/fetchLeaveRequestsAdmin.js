@@ -24,12 +24,12 @@ const fetchExpenseReqsAdmin = async (req, res) => {
         const { page, limit } = req.query;
 
 
-        const role = await Role.find({approvalId: req.payload.id}).sort({ "dateRequested": -1 })
+        const role = await Role.find({approverId: req.payload.id}).sort({ "dateRequested": -1 })
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
 
-        const count = await Role.find({approvalId: req.payload.id}).countDocuments()
+        const count = await Role.find({approverId: req.payload.id}).countDocuments()
 
         console.log(role)
 
