@@ -26,7 +26,7 @@ const updateCredits = async (req, res) => {
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let appraisal = await Credits.findOne({ companyId:company._id,  name: name });
+        let appraisal = await Credits.findOne({ companyId:company._id,  _id: req.params.id });
 
         console.log({appraisal})
 
@@ -47,13 +47,13 @@ const updateCredits = async (req, res) => {
             return;
         }
 
-        if (appraisal && String(appraisal._id) !== req.params.id) {
-            res.status(400).json({
-                status: 400,
-                error: 'This credit name already exist'
-            })
-            return;
-        }
+        // if (appraisal && String(appraisal._id) !== req.params.id) {
+        //     res.status(400).json({
+        //         status: 400,
+        //         error: 'This credit name already exist'
+        //     })
+        //     return;
+        // }
 
         Credits.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 

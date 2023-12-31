@@ -7,6 +7,7 @@ const PayrollPeriodSchema = new mongoose.Schema({
     description: { type: String },
     startDate: { type: String },
     endDate: { type: String },
+    status: {type: String, default: 'Pending'},
     date: { type: Date, default: Date.now()},
 
 }, { timestamps: true });

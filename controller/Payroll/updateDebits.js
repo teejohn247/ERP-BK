@@ -26,7 +26,7 @@ const updateDebits = async (req, res) => {
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let appraisal = await Debit.findOne({ companyId:company._id, name: name });
+        let appraisal = await Debit.findOne({ companyId:company._id, _id: req.params.id });
 
         console.log({appraisal})
 
@@ -42,7 +42,7 @@ const updateDebits = async (req, res) => {
         if (!appraisal) {
             res.status(400).json({
                 status: 400,
-                error: 'This credit does not exist'
+                error: 'This debit does not exist'
             })
             return;
         }
