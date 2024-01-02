@@ -125,6 +125,9 @@ import deleteCredit from '../controller/Payroll/deleteCredit';
 import deleteCompany from '../controller/Company/deleteCompany';
 import deleteExpenseRequest from '../controller/Expense/deleteExpenseRequest';
 import updateExpenseRequest from '../controller/Expense/updateExpenseRequest';
+import createPayrollPeriod from '../controller/Payroll/payrollPeriodData';
+import createPeriodPayData from '../controller/Payroll/createPeriodPayData';
+import updatePayrollStatus from '../controller/Payroll/updatePayrollStatus';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -319,7 +322,7 @@ router.get("/fetchRoles", auth, fetchRoles);
 
 router.post("/createCredits", auth, createCredits);
 router.post("/createDebits", auth, createDebits);
-router.post("/createPayrollPeriod", auth, payrollPeriod);
+router.post("/createPayrollPeriod", auth, createPayrollPeriod);
 
 router.get("/fetchCredits", auth, fetchCredits);
 router.get("/fetchDebits", auth, fetchDebits);
@@ -335,7 +338,10 @@ router.patch("/assignRole", auth, assignRole);
 router.get("/fetchRoles", auth, fetchRoles);
 router.get("/fetchPayroll", auth, fetchPayroll);
 router.get("/fetchEmployeesByDepartment", auth, fetchEmployeesByDepartment);
-router.post("/uploadPayroll", auth, mult.single("csv"), createPayroll);
+router.patch("/updatePayrollStatus", auth, updatePayrollStatus);
+
+router.post("/uploadPayroll/:id", auth, mult.single("file"), createPeriodPayData);
+
 
 
 
