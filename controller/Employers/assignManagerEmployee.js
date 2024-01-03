@@ -42,6 +42,14 @@ const assignManagerEmployee = async (req, res) => {
             return;
         }
 
+        if (check.companyId !== company._id.toString()) {
+            res.status(400).json({
+                status: 400,
+                error: "Manager does not belong to this company"
+            });
+            return;
+        }
+
         console.log({employees});
 
       

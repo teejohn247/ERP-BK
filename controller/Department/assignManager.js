@@ -2,6 +2,7 @@
 import dotenv from 'dotenv';
 import Department from '../../model/Department';
 import Employee from '../../model/Employees';
+import Company from '../../model/Company';
 
 
 
@@ -16,8 +17,9 @@ const assignManager = async (req, res) => {
         const department = await Department.findOne({_id: departmentId})
         const employee = await Employee.findOne({_id: managerId})
         const check = await Employee.findOne({ _id: managerId });
+        let company = await Company.findOne({ _id: req.payload.id });
 
-
+console.log(check, company._id)
         if(!managerId){
             res.status(404).json({
                 status:404,
@@ -44,6 +46,14 @@ const assignManager = async (req, res) => {
                 error:'Employee does not exist'
             })
             return
+        }
+
+        if (check.companyId !== company._id.toString()) {
+            res.status(400).json({
+                status: 400,
+                error: "Manager does not belong to this company"
+            });
+            return;
         }
 
         Department.findOneAndUpdate({ _id: departmentId}, { 
