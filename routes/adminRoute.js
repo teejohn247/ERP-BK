@@ -128,6 +128,9 @@ import updateExpenseRequest from '../controller/Expense/updateExpenseRequest';
 import createPayrollPeriod from '../controller/Payroll/payrollPeriodData';
 import createPeriodPayData from '../controller/Payroll/createPeriodPayData';
 import updatePayrollStatus from '../controller/Payroll/updatePayrollStatus';
+import payrollGraph from '../controller/Payroll/payrollGraph';
+import grossPay from '../controller/Payroll/grossSalary';
+import netSalary from '../controller/Payroll/netSalary';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -295,16 +298,11 @@ router.patch("/assignAppraisalToDepartment", auth, assignGroupsDepartment);
 router.patch("/assignAppraisalToDesignations", auth, assignGroupsDesignation);
 router.patch("/assignAppraisalToEmployees", auth, assignGroupsEmployees);
 router.patch("/updateExpenseRequest/:id", auth, upload.single("attachment"), imageUploader, updateExpenseRequest);
-
-
 router.patch("/approveExpenseRequests", auth, approveExpense);
-
 router.post("/employeeFillAppraisal", auth, fillAppraisal);
-
 router.get("/fetchApprovalRequests/:id", auth, fetchRequests);
 router.get("/fetchEmployeesByDepartment", auth, fetchEmployeesByDepartment);
 router.get("/fetchApprovedLeaveRequests", auth, approvedRequests);
-
 router.delete("/deleteKPI/:id", auth, deleteKPI);
 router.delete("/deletePeriod/:id", auth, deletePeriod);
 router.delete("/deleteRating/:id", auth, deleteRating);
@@ -312,26 +310,20 @@ router.delete("/deleteGroup/:id", auth, deleteGroup);
 router.delete("/deleteAppraisal/:id", auth, deleteFinal);
 router.delete("/deleteCompany", auth, deleteCompany);
 router.delete("/deleteExpenseRequest/:id", auth, deleteExpenseRequest);
-
-
 router.post("/createRole", auth, createRole);
 router.post("/createPermissions", auth, createPermissions);
 router.get("/fetchPermissions", auth, fetchPermissions);
 router.patch("/assignRole", auth, assignRole);
 router.get("/fetchRoles", auth, fetchRoles);
-
 router.post("/createCredits", auth, createCredits);
 router.post("/createDebits", auth, createDebits);
 router.post("/createPayrollPeriod", auth, createPayrollPeriod);
-
 router.get("/fetchCredits", auth, fetchCredits);
 router.get("/fetchDebits", auth, fetchDebits);
 router.get("/fetchPayrollPeriods", auth, fetchPayrollPeriod);
-
 router.patch("/updateCredits/:id", auth, updateCredits);
 router.patch("/updateDebits/:id", auth, updateDebits);
 router.patch("/updatePayrollPeriod/:id", auth, updatePayrollPeriod);
-
 router.post("/createPermissions", auth, createPermissions);
 router.get("/fetchPermissions", auth, fetchPermissions);
 router.patch("/assignRole", auth, assignRole);
@@ -339,9 +331,10 @@ router.get("/fetchRoles", auth, fetchRoles);
 router.get("/fetchPayroll", auth, fetchPayroll);
 router.get("/fetchEmployeesByDepartment", auth, fetchEmployeesByDepartment);
 router.patch("/updatePayrollStatus", auth, updatePayrollStatus);
-
+router.get("/payrollGraph/:year", auth, payrollGraph);
 router.post("/uploadPayroll/:id", auth, mult.single("file"), createPeriodPayData);
-
+router.get("/totalGrossPay", auth, grossPay);
+router.get("/totalNetPay", auth, netSalary);
 
 
 

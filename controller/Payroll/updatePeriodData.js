@@ -2,7 +2,7 @@
 import dotenv from 'dotenv';
 import Role from '../../model/Role';
 import Company from '../../model/Company';
-import Credits from '../../model/Credits';
+import Credits from '../../model/PeriodPayData';
 
 
 
@@ -21,8 +21,7 @@ const updateCredits = async (req, res) => {
 
     try {
        
-        const { name, description} = req.body;
-
+        const { role, bonus, standard, basicPay, pension, grossPay, insurance, payeTax, netPay, status} = req.body;
 
         let company = await Company.findOne({ _id: req.payload.id });
 
@@ -57,10 +56,16 @@ const updateCredits = async (req, res) => {
 
         Credits.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
-                name: name && name,
-                companyId: req.payload.id,
-                companyName: company.companyName,
-                description: description && description,
+                role: role && role, 
+                bonus: bonus && bonus, 
+                standard: standard && standard, 
+                basicPay: basicPay && basicPay, 
+                pension: pension && pension, 
+                insurance: insurance && insurance, 
+                payeTax: payeTax && payeTax, 
+                netPay: netPay && netPay,
+                grossPay: grossPay && grossPay,
+                status: status && status
             }
        },
             function (
@@ -92,7 +97,7 @@ const updateCredits = async (req, res) => {
         })
     }
 }
-export default updateCredits;
+export default updatePeriodData;
 
 
 

@@ -55,6 +55,8 @@ const createPeriodPayData = async (req, res) => {
                 lastName: data.lastName,
                 fullName:data.fullName,
                 profilePic: data.profilePic,
+                department: data.department,
+                designation: data.designation,
                 role: data.role, // Assigning role field from Employee model
                 bonus: data.bonus, // Example default values
                 standard: data.standard,
@@ -62,6 +64,8 @@ const createPeriodPayData = async (req, res) => {
                 pension: data.pension,
                 insurance: data.insurance,
                 payeTax: data.payeTax,
+                netPay: data.netPay,
+                grossPay: data.grossPay,
                 status: data.status, // Default status
               });
 

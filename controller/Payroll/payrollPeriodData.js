@@ -5,7 +5,7 @@ import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import PayrollPeriod from '../../model/PayrollPeriod';
 import Employee from '../../model/Employees';
-import PeriodPayData from '../../model/PeriodPayData'
+import PeriodPayData from '../../model/PeriodPayData';
 
 
 
@@ -30,7 +30,7 @@ const createPayrollPeriod = async (req, res) => {
         let company = await Company.findOne({ _id: req.payload.id });
 
         let appraisal = await PayrollPeriod.findOne({ companyId:company._id,  payrollPeriodName: payrollPeriodName });
-        let employees = await Employee.find({ companyId: req.payload.id }, {_id: 1, companyId: 1, companyName: 1, firstName:1, lastName: 1, fullName: 1, profilePic: 1})
+        let employees = await Employee.find({ companyId: req.payload.id }, {_id: 1, companyRole:1, companyId: 1, companyName: 1, firstName:1, lastName: 1, role:1, designationName:1, department: 1, fullName: 1, profilePic: 1})
 
         console.log({appraisal})
         console.log({employees})
@@ -81,14 +81,18 @@ const createPayrollPeriod = async (req, res) => {
               firstName: empp.firstName,
               lastName: empp.lastName,
               fullName: empp.fullName,
+              department: empp.department,
+              designation: empp.designationName,
               profilePic: empp.profilePic,
-              role: empp.role, // Assigning role field from Employee model
+              role: empp.companyRole,  
               bonus: 0, // Example default values
               standard: 0,
               basicPay: 0,
               pension: 0,
               insurance: 0,
               payeTax: 0,
+              netPay: 0,
+              grossPay: 0,
               status: 'Pending', // Default status
             });
             console.log({newPeriodPayData});
@@ -110,7 +114,7 @@ const createPayrollPeriod = async (req, res) => {
             lastName: emp.lastName,
             fullName: emp.fullName,
             profilePic: emp.profilePic,
-            role: emp.role, // Assigning role field from Employee model
+            role: emp.companyRole, // Assigning role field from Employee model
             bonus: 0, // Example default values
             standard: 0,
             basicPay: 0,
