@@ -76,8 +76,36 @@ const updatePayrollStatus = async (req, res) => {
                     return;
 
                 } else {
-               
-                
+
+                    let roll = await PeriodPayData.find({payrollPeriodId: payrollPeriodId});
+
+                    // Extract statuses from roll
+                    let statuses = roll.map(period => period.status);
+
+                    // Check if all statuses are 'completed'
+                    let allCompleted = statuses.every(status => status === 'Completed');
+                    let someCompleted = statuses.every(status => status === 'Completed');
+
+
+                    PayrollPeriod.update({ _id: payrollPeriodId}, { 
+                        $set: { 
+                            status: allCompleted == true ? "Completed" : allCompleted == false && someCompleted == true ? "Processing" : "Pending"
+                        }
+                    },{ upsert: true },
+                        async function (
+                            err,
+                            result
+                        ) {
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    success: false,
+                                    error: err
+                                })
+                                return;
+            
+                            } else {
+
                                     res.status(200).json({
                                         status: 200,
                                         success: true,
@@ -85,7 +113,8 @@ const updatePayrollStatus = async (req, res) => {
                                     })
                                     return;
                 
-
+                                }
+                            })
                
                 }
             })

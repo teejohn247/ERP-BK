@@ -52,17 +52,25 @@ const createPayrollPeriod = async (req, res) => {
             })
             return;
         }
+        let total = await PayrollPeriod.find();
 
+        const d = new Date();
+        let year = d.getFullYear();
+        let month = d.getMonth();
+        let day = d.getDay();
 
-
-       let group = new PayrollPeriod({
+        let group = new PayrollPeriod({
             companyId: req.payload.id,
             companyName: company.companyName,
             payrollPeriodName,
+            reference: `PAY-${month}${day}-${total.length + 1}`,
             description, 
             startDate, 
             endDate, 
         })
+
+        console.log({group})
+
 
 
         // const newPeriodPayDatas = [];
