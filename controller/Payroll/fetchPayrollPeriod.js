@@ -57,6 +57,9 @@ const fetchPayrollPeriod = async (req, res) => {
                   lastName: emp.lastName,
                   fullName: emp.fullName,
                   profilePic: emp.profilePic,
+                  department: emp.department,
+                  designation: emp.designation,
+                  profilePic: emp.profilePic,
                   role: emp.role, // Assigning role field from Employee model
                   bonus: emp.bonus, // Example default values
                   standard: emp.standard,
