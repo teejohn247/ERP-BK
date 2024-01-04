@@ -62,6 +62,7 @@ const fetchPayrollPeriodDetails = async (req, res) => {
                   bonus: emp.bonus, // Example default values
                   standard: emp.standard,
                   basicPay: emp.basicPay,
+                  netPay: emp.netPay,
                   pension: emp.pension,
                   insurance: emp.insurance,
                   payeTax: emp.payeTax,
