@@ -27,11 +27,11 @@ const addPayment = async (req, res) => {
     try {
         console.log(req.payload.id)
 
-        const { bankAddress, bankName, accountNumber, sortCode, TaxIndentificationNumber } = req.body;
-        let company = await Company.find({ _id: req.payload.id });
+        const { bankAddress, bankName, accountNumber, sortCode, accountName } = req.body;
+        // let company = await Company.find({ _id: req.payload.id });
 
 
-        const check = await Employee.findOne({ _id: req.params.id })
+        const check = await Employee.findOne({ _id: req.payload.id })
 
         console.log({ check })
 
@@ -49,7 +49,7 @@ const addPayment = async (req, res) => {
 
         if (check.paymentInformation && check.paymentInformation.length < 1) {
             console.log('kjds')
-            Employee.findOneAndUpdate({ _id: req.params.id },
+            Employee.findOneAndUpdate({ _id: req.payload.id },
                 {
                     $push: {
                         paymentInformation: {
@@ -58,7 +58,7 @@ const addPayment = async (req, res) => {
                             bankAddress: bankAddress && bankAddress,
                             accountNumber: accountNumber && accountNumber,
                             sortCode: sortCode && sortCode,
-                            TaxIndentificationNumber: TaxIndentificationNumber && TaxIndentificationNumber
+                            accountName: accountName && accountName
 
                         }
                     }
@@ -89,13 +89,13 @@ const addPayment = async (req, res) => {
         } else {
             console.log('2kjds')
 
-            Employee.findOneAndUpdate({ _id: req.params.id }, {
+            Employee.findOneAndUpdate({ _id: req.payload.id }, {
                 $set: {
                     "paymentInformation.$[i].bankName": bankName && bankName,
                     "paymentInformation.$[i].bankAddress": bankAddress && bankAddress,
                     "paymentInformation.$[i].accountNumber": accountNumber && accountNumber,
                     "paymentInformation.$[i].sortCode": sortCode && sortCode,
-                    "paymentInformation.$[i].TaxIndentificationNumber": TaxIndentificationNumber && TaxIndentificationNumber,
+                    "paymentInformation.$[i].accountName && accountName":accountName && accountName,
                 }
             },
                 {
@@ -133,11 +133,11 @@ const addPayment = async (req, res) => {
                   
                 })
 
-                const checkUpdated = await Employee.findOne({ _id: req.params.id })
+                const checkUpdated = await Employee.findOne({ _id: req.payload.id })
 
                 console.log(checkUpdated)
                 console.log(checkUpdated.officialInformation[0].officialEmail)
-                AuditTrail.findOneAndUpdate({ companyId: company[0]._id },
+                AuditTrail.findOneAndUpdate({ companyId: check.companyId },
                     {
                         $push: {
                             humanResources: {

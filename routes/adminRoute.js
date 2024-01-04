@@ -232,7 +232,7 @@ router.get('/fetchDepartments', auth, fetchDepartment);
 router.patch('/updateDepartment/:id',auth, updateDepartment);
 router.delete('/deleteDepartment/:id',auth, deleteDepartment);
 router.post('/addTable', addTable);
-router.patch('/addPayment/:id',auth, addPayment);
+router.patch('/addPayment',auth, addPayment);
 router.post('/updatePayment', auth, updatePayment);
 router.get('/fetchEmployees',auth,  fetchEmployees);
 router.get('/fetchEmployee/:id', auth, fetchSpecificEmployees);
