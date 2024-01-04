@@ -312,6 +312,9 @@ router.delete("/deleteGroup/:id", auth, deleteGroup);
 router.delete("/deleteAppraisal/:id", auth, deleteFinal);
 router.delete("/deleteCompany", auth, deleteCompany);
 router.delete("/deleteExpenseRequest/:id", auth, deleteExpenseRequest);
+
+router.delete("/deletePayrollPeriod/:id", auth, deletePeriod);
+
 router.post("/createRole", auth, createRole);
 router.post("/createPermissions", auth, createPermissions);
 router.get("/fetchPermissions", auth, fetchPermissions);

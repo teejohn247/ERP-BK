@@ -4,7 +4,8 @@ import Role from '../../model/Role';
 import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import FinalRating from '../../model/FinalRating';
-import Period from '../../model/PayrollPeriod'
+import Period from '../../model/AppraisalPeriod'
+import PayrollPeriod from '../../model/PayrollPeriod';
 
 
 
@@ -34,19 +35,19 @@ const deletePeriod = async (req, res) => {
         }
 
 
-        let leave = await Period.findOne({ _id: req.params.id });
+        let leave = await PayrollPeriod.findOne({ _id: req.params.id });
 
 
         if (!leave) {
             res.status(400).json({
                 status: 400,
-                error: 'Period not found'
+                error: 'Payroll period not found'
             })
             return;
         }
 
 
-        Period.remove({ _id: req.params.id},
+        PayrollPeriod.remove({ _id: req.params.id},
             function (
                 err,
                 result
