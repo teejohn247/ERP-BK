@@ -51,6 +51,8 @@ const createPeriodPayData = async (req, res) => {
                 // companyId: data.companyId,
                 // companyName: data.companyName,
                 payrollPeriodId: req.params.id,
+                userId: data.userId && data.userId,
+                email: data.email && data.email,
                 firstName: data.firstName,
                 lastName: data.lastName,
                 fullName:data.fullName,

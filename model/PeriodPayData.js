@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 const periodPayDataSchema = new mongoose.Schema({
     companyName: { type: String },
     companyId: { type: String },
+    userId:{ type: String },
+    email:{ type: String },
     firstName: { type: String },
     lastName: { type: String },
     fullName: { type: String },
