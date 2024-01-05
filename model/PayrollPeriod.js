@@ -9,7 +9,7 @@ const PayrollPeriodSchema = new mongoose.Schema({
     endDate: { type: String },
     reference: { type: String },
     totalEarnings: { type: Number, default: 0 },
-    netPay: { type: Number, default: 0 },
+    netEarnings: { type: Number, default: 0 },
     deductions: { type: Number, default: 0 },
     status: {type: String, default: 'Pending'},
     date: { type: Date, default: Date.now()},

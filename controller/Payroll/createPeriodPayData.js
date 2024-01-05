@@ -65,7 +65,7 @@ const createPeriodPayData = async (req, res) => {
                 pension: data.pension,
                 insurance: data.insurance,
                 payeTax: data.payeTax,
-                netPay: data.netPay,
+                netEarnings: data.netEarnings,
                 totalEarnings: data.totalEarnings,
                 status: data.status, // Default status
               });

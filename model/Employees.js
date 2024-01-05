@@ -333,7 +333,7 @@ const EmployeeSchema = new mongoose.Schema({
       sortCode: {
         type: String,
       },
-      TaxIndentificationNumber: {
+      taxIdentificationNumber: {
         type: String,
       },
     },

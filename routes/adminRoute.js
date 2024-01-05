@@ -342,7 +342,7 @@ router.patch("/updatePayrollStatus", auth, updatePayrollStatus);
 router.get("/payrollGraph/:year", auth, payrollGraph);
 router.post("/uploadPayroll/:id", auth, mult.single("file"), createPeriodPayData);
 router.get("/totalEarnings", auth, totalEarnings);
-router.get("/totalNetPay", auth, netSalary);
+router.get("/totalnetEarnings", auth, netSalary);
 router.get("/fetchPayrollPeriodHistory", auth, fetchPayrollPrd);
 router.get("/fetchPayrollPeriodDetails/:id", auth, fetchPayrollPeriodDetails);
 router.get("/leaveStats", auth, leaveDetails);

@@ -63,8 +63,8 @@ const netSalary= async (req, res) => {
             {
               $group: {
                 _id: '$id',
-                totalNetPay: {
-                  $sum: '$netPay',
+                totalnetEarnings: {
+                  $sum: '$netEarnings',
                 },
               },
             },

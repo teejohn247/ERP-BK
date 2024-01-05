@@ -27,14 +27,14 @@ const addPayment = async (req, res) => {
     try {
         console.log(req.payload.id)
 
-        const { bankAddress, bankName, accountNumber, sortCode, accountName } = req.body;
+        const { bankAddress, bankName, accountNumber, sortCode, taxIdentificationNumber, accountName } = req.body;
         // let company = await Company.find({ _id: req.payload.id });
 
 
         const check = await Employee.findOne({ _id: req.payload.id })
 
         console.log({ check })
-
+console.log(req.body, 'test')
 
 
         if (!check) {
@@ -56,9 +56,11 @@ const addPayment = async (req, res) => {
 
                             bankName: bankName && bankName,
                             bankAddress: bankAddress && bankAddress,
-                            accountNumber: accountNumber && accountNumber,
+                            accountNumber: accountNumber && accountNumber.toString(),
                             sortCode: sortCode && sortCode,
-                            accountName: accountName && accountName
+                            accountName: accountName && accountName,
+                            taxIdentificationNumber: taxIdentificationNumber && taxIdentificationNumber
+
 
                         }
                     }
@@ -78,11 +80,11 @@ const addPayment = async (req, res) => {
                     } else {
 
 
-                        res.status(200).json({
-                            status: 200,
-                            success: true,
-                            data: "Update Successful"
-                        })
+                        // res.status(200).json({
+                        //     status: 200,
+                        //     success: true,
+                        //     data: "Update Successful"
+                        // })
 
                     }
                 })
@@ -93,9 +95,11 @@ const addPayment = async (req, res) => {
                 $set: {
                     "paymentInformation.$[i].bankName": bankName && bankName,
                     "paymentInformation.$[i].bankAddress": bankAddress && bankAddress,
-                    "paymentInformation.$[i].accountNumber": accountNumber && accountNumber,
+                    "paymentInformation.$[i].accountNumber": accountNumber && accountNumber.toString(),
                     "paymentInformation.$[i].sortCode": sortCode && sortCode,
-                    "paymentInformation.$[i].accountName && accountName":accountName && accountName,
+                    "paymentInformation.$[i].accountName":accountName && accountName,
+                    "paymentInformation.$[i].taxIdentificationNumber":taxIdentificationNumber && taxIdentificationNumber,
+
                 }
             },
                 {
@@ -169,6 +173,8 @@ const addPayment = async (req, res) => {
                                 success: true,
                                 data: "Update Successful"
                             })
+
+                            return;
 
                         }
                     })

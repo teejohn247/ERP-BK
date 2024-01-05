@@ -99,7 +99,7 @@ const createPayrollPeriod = async (req, res) => {
               pension: 0,
               insurance: 0,
               payeTax: 0,
-              netPay: 0,
+              netEarnings: 0,
               totalEarnings: 0,
               status: 'Pending', // Default status
             });

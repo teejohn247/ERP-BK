@@ -59,7 +59,7 @@ const payrollGraph = async (req, res) => {
         // }
 
 
-        const monthlyNetPay = await PeriodPayData.aggregate([
+        const monthlynetEarnings = await PeriodPayData.aggregate([
             {
               $match: {
                 // payrollPeriodId: mongoose.Types.ObjectId(payrollPeriodId),
@@ -84,24 +84,24 @@ const payrollGraph = async (req, res) => {
             },
           ])
 
-          console.log({monthlyNetPay})
+          console.log({monthlynetEarnings})
 
 
-          const monthlyTotalNetPay = Array(12).fill(0); // Initialize array for 12 months
+          const monthlyTotalnetEarnings = Array(12).fill(0); // Initialize array for 12 months
 
-     monthlyNetPay.map((monthData) => {
+     monthlynetEarnings.map((monthData) => {
             const { month, totalEarnings: totalEarnings } = monthData;
-            monthlyTotalNetPay[month - 1] =  totalEarnings; // Subtract 1 to match array index (0-based)
+            monthlyTotalnetEarnings[month - 1] =  totalEarnings; // Subtract 1 to match array index (0-based)
           });
 
-          console.log({monthlyTotalNetPay})
+          console.log({monthlyTotalnetEarnings})
       
           const monthNames = [
             'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December',
           ];
       
-          const response = monthlyTotalNetPay.reduce((acc,  totalEarnings, index) => {
+          const response = monthlyTotalnetEarnings.reduce((acc,  totalEarnings, index) => {
             acc.push({ [monthNames[index]]:  totalEarnings });
             return acc;
           }, []);
@@ -114,8 +114,8 @@ const payrollGraph = async (req, res) => {
 
           const compressedData = response.reduce((acc, monthObj) => {
             const monthName = Object.keys(monthObj)[0];
-            const netPay = monthObj[monthName];
-            acc[monthName.toLowerCase()] = netPay;
+            const netEarnings = monthObj[monthName];
+            acc[monthName.toLowerCase()] = netEarnings;
             return acc;
         }, {});
         
@@ -173,9 +173,9 @@ export default payrollGraph;
 
 // const PeriodPayData = mongoose.model('PeriodPayData', periodPayDataSchema);
 
-// async function calculateMonthlyTotalNetPay(year, payrollPeriodId) {
+// async function calculateMonthlyTotalnetEarnings(year, payrollPeriodId) {
 //   try {
-//     const monthlyNetPay = await PeriodPayData.aggregate([
+//     const monthlynetEarnings = await PeriodPayData.aggregate([
 //       {
 //         $match: {
 //           payrollPeriodId: mongoose.Types.ObjectId(payrollPeriodId),
@@ -188,23 +188,23 @@ export default payrollGraph;
 //       {
 //         $group: {
 //           _id: { $month: '$createdAt' },
-//           totalNetPay: { $sum: '$netPay' },
+//           totalnetEarnings: { $sum: '$netEarnings' },
 //         },
 //       },
 //       {
 //         $project: {
 //           _id: 0,
 //           month: '$_id',
-//           totalNetPay: 1,
+//           totalnetEarnings: 1,
 //         },
 //       },
 //     ]);
 
-//     const monthlyTotalNetPay = Array(12).fill(0); // Initialize array for 12 months
+//     const monthlyTotalnetEarnings = Array(12).fill(0); // Initialize array for 12 months
 
-//     monthlyNetPay.forEach((monthData) => {
-//       const { month, totalNetPay: netPay } = monthData;
-//       monthlyTotalNetPay[month - 1] = netPay; // Subtract 1 to match array index (0-based)
+//     monthlynetEarnings.forEach((monthData) => {
+//       const { month, totalnetEarnings: netEarnings } = monthData;
+//       monthlyTotalnetEarnings[month - 1] = netEarnings; // Subtract 1 to match array index (0-based)
 //     });
 
 //     const monthNames = [
@@ -212,8 +212,8 @@ export default payrollGraph;
 //       'July', 'August', 'September', 'October', 'November', 'December',
 //     ];
 
-//     const response = monthlyTotalNetPay.reduce((acc, netPay, index) => {
-//       acc.push({ [monthNames[index]]: netPay });
+//     const response = monthlyTotalnetEarnings.reduce((acc, netEarnings, index) => {
+//       acc.push({ [monthNames[index]]: netEarnings });
 //       return acc;
 //     }, []);
 
@@ -227,7 +227,7 @@ export default payrollGraph;
 // // Example usage:
 // const year = 2023; // Specify the year
 // const payrollPeriodId = '61579862e5901e2d484aadcf'; // Replace with actual payrollPeriodId
-// calculateMonthlyTotalNetPay(year, payrollPeriodId)
+// calculateMonthlyTotalnetEarnings(year, payrollPeriodId)
 //   .then((result) => {
 //     console.log(result);
 //   })

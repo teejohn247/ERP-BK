@@ -26,7 +26,7 @@ const leaveAction = async (req, res) => {
       
         
 
-        const { leaveId, leaveStatus, assignedNoOfDays, decisionMessage, employeeId } = req.body;
+        const { leaveId, approved, assignedNoOfDays, decisionMessage, employeeId } = req.body;
 
         let company = await Company.findOne({ _id: req.payload.id });
         const leaveType = await LeaveRecords.findOne({ _id: leaveId});
@@ -53,13 +53,13 @@ const leaveAction = async (req, res) => {
         console.log(leaveType.userId)
 
         await leaveType.updateOne({
-            leaveStatus
+            leaveStatus: approved == true ? "Approved" : "Declined"
         }).then(async (app) => {
             
             Employee.findOneAndUpdate({ _id: leaveType.userId }, { 
                 $set: { 
-                    "leaveAssignment.$[i].leaveApproved": leaveStatus && `${leaveStatus == "Accepted" ? true:false}`,
-                    "leaveAssignment.$[i].leaveStatus": leaveStatus && leaveStatus,
+                    "leaveAssignment.$[i].leaveApproved": approved && approved,
+                    "leaveAssignment.$[i].leaveStatus": approved == true ? "Approved" :approved == false && "Declined",
                     "leaveAssignment.$[i].leaveStartDate": leaveType.leaveStartDate && leaveType.leaveStartDate,
                     "leaveAssignment.$[i].leaveEndDate": leaveType.leaveEndDate && leaveType.leaveEndDate,
                     "leaveAssignment.$[i].assignedNoOfDays": leaveType.assignedNoOfDays && leaveType.assignedNoOfDays,
@@ -115,7 +115,7 @@ const leaveAction = async (req, res) => {
                             
                                     <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
                                     
-                                     Your leave request has been ${leaveStatus}
+                                     Your leave request has been ${approved == true ? "Approved" : "Declined"}
                                    
                                     <br><br>
                                     </p>
