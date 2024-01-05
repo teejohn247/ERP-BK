@@ -24,7 +24,7 @@ dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
-const grossPay = async (req, res) => {
+const totalEarnings = async (req, res) => {
 
     try {
        
@@ -54,7 +54,7 @@ const grossPay = async (req, res) => {
         }
 
 
-        const totalGrossPayByCompany = await PeriodPayData.aggregate([
+        const totalEarningsByCompany = await PeriodPayData.aggregate([
             {
               $match: {
                 companyId: company._id.toString(),
@@ -63,7 +63,7 @@ const grossPay = async (req, res) => {
             {
               $group: {
                 _id: '$id',
-                totalGrossPay: {
+                totalEarnings: {
                   $sum: {
                     $add: ['$basicPay', '$bonus', '$standard', '$pension', '$insurance', '$payeTax'],
                   },
@@ -72,13 +72,13 @@ const grossPay = async (req, res) => {
             },
           ]);
         
-          console.log('Total Gross Pay By Company:', totalGrossPayByCompany);
-          console.log({totalGrossPayByCompany})
+          console.log('Total Gross Pay By Company:', totalEarningsByCompany);
+          console.log({totalEarningsByCompany})
           
           res.status(200).json({
             status: 200,
             success: true,
-            data:  totalGrossPayByCompany
+            data:  totalEarningsByCompany
         })
     } catch (error) {
         res.status(500).json({
@@ -88,4 +88,4 @@ const grossPay = async (req, res) => {
         })
     }
 }
-export default grossPay;
+export default totalEarnings;

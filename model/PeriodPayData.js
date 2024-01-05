@@ -18,7 +18,7 @@ const periodPayDataSchema = new mongoose.Schema({
     insurance: { type: Number, default: 0 },
     payeTax: { type: Number, default: 0 },
     netPay: { type: Number, default: 0 },
-    grossPay: { type: Number, default: 0 },
+    totalEarnings: { type: Number, default: 0 },
     status: {type: String, default: 'Pending'},
     createdAt: { type: Date, default: Date.now },
 }, { timestamps: true })

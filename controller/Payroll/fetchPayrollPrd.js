@@ -52,7 +52,7 @@ const fetchPayrollPrd = async (req, res) => {
                 endDate: { $first: '$payrollPeriodData.endDate' },
                 reference: { $first: '$payrollPeriodData.reference' },
                 status: { $first: '$payrollPeriodData.status' },
-                totalGrossPay: { $sum: { $add: ['$basicPay', '$bonus', '$standard', '$pension', '$insurance', '$payeTax'] } },
+                totalEarnings: { $sum: { $add: ['$basicPay', '$bonus', '$standard', '$pension', '$insurance', '$payeTax'] } },
                 totalNetPay: { $sum: '$netPay' },
                 totalDeductions: { $sum: { $add: ['$bonus', '$standard', '$pension', '$insurance', '$payeTax'] } },
                 // You can include other fields from PayrollPeriod if needed

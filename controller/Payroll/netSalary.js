@@ -54,7 +54,7 @@ const netSalary= async (req, res) => {
         }
 
 
-        const totalGrossPayByCompany = await PeriodPayData.aggregate([
+        const totalEarningsByCompany = await PeriodPayData.aggregate([
             {
               $match: {
                 companyId: company._id.toString(),
@@ -70,13 +70,13 @@ const netSalary= async (req, res) => {
             },
           ]);
         
-          console.log('Total Gross Pay By Company:', totalGrossPayByCompany);
-          console.log({totalGrossPayByCompany})
+          console.log('Total Gross Pay By Company:', totalEarningsByCompany);
+          console.log({totalEarningsByCompany})
           
           res.status(200).json({
             status: 200,
             success: true,
-            data:  totalGrossPayByCompany
+            data:  totalEarningsByCompany
         })
     } catch (error) {
         res.status(500).json({

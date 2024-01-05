@@ -8,7 +8,7 @@ const PayrollPeriodSchema = new mongoose.Schema({
     startDate: { type: String },
     endDate: { type: String },
     reference: { type: String },
-    grossPay: { type: Number, default: 0 },
+    totalEarnings: { type: Number, default: 0 },
     netPay: { type: Number, default: 0 },
     deductions: { type: Number, default: 0 },
     status: {type: String, default: 'Pending'},

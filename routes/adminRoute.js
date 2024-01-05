@@ -129,12 +129,13 @@ import createPayrollPeriod from '../controller/Payroll/payrollPeriodData';
 import createPeriodPayData from '../controller/Payroll/createPeriodPayData';
 import updatePayrollStatus from '../controller/Payroll/updatePayrollStatus';
 import payrollGraph from '../controller/Payroll/payrollGraph';
-import grossPay from '../controller/Payroll/grossSalary';
+import totalEarnings from '../controller/Payroll/grossSalary';
 import netSalary from '../controller/Payroll/netSalary';
 import fetchPayrollPrd from '../controller/Payroll/fetchPayrollPrd';
 import fetchPayrollPeriodDetails from '../controller/Payroll/fetchPayrollPeriodDetails';
 import leaveDetails from '../controller/Leave/leaveDetails';
 import updatePeriodData from '../controller/Payroll/updatePeriodData';
+import expenseGraph from '../controller/Expense/expenseGraph';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -340,11 +341,14 @@ router.get("/fetchEmployeesByDepartment", auth, fetchEmployeesByDepartment);
 router.patch("/updatePayrollStatus", auth, updatePayrollStatus);
 router.get("/payrollGraph/:year", auth, payrollGraph);
 router.post("/uploadPayroll/:id", auth, mult.single("file"), createPeriodPayData);
-router.get("/totalGrossPay", auth, grossPay);
+router.get("/totalEarnings", auth, totalEarnings);
 router.get("/totalNetPay", auth, netSalary);
 router.get("/fetchPayrollPeriodHistory", auth, fetchPayrollPrd);
 router.get("/fetchPayrollPeriodDetails/:id", auth, fetchPayrollPeriodDetails);
 router.get("/leaveStats", auth, leaveDetails);
+
+router.get("/expenseGraph/:year", auth, expenseGraph);
+
 
 router.patch("/updatePayrollEntry/:id", auth, updatePeriodData);
 

@@ -8,7 +8,7 @@ import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import PayrollPeriod from '../../model/PayrollPeriod';
 import Employee from '../../model/Employees';
-import PeriodPayData from '../../model/PeriodPayData';
+import PeriodPayData from '../../model/ExpenseRequests';
 import mongoose from 'mongoose';
 
 
@@ -24,21 +24,18 @@ dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
-const payrollGraph = async (req, res) => {
+const expenseGraph = async (req, res) => {
 
     try {
        
         const { year, payrollPeriodId  } = req.params;
 
+        console.log(req.params)
 
       
         let company = await Company.findOne({ _id: req.payload.id });
 
-        // let appraisal = await PayrollPeriod.findOne({ companyId:company._id,  _id : payrollPeriodId  });
-
-        // console.log({appraisal})
-
-        console.log({company})
+        
 
 
         if (!company.companyName) {
@@ -50,19 +47,12 @@ const payrollGraph = async (req, res) => {
         }
 
 
-        // if (!appraisal) {
-        //     res.status(400).json({
-        //         status: 400,
-        //         error: 'This period does not exist'
-        //     })
-        //     return;
-        // }
-
 
         const monthlyNetPay = await PeriodPayData.aggregate([
             {
               $match: {
                 // payrollPeriodId: mongoose.Types.ObjectId(payrollPeriodId),
+                approved: true,
                 endDate: {
                   $gte: new Date(`${year}-01-01`),
                   $lt: new Date(`${year + 1}-01-01`),
@@ -71,15 +61,15 @@ const payrollGraph = async (req, res) => {
             },
             {
               $group: {
-                _id: { $month: '$endDate' },
-                totalEarnings: { $sum: '$totalEarnings' },
+                _id: { $month: '$dateRequested' },
+                totalAmount: { $sum: '$amount' },
               },
             },
             {
               $project: {
                 _id: 0,
                 month: '$_id',
-                totalEarnings: 1,
+                totalAmount: 1,
               },
             },
           ])
@@ -90,8 +80,8 @@ const payrollGraph = async (req, res) => {
           const monthlyTotalNetPay = Array(12).fill(0); // Initialize array for 12 months
 
      monthlyNetPay.map((monthData) => {
-            const { month, totalEarnings: totalEarnings } = monthData;
-            monthlyTotalNetPay[month - 1] =  totalEarnings; // Subtract 1 to match array index (0-based)
+            const { month, totalAmount: amount } = monthData;
+            monthlyTotalNetPay[month - 1] =  amount; // Subtract 1 to match array index (0-based)
           });
 
           console.log({monthlyTotalNetPay})
@@ -101,26 +91,26 @@ const payrollGraph = async (req, res) => {
             'July', 'August', 'September', 'October', 'November', 'December',
           ];
       
-          const response = monthlyTotalNetPay.reduce((acc,  totalEarnings, index) => {
-            acc.push({ [monthNames[index]]:  totalEarnings });
+          const response = monthlyTotalNetPay.reduce((acc, amount, index) => {
+            acc.push({ [monthNames[index]]:  amount });
             return acc;
           }, []);
 
           const convertedData = response.map((monthObj) => {
             const monthName = Object.keys(monthObj)[0];
-            const totalEarnings = monthObj[monthName];
-            return { [monthName.toLowerCase()]: totalEarnings };
+            const amount = monthObj[monthName];
+            return { [monthName.toLowerCase()]: amount };
           });
 
           const compressedData = response.reduce((acc, monthObj) => {
             const monthName = Object.keys(monthObj)[0];
-            const netPay = monthObj[monthName];
-            acc[monthName.toLowerCase()] = netPay;
+            const amount = monthObj[monthName];
+            acc[monthName.toLowerCase()] = amount;
             return acc;
         }, {});
         
         console.log({compressedData});
-
+// 
           console.log({convertedData})
           res.status(200).json({
             status: 200,
@@ -135,7 +125,7 @@ const payrollGraph = async (req, res) => {
         })
     }
 }
-export default payrollGraph;
+export default expenseGraph;
 
 
 
