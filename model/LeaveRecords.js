@@ -62,7 +62,7 @@ const LeaveRecordsSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    leaveStatus:{
+    status:{
         type: String,
         default: "Pending"
     },

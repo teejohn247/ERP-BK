@@ -21,7 +21,7 @@ const daysUsed = async (req, res) => {
         const today = new Date();
 
         const leaveRecords = await LeaveRecords.find({
-            leaveStatus: 'Approved',
+            status: 'Approved',
             $and: [
               { leaveStartDate: { $lte: today } }, // leaveStartDate is less than or equal to today
               { leaveEndDate: { $gte: today } }    // leaveEndDate is greater than or equal to today

@@ -27,7 +27,7 @@ const getAdminApprovedRecords = async (req, res) => {
 
         const { page, limit } = req.query;
 
-        const employee = await LeaveRecords.find({leaveApprover: req.params.id, leaveStatus: "Approved"}).sort({_id: -1})
+        const employee = await LeaveRecords.find({leaveApprover: req.params.id, status: "Approved"}).sort({_id: -1})
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();

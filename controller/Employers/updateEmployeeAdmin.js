@@ -81,9 +81,9 @@ const updateEmployeeAdmin = async (req, res) => {
         console.log({checkDept})
         Employee.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
-                    // firstName: firstName && firstName,
-                    // lastName: lastName && lastName,
-                    // dateOfBirth: dateOfBirth && dateOfBirth,
+                    firstName: firstName && firstName,
+                    lastName: lastName && lastName,
+                    dateOfBirth: dateOfBirth && dateOfBirth,
                     address: address && address,
                     personalEmail: personalEmail && personalEmail,
                     gender: gender && gender,
