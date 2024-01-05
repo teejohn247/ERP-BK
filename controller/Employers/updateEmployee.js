@@ -56,10 +56,10 @@ const updateEmployee = async (req, res) => {
         Employee.findOneAndUpdate({ _id: req.payload.id}, { 
             $set: { 
 
-                    // firstName: firstName && firstName,
-                    // lastName: lastName && lastName,
-                    // dateOfBirth: dateOfBirth && dateOfBirth,
-                    // gender: gender && gender,  
+                    firstName: firstName && firstName,
+                    lastName: lastName && lastName,
+                    dateOfBirth: dateOfBirth && dateOfBirth,
+                    gender: gender && gender,  
                     address: address && address,
                     personalEmail: personalEmail && personalEmail,
                     phoneNumber: phoneNumber && phoneNumber,
