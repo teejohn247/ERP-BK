@@ -12,6 +12,8 @@ import middlewareDetect from './middleware/middlewareDetect'
 import { cloudinaryConfig } from './config/cloudinary';
 import { sendEmail } from './config/email';
 import { emailTemp } from './emailTemplate';
+import daysUsed from './cron/daysUsed';
+const cron = require("node-cron");
 
 const upload = multer()
 const app = express();
@@ -85,6 +87,17 @@ const debug = Debug('http');
 connectDb()
 
 let hostname = '0.0.0.0'
+
+cron.schedule("* * * * *", async function () {
+  console.log("---------------------");
+ const ans = await daysUsed()
+ console.log(ans)
+ console.log("running a task every 60 seconds");
+
+ return ans;
+  
+
+});
 
 app.get('/test', async (req, res) => {
 

@@ -96,8 +96,6 @@ const assignDesignation = async (req, res) => {
           Employee.updateMany({ _id: { $in : employees }}, { 
             $push: { 
                 leaveAssignment: check.leaveTypes,
-                
-
             }
         },{ upsert: true },
             async function (

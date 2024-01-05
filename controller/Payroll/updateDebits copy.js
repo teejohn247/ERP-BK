@@ -2,7 +2,7 @@
 import dotenv from 'dotenv';
 import Role from '../../model/Role';
 import Company from '../../model/Company';
-import Credits from '../../model/PeriodPayData';
+import Debit from '../../model/Debit';
 
 
 
@@ -17,15 +17,16 @@ dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
-const updatePeriodData= async (req, res) => {
+const updateDebits = async (req, res) => {
 
     try {
        
-        const { role, bonus, standard, basicPay, pension, grossPay, insurance, payeTax, netPay, status} = req.body;
+        const { name, description} = req.body;
+
 
         let company = await Company.findOne({ _id: req.payload.id });
 
-        let appraisal = await Credits.findOne({ companyId:company._id,  _id: req.params.id });
+        let appraisal = await Debit.findOne({ companyId:company._id, _id: req.params.id });
 
         console.log({appraisal})
 
@@ -41,31 +42,16 @@ const updatePeriodData= async (req, res) => {
         if (!appraisal) {
             res.status(400).json({
                 status: 400,
-                error: 'This credit does not exist'
+                error: 'This debit does not exist'
             })
             return;
         }
-
-        // if (appraisal && String(appraisal._id) !== req.params.id) {
-        //     res.status(400).json({
-        //         status: 400,
-        //         error: 'This credit name already exist'
-        //     })
-        //     return;
-        // }
-
-        Credits.findOneAndUpdate({ _id: req.params.id}, { 
+        Debit.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
-                role: role && role, 
-                bonus: bonus && bonus, 
-                standard: standard && standard, 
-                basicPay: basicPay && basicPay, 
-                pension: pension && pension, 
-                insurance: insurance && insurance, 
-                payeTax: payeTax && payeTax, 
-                netPay: netPay && netPay,
-                grossPay: grossPay && grossPay,
-                status: status && status
+                name: name && name,
+                companyId: req.payload.id,
+                companyName: company.companyName,
+                description: description && description,
             }
        },
             function (
@@ -81,11 +67,6 @@ const updatePeriodData= async (req, res) => {
                     })
 
                 } else {
-
-
-
-
-                    
                     res.status(200).json({
                         status: 200,
                         success: true,
@@ -102,7 +83,7 @@ const updatePeriodData= async (req, res) => {
         })
     }
 }
-export default updatePeriodData;
+export default updateDebits;
 
 
 

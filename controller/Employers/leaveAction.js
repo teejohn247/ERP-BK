@@ -88,7 +88,6 @@ const leaveAction = async (req, res) => {
                     } else {
 
 
-
                        LeaveRecords.findOneAndUpdate({ _id: leaveId }, { 
                             $set: { 
                                decisionMessage: decisionMessage

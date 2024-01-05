@@ -10,6 +10,8 @@ import utils from '../../config/utils';
 
 import { emailTemp } from '../../emailTemplate';
 import LeaveRecords from '../../model/LeaveRecords';
+import Company from '../../model/Company';
+
 
 
 const sgMail = require('@sendgrid/mail')
@@ -27,33 +29,76 @@ const getAdminRecords = async (req, res) => {
 
         const { page, limit } = req.query;
 
-        const employee = await LeaveRecords.find({leaveApprover: req.payload.id}).sort({_id: -1})
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
+        const comp = await Employee.findOne({_id: req.payload.id})
+        const allComp = await Company.findOne({_id: req.payload.id})
 
-        console.log({employee})
+        console.log({comp})
+        console.log({allComp})
 
-        
 
-        const count = await Employee.find().countDocuments()
 
-        if(!employee){
-            res.status(404).json({
-                status:404,
-                success: false,
-                error:'No employee Found'
-            })
+        if(comp){
+
+            const employee = await LeaveRecords.find({companyId:comp.companyId, leaveApprover: req.payload.id}).sort({_id: -1}) 
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .exec();
+    
+            console.log({employee})
+    
+            
+    
+            const count = await Employee.find().countDocuments()
+    
+            if(!employee){
+                res.status(404).json({
+                    status:404,
+                    success: false,
+                    error:'No employee Found'
+                })
+                return
+            }else{
+                res.status(200).json({
+                    status: 200,
+                    success: true,
+                    data: employee,
+                    totalPages: Math.ceil(count / limit),
+                    currentPage: page
+                })
+            }
             return
-        }else{
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: employee,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page
-            })
+        }  else if(allComp){
+
+            const employee = await LeaveRecords.find({companyId:req.payload.id}).sort({_id: -1}) 
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .exec();
+    
+            console.log({employee})
+    
+            
+    
+            const count = await Employee.find().countDocuments()
+    
+            if(!employee){
+                res.status(404).json({
+                    status:404,
+                    success: false,
+                    error:'No employee Found'
+                })
+                return
+            }else{
+                res.status(200).json({
+                    status: 200,
+                    success: true,
+                    data: employee,
+                    totalPages: Math.ceil(count / limit),
+                    currentPage: page
+                })
+            }
+            return
         }
+
 
     } catch (error) {
         res.status(500).json({

@@ -39,6 +39,10 @@ const LeaveRecordsSchema = new mongoose.Schema({
         type: String,
        required:true
     },
+    lastUpdated:{
+      type: Date,
+
+    },
     assignedNoOfDays: {
         type: Number,
     },

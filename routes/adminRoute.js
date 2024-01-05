@@ -133,6 +133,8 @@ import grossPay from '../controller/Payroll/grossSalary';
 import netSalary from '../controller/Payroll/netSalary';
 import fetchPayrollPrd from '../controller/Payroll/fetchPayrollPrd';
 import fetchPayrollPeriodDetails from '../controller/Payroll/fetchPayrollPeriodDetails';
+import leaveDetails from '../controller/Leave/leaveDetails';
+import updatePeriodData from '../controller/Payroll/updatePeriodData';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -342,6 +344,10 @@ router.get("/totalGrossPay", auth, grossPay);
 router.get("/totalNetPay", auth, netSalary);
 router.get("/fetchPayrollPeriodHistory", auth, fetchPayrollPrd);
 router.get("/fetchPayrollPeriodDetails/:id", auth, fetchPayrollPeriodDetails);
+router.get("/leaveStats", auth, leaveDetails);
+
+router.patch("/updatePayrollEntry/:id", auth, updatePeriodData);
+
 
 
 
