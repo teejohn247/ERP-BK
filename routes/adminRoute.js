@@ -303,7 +303,7 @@ router.patch("/assignAppraisalToDepartment", auth, assignGroupsDepartment);
 router.patch("/assignAppraisalToDesignations", auth, assignGroupsDesignation);
 router.patch("/assignAppraisalToEmployees", auth, assignGroupsEmployees);
 router.patch("/updateExpenseRequest/:id", auth, upload.single("attachment"), imageUploader, updateExpenseRequest);
-router.patch("/approveExpenseRequests", auth, approveExpense);
+router.patch("/expenseAction", auth, approveExpense);
 router.post("/employeeFillAppraisal", auth, fillAppraisal);
 router.get("/fetchApprovalRequests/:id", auth, fetchRequests);
 router.get("/fetchEmployeesByDepartment", auth, fetchEmployeesByDepartment);
