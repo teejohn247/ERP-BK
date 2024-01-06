@@ -22,6 +22,18 @@ dotenv.config();
 
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
+//Convert string to camel case
+function toCamelCase(str){
+    return str.split(' ').map(function(word,index){
+      // If it is the first word make sure to lowercase all the chars.
+      if(index == 0){
+        return word.toLowerCase();
+      }
+      // If it is not the first word only upper case the first char and lowercase the rest.
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join('');
+  }
+
 
 const createPayrollPeriod = async (req, res) => {
 
@@ -81,13 +93,13 @@ const createPayrollPeriod = async (req, res) => {
 
         credits.length > 0 && credits.map((credit) => {
             if (credit.name && typeof credit.name === 'string') {
-              dynamicFields[credit.name] = 0;
+              dynamicFields[toCamelCase(credit.name)] = 0;
             }
           });
 
           debits.length > 0 &&  debits.map((debit) => {
             if (debit.name && typeof debit.name === 'string') {
-              dynamicFields[debit.name] = 0;
+              dynamicFields[toCamelCase(debit.name)] = 0;
             }
           });
         console.log({ dynamicFields });
