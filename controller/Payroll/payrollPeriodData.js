@@ -32,7 +32,7 @@ const createPayrollPeriod = async (req, res) => {
       
         let company = await Company.findOne({ _id: req.payload.id });
         let credits = await Credits.find({ companyId: company._id });
-        let debits = await Debits.find({ _id: company._id });
+        let debits = await Debits.find({ companyId: company._id });
 
 
         let appraisal = await PayrollPeriod.findOne({ companyId:company._id,  payrollPeriodName: payrollPeriodName });
