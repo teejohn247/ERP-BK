@@ -166,6 +166,7 @@ const missingKeys = allKeysArray.filter(key => !jsonObjKeys.includes(key));
                 dynamicFields: dynamicFields,
                 netEarnings: data.netEarnings,
                 totalEarnings: data.totalEarnings,
+                deductions: data.deductions,
                 status: data.status, // Default status
               });
 

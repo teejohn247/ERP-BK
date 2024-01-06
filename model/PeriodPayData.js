@@ -25,7 +25,7 @@ const periodPayDataSchema = new mongoose.Schema({
         type: Map,
         of: mongoose.Schema.Types.Mixed,
       },
-
+    deductions: { type: Number, default: 0 },
     netEarnings: { type: Number, default: 0 },
     totalEarnings: { type: Number, default: 0 },
     status: {type: String, default: 'Pending'},

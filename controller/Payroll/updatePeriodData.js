@@ -21,7 +21,7 @@ const updatePeriodData= async (req, res) => {
 
     try {
        
-        const { role, bonus, totalEarnings, dynamicFields, netEarnings, status} = req.body;
+        const { role, bonus, totalEarnings, dynamicFields, deductions, netEarnings, status} = req.body;
 
         let company = await Company.findOne({ _id: req.payload.id });
 
@@ -61,6 +61,8 @@ const updatePeriodData= async (req, res) => {
                 dynamicFields: dynamicFields && dynamicFields,
                 netEarnings: netEarnings && netEarnings,
                 totalEarnings: totalEarnings && totalEarnings,
+                deductions: deductions && deductions,
+
                 // status: status && status
             }
        },
