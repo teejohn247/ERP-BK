@@ -121,7 +121,7 @@ const createPayrollPeriod = async (req, res) => {
               firstName: empp.firstName,
               lastName: empp.lastName,
               fullName: empp.fullName,
-              employeeId: empp.employeeId,
+              employeeId: empp._id,
               department: empp.department,
               designation: empp.designationName,
               profilePic: empp.profilePic,
