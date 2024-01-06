@@ -67,6 +67,7 @@ const updateEmployee = async (req, res) => {
                     nationality: nationality && nationality,
                     maritalStatus: maritalStatus && maritalStatus,
                     personalPhone: personalPhone && personalPhone,
+                    fullName: firstName && lastName && `${firstName} ${lastName}`,
                     country: country && country,
                     city: city && city,
                     nextOfKinFullName: nextOfKinFullName && nextOfKinFullName,
