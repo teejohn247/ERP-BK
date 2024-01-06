@@ -27,6 +27,8 @@ const updatePeriodData= async (req, res) => {
 
         let appraisal = await Credits.findOne({ companyId:company._id,  _id: req.params.id });
 
+        console.log(req.body)
+
         console.log({appraisal})
 
         if (!company.companyName) {
@@ -41,7 +43,7 @@ const updatePeriodData= async (req, res) => {
         if (!appraisal) {
             res.status(400).json({
                 status: 400,
-                error: 'This credit does not exist'
+                error: 'This entry does not exist'
             })
             return;
         }
@@ -66,6 +68,7 @@ const updatePeriodData= async (req, res) => {
                 // status: status && status
             }
        },
+       { upsert: true, new: true },
             function (
                 err,
                 result
@@ -79,9 +82,6 @@ const updatePeriodData= async (req, res) => {
                     })
 
                 } else {
-
-
-
 
                     
                     res.status(200).json({

@@ -2,7 +2,10 @@
 import dotenv from 'dotenv';
 import Role from '../../model/Debit';
 import PayrollPeriod from '../../model/PayrollPeriod';
-import PeriodPayData from '../../model/PeriodPayData'
+import PeriodPayData from '../../model/PeriodPayData';
+import Employee from '../../model/Employees';
+import Company from '../../model/Company';
+
 
 
 
@@ -23,6 +26,12 @@ const fetchPayrollPeriod = async (req, res) => {
 
         const { page, limit } = req.query;
 
+        const comp =  await Company.findOne({_id: req.payload.id})
+        const employee =  await Employee.findOne({_id: req.payload.id})
+
+
+
+     if(comp){
 
         const role = await PayrollPeriod.find({companyId: req.payload.id})
         .sort({endDate: 1})
@@ -89,6 +98,77 @@ const fetchPayrollPeriod = async (req, res) => {
                 currentPage: page
             });
           })
+        }
+
+
+        else if(employee){
+
+          const role = await PayrollPeriod.find({companyId: employee.companyId})
+          .sort({endDate: 1})
+          .limit(limit * 1)
+          .skip((page - 1) * limit)
+          .exec();
+  
+          const count = await PayrollPeriod.find({companyId: employee.companyId}).countDocuments()
+  
+          console.log(role)
+  
+          // let period = await PeriodPayData.findOne({ payrollPeriodId: adm._id});
+          // console.log({period})
+  
+          const all = [];
+  
+          
+          const promises = role.map(async (empp) => {
+              console.log({ empp });
+              
+              const period = await PeriodPayData.find({ payrollPeriodId: empp._id });
+              console.log({ period });
+          
+              all.push({
+                  ...empp.toObject(), // Convert Mongoose document to JS object
+                  payrollPeriodData: period.map(emp => ({
+                    _id: emp._id,
+                    companyId: emp.companyId,
+                    companyName: emp.companyName,
+                    payrollPeriodId: empp._id,
+                    firstName: emp.firstName,
+                    lastName: emp.lastName,
+                    fullName: emp.fullName,
+                    profilePic: emp.profilePic,
+                    department: emp.department,
+                    designation: emp.designation,
+                    profilePic: emp.profilePic,
+                    employeeId: empp.employeeId,
+                    deductions: emp.deductions,
+                    netEarnings: emp.netEarnings,
+                    role: emp.role, // Assigning role field from Employee model
+                    bonus: emp.bonus, // Example default values
+                    dynamicFields: emp.dynamicFields,
+                    // standard: emp.standard,
+                    // basicPay: emp.basicPay,
+                    // netEarnings: emp.netEarnings,
+                    // pension: emp.pension,
+                    // insurance: emp.insurance,
+                    totalEarnings: emp.totalEarnings,
+                    payeTax: emp.payeTax,
+                    status: emp.status, // Default status
+                  })),
+                });
+            
+                // console.log({ all });
+              });
+          
+            await Promise.all(promises).then(()=> {
+              res.status(200).json({
+                  status: 200,
+                  success: true,
+                  data: all,
+                  totalPages: Math.ceil(count / limit),
+                  currentPage: page
+              });
+            })
+          }
 
     } catch (error) {
 
