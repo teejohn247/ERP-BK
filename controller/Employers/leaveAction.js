@@ -53,13 +53,14 @@ const leaveAction = async (req, res) => {
         console.log(leaveType.userId)
 
         await leaveType.updateOne({
-            leaveStatus: approved == true ? "Approved" : "Declined"
+            status: approved == true ? "Approved" : "Declined"
         }).then(async (app) => {
             
             Employee.findOneAndUpdate({ _id: leaveType.userId }, { 
                 $set: { 
+
                     "leaveAssignment.$[i].leaveApproved": approved && approved,
-                    "leaveAssignment.$[i].leaveStatus": approved == true ? "Approved" :approved == false && "Declined",
+                    "leaveAssignment.$[i].status": approved == true ? "Approved" : approved == false && "Declined",
                     "leaveAssignment.$[i].leaveStartDate": leaveType.leaveStartDate && leaveType.leaveStartDate,
                     "leaveAssignment.$[i].leaveEndDate": leaveType.leaveEndDate && leaveType.leaveEndDate,
                     "leaveAssignment.$[i].assignedNoOfDays": leaveType.assignedNoOfDays && leaveType.assignedNoOfDays,
