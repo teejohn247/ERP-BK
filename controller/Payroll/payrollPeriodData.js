@@ -92,26 +92,6 @@ const createPayrollPeriod = async (req, res) => {
           });
         console.log({ dynamicFields });
 
-//   console.log({creditDynamicFields})
-  
-//   // Generate dynamicFields from debits
-//   const debitDynamicFields = await Promise.all(
-//     debits.map(async (debit) => {
-//       const fields = Object.assign(
-//         {},
-//         ...debit.name.map((deb) =>
-//           deb.reduce((acc, key) => {
-//             acc[key] = 0;
-//             return acc;
-//           }, {})
-//         )
-//       );
-//       return fields;
-//     })
-//   );
-//   console.log({debitDynamicFields})
-  
-  // Concatenate both credit and debit dynamic fields
 
   
 
@@ -129,6 +109,7 @@ const createPayrollPeriod = async (req, res) => {
               firstName: empp.firstName,
               lastName: empp.lastName,
               fullName: empp.fullName,
+              employeeId: empp.employeeId,
               department: empp.department,
               designation: empp.designationName,
               profilePic: empp.profilePic,
