@@ -59,12 +59,14 @@ const fetchPayrollPeriodDetails = async (req, res) => {
                   role: emp.role, // Assigning role field from Employee model
                   department: emp.department,
                   designation: emp.designation,
-                  bonus: emp.bonus, // Example default values
-                  standard: emp.standard,
-                  basicPay: emp.basicPay,
-                  netEarnings: emp.netEarnings,
-                  pension: emp.pension,
-                  insurance: emp.insurance,
+                  dynamicFields: emp.dynamicFields,
+
+                  // bonus: emp.bonus, // Example default values
+                  // standard: emp.standard,
+                  // basicPay: emp.basicPay,
+                  // netEarnings: emp.netEarnings,
+                  // pension: emp.pension,
+                  // insurance: emp.insurance,
                   totalEarnings: emp.totalEarnings,
                   payeTax: emp.payeTax,
                   status: emp.status, // Default status

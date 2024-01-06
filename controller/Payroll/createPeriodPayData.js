@@ -4,6 +4,8 @@ import Role from '../../model/Role';
 import Company from '../../model/Company';
 import Payroll from '../../model/Payroll';
 import PeriodPayData from '../../model/PeriodPayData';
+import Credits from '../../model/Credits';
+import Debits from '../../model/Debit';
 
 const csv = require('csvtojson');
 
@@ -24,29 +26,131 @@ const createPeriodPayData = async (req, res) => {
     try {
 
         console.log(req.file)
+        let company = await Company.findOne({ _id: req.payload.id });
+
+        let credits = await Credits.find({ companyId: company._id });
+        let debits = await Debits.find({ _id: company._id });
+
+//         csv()
+//         .fromFile(req.file.path)
+//         .on('headers', (headers) => {
+//           // This callback will provide the headers from the CSV file
+//           console.log(headers);
+      
+//           // Use these headers as jsonObjKeys
+//         //   const jsonObjKeys = headers;
+      
+//           // Proceed with the rest of the logic here
+//           // Gather all unique keys from credits and debits...
+//           // Check if all jsonObj keys exist in allKeysArray...
+//         })
+//         .then((jsonObj) => {
+
+//           console.log({jsonObj})
+
+//           const jsonObjKeys = Object.keys(jsonObj[0]);
+
+//           console.log({jsonObjKeys})
+
+//           // Gather all unique keys from credits and debits
+//             const allKeys = new Set();
+//             credits.forEach((credit) => {
+//             allKeys.add(credit.name);
+//             });
+//             debits.forEach((debit) => {
+//             allKeys.add(debit.name);
+//             });
+
+// // Convert Set to array
+// const allKeysArray = Array.from(allKeys);
+
+// console.log({allKeysArray})
+
+//   // Check for missing keys
+//   const missingKeys = allKeysArray.filter(key => !jsonObjKeys.includes(key));
+
+//   if (missingKeys.length === 0) {
+//     console.log('All keys exist in the CSV file headers!');
+//     // Proceed with further processing
+//   } else {
+//     console.log('Missing keys in the CSV file headers:', missingKeys.join(', '));
+//     // Handle missing keys as needed
+//   }
+
+
+//           // Rest of your logic here
+//         });
+      
+//         return;
        
 
-        let company = await Company.findOne({ _id: req.payload.id });
 
         const deletePromises = [
 
             await PeriodPayData.deleteMany({ payrollPeriodId: req.params.id }),
             
           ]
-      
+
           await Promise.all(deletePromises)
+
+
 
         csv()
         .fromFile(req.file.path)
         .then(async (jsonObj) => {
         console.log({jsonObj})
 
+
+        console.log({jsonObj})
+
+        const jsonObjKeys = Object.keys(jsonObj[0]);
+
+        console.log({jsonObjKeys})
+
+        // Gather all unique keys from credits and debits
+          const allKeys = new Set();
+          credits.forEach((credit) => {
+          allKeys.add(credit.name);
+          });
+          debits.forEach((debit) => {
+          allKeys.add(debit.name);
+          });
+
+// Convert Set to array
+const allKeysArray = Array.from(allKeys);
+
+console.log({allKeysArray})
+
+// Check for missing keys
+const missingKeys = allKeysArray.filter(key => !jsonObjKeys.includes(key));
+
+        if (missingKeys.length === 0) {
+        console.log('All keys exist in the CSV file headers!');
+        // Proceed with further processing
+        } else {
+        console.log('Missing keys in the CSV file headers:', missingKeys.join(', '));
+
+        res.status(400).json({
+            status: 400,
+            success: false,
+            error: `Missing keys in the CSV file headers:', ${missingKeys.join(', ')}`
+        })
+        return
+        // Handle missing keys as needed
+        }
+
         jsonObj.map((data, index) => {
             data.companyName = company.companyName;
             data.companyId = req.payload.id;
+
+          
         })
         for (const data of jsonObj) {
             console.log({data})
+            const dynamicFields = {};
+            for (const key of allKeysArray) {
+              dynamicFields[key] = data[key] || 0;
+            }
             const newPeriodPayData = new PeriodPayData({
                 // companyId: data.companyId,
                 // companyName: data.companyName,
@@ -59,12 +163,7 @@ const createPeriodPayData = async (req, res) => {
                 department: data.department,
                 designation: data.designation,
                 role: data.role, // Assigning role field from Employee model
-                bonus: data.bonus, // Example default values
-                standard: data.standard,
-                basicPay: data.basicPay,
-                pension: data.pension,
-                insurance: data.insurance,
-                payeTax: data.payeTax,
+                dynamicFields: dynamicFields,
                 netEarnings: data.netEarnings,
                 totalEarnings: data.totalEarnings,
                 status: data.status, // Default status

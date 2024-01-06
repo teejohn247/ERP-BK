@@ -6,6 +6,9 @@ import Leave from '../../model/Expense';
 import PayrollPeriod from '../../model/PayrollPeriod';
 import Employee from '../../model/Employees';
 import PeriodPayData from '../../model/PeriodPayData';
+import Credits from '../../model/Credits';
+import Debits from '../../model/Debit';
+
 
 
 
@@ -28,13 +31,16 @@ const createPayrollPeriod = async (req, res) => {
 
       
         let company = await Company.findOne({ _id: req.payload.id });
+        let credits = await Credits.find({ companyId: company._id });
+        let debits = await Debits.find({ _id: company._id });
+
 
         let appraisal = await PayrollPeriod.findOne({ companyId:company._id,  payrollPeriodName: payrollPeriodName });
         let employees = await Employee.find({ companyId: req.payload.id }, {_id: 1, companyRole:1, companyId: 1, companyName: 1, firstName:1, lastName: 1, role:1, designationName:1, department: 1, fullName: 1, profilePic: 1})
 
-        console.log({appraisal})
-        console.log({employees})
-
+        console.log({credits})
+        console.log({debits})
+   
 
         if (!company.companyName) {
             res.status(400).json({
@@ -71,9 +77,43 @@ const createPayrollPeriod = async (req, res) => {
 
         console.log({group})
 
+        let dynamicFields = {};
 
+        credits.length > 0 && credits.map((credit) => {
+            if (credit.name && typeof credit.name === 'string') {
+              dynamicFields[credit.name] = 0;
+            }
+          });
 
-        // const newPeriodPayDatas = [];
+          debits.length > 0 &&  debits.map((debit) => {
+            if (debit.name && typeof debit.name === 'string') {
+              dynamicFields[debit.name] = 0;
+            }
+          });
+        console.log({ dynamicFields });
+
+//   console.log({creditDynamicFields})
+  
+//   // Generate dynamicFields from debits
+//   const debitDynamicFields = await Promise.all(
+//     debits.map(async (debit) => {
+//       const fields = Object.assign(
+//         {},
+//         ...debit.name.map((deb) =>
+//           deb.reduce((acc, key) => {
+//             acc[key] = 0;
+//             return acc;
+//           }, {})
+//         )
+//       );
+//       return fields;
+//     })
+//   );
+//   console.log({debitDynamicFields})
+  
+  // Concatenate both credit and debit dynamic fields
+
+  
 
         await group.save().then(async (adm) => {
             console.log(adm)
@@ -93,12 +133,14 @@ const createPayrollPeriod = async (req, res) => {
               designation: empp.designationName,
               profilePic: empp.profilePic,
               role: empp.companyRole,  
-              bonus: 0, // Example default values
-              standard: 0,
-              basicPay: 0,
-              pension: 0,
-              insurance: 0,
-              payeTax: 0,
+                 // Adding keys from `debits.name` with value 0
+                 dynamicFields: dynamicFields,
+            //   bonus: 0, // Example default values
+            //   standard: 0,
+            //   basicPay: 0,
+            //   pension: 0,
+            //   insurance: 0,
+            //   payeTax: 0,
               netEarnings: 0,
               totalEarnings: 0,
               status: 'Pending', // Default status
@@ -119,7 +161,7 @@ const createPayrollPeriod = async (req, res) => {
             companyName: emp.companyName,
             payrollPeriodId: adm._id,
             firstName: emp.firstName,
-            lastName: emp.lastName,
+            lastName: emp.lastName, 
             fullName: emp.fullName,
             profilePic: emp.profilePic,
             role: emp.companyRole, // Assigning role field from Employee model

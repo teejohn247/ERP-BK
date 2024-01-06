@@ -66,7 +66,7 @@ const updateEmployee = async (req, res) => {
                     profilePic: req.body.image && req.body.image,
                     nationality: nationality && nationality,
                     maritalStatus: maritalStatus && maritalStatus,
-                    // personalPhone: personalPhone && personalEmail,
+                    personalPhone: personalPhone && personalPhone,
                     country: country && country,
                     city: city && city,
                     nextOfKinFullName: nextOfKinFullName && nextOfKinFullName,

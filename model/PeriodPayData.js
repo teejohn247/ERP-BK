@@ -13,12 +13,19 @@ const periodPayDataSchema = new mongoose.Schema({
     role: { type: String },
     department:{ type: String },
     designation:{ type: String },
-    bonus: { type: Number, default: 0 },
-    standard: { type: Number, default: 0 },
-    basicPay: { type: Number, default: 0 },
-    pension: { type: Number, default: 0 },
-    insurance: { type: Number, default: 0 },
-    payeTax: { type: Number, default: 0 },
+
+    // bonus: { type: Number, default: 0 },
+    // standard: { type: Number, default: 0 },
+    // basicPay: { type: Number, default: 0 },
+    // pension: { type: Number, default: 0 },
+    // insurance: { type: Number, default: 0 },
+    // payeTax: { type: Number, default: 0 },
+
+    dynamicFields: {
+        type: Map,
+        of: mongoose.Schema.Types.Mixed,
+      },
+
     netEarnings: { type: Number, default: 0 },
     totalEarnings: { type: Number, default: 0 },
     status: {type: String, default: 'Pending'},
