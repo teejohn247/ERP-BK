@@ -60,7 +60,8 @@ const fetchPayrollPeriodDetails = async (req, res) => {
                   department: emp.department,
                   designation: emp.designation,
                   employeeId: emp.employeeId,
-
+                  netEarnings: emp.netEarnings,
+                  deductions: emp.deductions,
                   dynamicFields: emp.dynamicFields,
 
                   // bonus: emp.bonus, // Example default values
