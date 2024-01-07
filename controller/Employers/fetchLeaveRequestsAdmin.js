@@ -1,6 +1,7 @@
 
 import dotenv from 'dotenv';
 import Role from '../../model/ExpenseRequests';
+import Employee from '../../model/Employees';
 
 
 import { emailTemp } from '../../emailTemplate';
@@ -23,13 +24,25 @@ const fetchExpenseReqsAdmin = async (req, res) => {
 
         const { page, limit } = req.query;
 
+        const user =  await Employee.findOne({_id: req.payload.id, isManager: true})
 
-        const role = await Role.find({approverId: req.payload.id}).sort({ "dateRequested": -1 })
+        if(!user){
+            res.status(400).json({
+                status: 400,
+                success: false,
+                data: "This employee is not a manager",
+            })
+
+            return;
+        }
+
+
+        const role = await Role.find({approverId: req.payload.id, companyId: user.companyId}).sort({ "dateRequested": -1 })
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
 
-        const count = await Role.find({approverId: req.payload.id}).countDocuments()
+        const count = await Role.find({approverId: req.payload.id, companyId: user.companyId}).countDocuments()
 
         console.log(role)
 

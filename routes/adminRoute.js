@@ -136,6 +136,7 @@ import fetchPayrollPeriodDetails from '../controller/Payroll/fetchPayrollPeriodD
 import leaveDetails from '../controller/Leave/leaveDetails';
 import updatePeriodData from '../controller/Payroll/updatePeriodData';
 import expenseGraph from '../controller/Expense/expenseGraph';
+import addPaymentAdmin from '../controller/Employers/addPaymentAdmin';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -348,6 +349,9 @@ router.get("/fetchPayrollPeriodDetails/:id", auth, fetchPayrollPeriodDetails);
 router.get("/leaveStats", auth, leaveDetails);
 router.get("/expenseGraph/:year", auth, expenseGraph);
 router.patch("/updatePayrollEntry/:id", auth, updatePeriodData);
+
+router.patch("/addPayment/:id", auth, addPaymentAdmin);
+
 
 
 

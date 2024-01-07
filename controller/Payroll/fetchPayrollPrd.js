@@ -62,8 +62,8 @@ const fetchPayrollPrd = async (req, res) => {
                 reference: { $first: '$payrollPeriodData.reference' },
                 status: { $first: '$payrollPeriodData.status' },
                 totalEarnings: { $sum: { $add: ['$totalEarnings'] } },
-                totalnetEarnings: { $sum: '$netEarnings' },
-                totalDeductions: { $sum: { $add: ['$deductions'] } },
+                netEarnings: { $sum: '$netEarnings' },
+                deductions: { $sum: { $add: ['$deductions'] } },
                 // You can include other fields from PayrollPeriod if needed
               },
             },
@@ -114,8 +114,8 @@ const fetchPayrollPrd = async (req, res) => {
                 reference: { $first: '$payrollPeriodData.reference' },
                 status: { $first: '$payrollPeriodData.status' },
                 totalEarnings: { $sum: { $add: ['$totalEarnings'] } },
-                totalnetEarnings: { $sum: '$netEarnings' },
-                totalDeductions: { $sum: { $add: ['$deductions'] } },
+                netEarnings: { $sum: '$netEarnings' },
+                deductions: { $sum: { $add: ['$deductions'] } },
                 // You can include other fields from PayrollPeriod if needed
               },
             },
