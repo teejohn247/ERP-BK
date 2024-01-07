@@ -2,6 +2,8 @@
 import dotenv from 'dotenv';
 import Role from '../../model/ExpenseRequests';
 import Employee from '../../model/Employees';
+import Company from '../../model/Company';
+
 
 
 import { emailTemp } from '../../emailTemplate';
@@ -25,8 +27,10 @@ const fetchExpenseReqsAdmin = async (req, res) => {
         const { page, limit } = req.query;
 
         const user =  await Employee.findOne({_id: req.payload.id, isManager: true})
+        const company=  await Company.findOne({_id: req.payload.id})
 
-        if(!user){
+
+        if(!user && !company){
             res.status(400).json({
                 status: 400,
                 success: false,
@@ -36,25 +40,54 @@ const fetchExpenseReqsAdmin = async (req, res) => {
             return;
         }
 
+        if(user){
 
-        const role = await Role.find({approverId: req.payload.id, companyId: user.companyId}).sort({ "dateRequested": -1 })
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
 
-        const count = await Role.find({approverId: req.payload.id, companyId: user.companyId}).countDocuments()
+            const role = await Role.find({approverId: req.payload.id, companyId: user.companyId ? user.companyId :company._id }).sort({ "dateRequested": -1 })
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .exec();
+    
+            const count = await Role.find({approverId: req.payload.id, companyId: user.companyId ? user.companyId :company._id}).countDocuments()
+    
+            console.log(role)
+    
+            res.status(200).json({
+                status: 200,
+                success: true,
+                data: role,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page
+            })
+    
+            return;
+    
+        }
 
-        console.log(role)
+        else if(company){
 
-        res.status(200).json({
-            status: 200,
-            success: true,
-            data: role,
-            totalPages: Math.ceil(count / limit),
-            currentPage: page
-        })
 
-        return;
+            const role = await Role.find({companyId: company._id }).sort({ "dateRequested": -1 })
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .exec();
+    
+            const count = await Role.find({ companyId: company._id}).countDocuments()
+    
+            console.log(role)
+    
+            res.status(200).json({
+                status: 200,
+                success: true,
+                data: role,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page
+            })
+    
+            return;
+    
+        }
+
 
      
     } catch (error) {
