@@ -328,7 +328,7 @@ router.post("/createDebits", auth, createDebits);
 router.post("/createPayrollPeriod", auth, createPayrollPeriod);
 router.get("/fetchCredits", auth, fetchCredits);
 router.get("/fetchDebits", auth, fetchDebits);
-router.get("/fetchPayrollPeriods", auth, fetchPayrollPeriod);
+// router.get("/fetchPayrollPeriods", auth, fetchPayrollPeriod);
 router.patch("/updateCredits/:id", auth, updateCredits);
 router.patch("/updateDebits/:id", auth, updateDebits);
 router.patch("/updatePayrollPeriod/:id", auth, updatePayrollPeriod);
@@ -343,13 +343,10 @@ router.get("/payrollGraph/:year", auth, payrollGraph);
 router.post("/uploadPayroll/:id", auth, mult.single("file"), createPeriodPayData);
 router.get("/totalEarnings", auth, totalEarnings);
 router.get("/totalnetEarnings", auth, netSalary);
-router.get("/fetchPayrollPeriodHistory", auth, fetchPayrollPrd);
+router.get("/fetchPayrollPeriods", auth, fetchPayrollPrd);
 router.get("/fetchPayrollPeriodDetails/:id", auth, fetchPayrollPeriodDetails);
 router.get("/leaveStats", auth, leaveDetails);
-
 router.get("/expenseGraph/:year", auth, expenseGraph);
-
-
 router.patch("/updatePayrollEntry/:id", auth, updatePeriodData);
 
 

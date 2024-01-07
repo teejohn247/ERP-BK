@@ -19,7 +19,7 @@ const assignManager = async (req, res) => {
         const check = await Employee.findOne({ _id: managerId });
         let company = await Company.findOne({ _id: req.payload.id });
 
-console.log(check, company._id)
+        console.log(check, company._id)
         if(!managerId){
             res.status(404).json({
                 status:404,

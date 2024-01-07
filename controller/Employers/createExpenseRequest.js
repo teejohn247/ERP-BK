@@ -95,32 +95,32 @@ const createExpenseRequest = async (req, res) => {
 
     await expenseRequest
       .save()
-      .then((adm) => {
+      .then(async (adm) => {
         console.log(adm);
 
-        Employee.findOneAndUpdate(
-          { _id: req.payload.id },
-          {
-            $set: {
-              "expenseDetails.cardBalance":
-                Number(employee.expenseDetails.cardBalance) - Number(amount),
-              "expenseDetails.totalSpent":
-                Number(employee.expenseDetails.totalSpent) + Number(amount),
-              "expenseDetails.currentSpent": Number(amount),
-              "expenseDetails.currentExpense":
-                Number(employee.expenseDetails.currentExpense) + Number(amount),
-            },
-          },
-          async function (err, result) {
-            if (err) {
-              res.status(401).json({
-                status: 401,
-                success: false,
-                error: err,
-              });
+        // Employee.findOneAndUpdate(
+        //   { _id: req.payload.id },
+        //   {
+        //     $set: {
+        //       "expenseDetails.cardBalance":
+        //         Number(employee.expenseDetails.cardBalance) - Number(amount),
+        //       "expenseDetails.totalSpent":
+        //         Number(employee.expenseDetails.totalSpent) + Number(amount),
+        //       "expenseDetails.currentSpent": Number(amount),
+        //       "expenseDetails.currentExpense":
+        //         Number(employee.expenseDetails.currentExpense) + Number(amount),
+        //     },
+        //   },
+        //   async function (err, result) {
+        //     if (err) {
+        //       res.status(401).json({
+        //         status: 401,
+        //         success: false,
+        //         error: err,
+        //       });
 
-              return;
-            } else {
+        //       return;
+            // } else {
               const history = await Employee.findOneAndUpdate(
                 { _id: req.payload.id },
                 {
@@ -216,9 +216,9 @@ const createExpenseRequest = async (req, res) => {
                 });
                 return;
               }
-            }
-          }
-        );
+            // }
+        //   }
+        // );
         
       })
       .catch((err) => {

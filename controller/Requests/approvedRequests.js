@@ -26,7 +26,7 @@ const  approvedRequests = async (req, res) => {
 
 
         const expense = await Role.find({approverId: req.payload.id, status: "Approved" });
-        const leave = await Role.find({leaveApprover: req.payload.id, leaveStatus: "Approved"});
+        const leave = await Role.find({leaveApprover: req.payload.id, status: "Approved"});
 
 
         const results = [expense, leave]

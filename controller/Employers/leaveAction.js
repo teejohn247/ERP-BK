@@ -8,6 +8,7 @@ import utils from '../../config/utils';
 import { emailTemp } from '../../emailTemplate';
 import LeaveRecords from '../../model/LeaveRecords';
 import { sendEmail } from '../../config/email';
+import daysUsed from '../../cron/daysUsed';
 
 const sgMail = require('@sendgrid/mail')
 
@@ -50,6 +51,7 @@ const leaveAction = async (req, res) => {
             return;
         }
 
+
         console.log(leaveType.userId)
 
         await leaveType.updateOne({
@@ -65,7 +67,7 @@ const leaveAction = async (req, res) => {
                     "leaveAssignment.$[i].leaveEndDate": leaveType.leaveEndDate && leaveType.leaveEndDate,
                     "leaveAssignment.$[i].assignedNoOfDays": leaveType.assignedNoOfDays && leaveType.assignedNoOfDays,
                     "leaveAssignment.$[i].decisionMessage": decisionMessage && decisionMessage,
-
+                    "leaveAssignment.$[i].daysUsed": approved == true ? daysUsed + 1 : approved == false && "Declined",
                 }
            },
            { 

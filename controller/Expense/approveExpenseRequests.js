@@ -33,6 +33,8 @@ const { status, comment, requestId, approved } = req.body;
 let company = await Company.findOne({ _id: req.payload.id });
 const leaveType = await LeaveRecords.findOne({ _id: requestId});
 const check = await Employee.findOne({ _id: leaveType.employeeId});
+let employee = await Employee.findOne({ _id: leaveType.employeeId })
+
 
 
 
@@ -51,6 +53,7 @@ if (!leaveType) {
     });
     return;
 }
+const approve = employee.approvals.filter(obj => obj.approvalType === "reimbursement");
 
 console.log(leaveType.employeeId)
 
@@ -64,7 +67,7 @@ await leaveType.updateOne({
 //     Employee.findOneAndUpdate({ _id: leaveType.userId }, { 
 //         $set: { 
 //             "leaveAssignment.$[i].leaveApproved": approved && approved,
-//             "leaveAssignment.$[i].leaveStatus": approved == true ? "Approved" :approved == false && "Declined",
+//             "leaveAssignment.$[i].status": approved == true ? "Approved" :approved == false && "Declined",
 //             "leaveAssignment.$[i].leaveStartDate": leaveType.leaveStartDate && leaveType.leaveStartDate,
 //             "leaveAssignment.$[i].leaveEndDate": leaveType.leaveEndDate && leaveType.leaveEndDate,
 //             "leaveAssignment.$[i].assignedNoOfDays": leaveType.assignedNoOfDays && leaveType.assignedNoOfDays,
@@ -112,7 +115,75 @@ await leaveType.updateOne({
                             })
         
                         } else {
-    
+
+
+                            if(leaveType.status == "Pending"){
+
+                                   
+                              Employee.findOneAndUpdate(
+                                { _id: req.payload.id },
+                                {
+                                  $set: {
+                                    "expenseDetails.cardBalance":
+                                      Number(employee.expenseDetails.cardBalance) - Number(leaveType.amount),
+                                    "expenseDetails.totalSpent":
+                                      Number(employee.expenseDetails.totalSpent) + Number(leaveType.amount),
+                                    "expenseDetails.currentSpent": Number(leaveType.amount),
+                                    "expenseDetails.currentExpense":
+                                      Number(employee.expenseDetails.currentExpense) + Number(leaveType.amount),
+                                  },
+                                },
+                                async function (err, result) {
+                                  if (err) {
+                                    res.status(401).json({
+                                      status: 401,
+                                      success: false,
+                                      error: err,
+                                    });
+                      
+                                    return;
+                                  } else {
+                                    // const history = await Employee.findOneAndUpdate(
+                                    //   { _id: req.payload.id },
+                                    //   {
+                                    //     $push: {
+                                    //       "expenseDetails.expenseHistory": {
+                      
+                                    //           employeeId: req.payload.id,
+                                    //           companyId: employee.companyId,
+                                    //           companyName: employee.companyName,
+                                    //           expenseTypeId,
+                                    //           expenseTypeName: expense.expenseCardName,
+                                    //           expenseDate,
+                                    //           attachment: image,
+                                    //           approver: approve[0].approval,
+                                    //           approverId: approve[0].approvalId,
+                                    //           amount,
+                                    //           image,
+                                    //           description,
+                                    //       },
+                                    //     },
+                                    //   }
+                                    // );
+                      
+                      
+                      
+                                    // console.log({ history });
+                                    // if (history) {
+                      
+                                  
+                                    // } else {
+                                    //   res.status(400).json({
+                                    //     status: 400,
+                                    //     error: "error saving expense history",
+                                    //   });
+                                    //   return;
+                                    // }
+                                  }
+                                }
+                              );
+
+
                             let data = `<div>
                             <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
                             Hi ${check.firstName},
@@ -143,6 +214,19 @@ await leaveType.updateOne({
                                 data: "Update Successful"
                             })
                            return
+                            } else{
+                                res.status(400).json({
+                                    status: 400,
+                                    success: true,
+                                    data: "You have already approved or declined this request"
+                                })
+                            }
+
+                        
+                   
+                              
+    
+                           
                         }
                     })
                
