@@ -316,28 +316,37 @@ const EmployeeSchema = new mongoose.Schema({
     },
   ],
 
-  paymentInformation: [
-    {
-      bankName: {
-        type: String,
+  paymentInformation: {
+    type: [
+      {
+        bankName: {
+          type: String,
+          default: ""
+        },
+        bankAddress: {
+          type: String,
+          default: ""
+        },
+        accountNumber: {
+          type: Number,
+          default: 0
+        },
+        accountName: {
+          type: String,
+          default: ""
+        },
+        sortCode: {
+          type: String,
+          default: ""
+        },
+        taxIdentificationNumber: {
+          type: String,
+          default: ""
+        },
       },
-      bankAddress: {
-        type: String,
-      },
-      accountNumber: {
-        type: String,
-      },
-      accountName: {
-        type: String,
-      },
-      sortCode: {
-        type: String,
-      },
-      taxIdentificationNumber: {
-        type: String,
-      },
-    },
-  ],
+    ],
+    default: [{}] // Initialize with an empty object as default
+  },
 
   // attendance:
   //     [{
