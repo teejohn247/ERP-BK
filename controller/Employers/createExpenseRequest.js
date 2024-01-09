@@ -71,7 +71,7 @@ const createExpenseRequest = async (req, res) => {
 
 
     console.log('here')
-    const approve = employee.approvals.filter(obj => obj.approvalType === "reimbursement");
+    const approve = employee.approvals.filter(obj => obj.approvalType === "expense");
 
     console.log({approve})
 

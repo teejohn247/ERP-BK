@@ -137,6 +137,13 @@ import leaveDetails from '../controller/Leave/leaveDetails';
 import updatePeriodData from '../controller/Payroll/updatePeriodData';
 import expenseGraph from '../controller/Expense/expenseGraph';
 import addPaymentAdmin from '../controller/Employers/addPaymentAdmin';
+import createHoliday from '../controller/Holiday/createHoliday';
+import updateHoliday from '../controller/Holiday/updateHolidays';
+import fetchHoliday from '../controller/Holiday/fetchHoliday';
+import fetchHolidayDetails from '../controller/Holiday/fetchHolidayDetails';
+import deleteHoliday from '../controller/Holiday/deleteHoliday';
+import assignApproval from '../controller/Employers/assignApproval';
+import setExpense from '../controller/Employers/setExpense';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -349,8 +356,21 @@ router.get("/fetchPayrollPeriodDetails/:id", auth, fetchPayrollPeriodDetails);
 router.get("/leaveStats", auth, leaveDetails);
 router.get("/expenseGraph/:year", auth, expenseGraph);
 router.patch("/updatePayrollEntry/:id", auth, updatePeriodData);
-
 router.patch("/addPayment/:id", auth, addPaymentAdmin);
+router.post("/createHoliday", auth, createHoliday);
+router.patch("/updateHoliday/:id", auth, updateHoliday);
+router.get("/fetchHolidays", auth, fetchHoliday);
+router.get("/fetchHoliday/:id", auth, fetchHolidayDetails);
+router.delete("/deleteHoliday/:id", auth, deleteHoliday);
+router.patch("/assignApprover", auth, assignApproval);
+router.patch("/setExpense",  setExpense);
+
+
+
+
+
+
+
 
 
 

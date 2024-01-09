@@ -59,10 +59,16 @@ const assignManagerEmployee = async (req, res) => {
             approvalId: managerId
         },
         {
-            approvalType: 'reimbursement',
+            approvalType: 'expense',
             approval: `${check.firstName} ${check.lastName}`,
             approvalId: managerId
-        }]
+        },
+        {
+            approvalType: 'appraisal',
+            approval: `${check.firstName} ${check.lastName}`,
+            approvalId: managerId
+        },
+    ]
 
         // let checks_sch = await School.find({ _id: { $in : ids }},
         //     { notification_types: { $elemMatch: { notification_id: notificationId } } })

@@ -60,7 +60,7 @@ console.log({company})
       await AppraisalPeriod.deleteMany({ companyId: req.payload.id }),
     ]
 
-    await Promise.all(deletePromises)
+    V
 
    Company.deleteOne({ _id: req.payload.id }, async function (err, result) {
       console.log(result);

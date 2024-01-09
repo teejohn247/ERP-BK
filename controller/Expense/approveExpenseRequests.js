@@ -53,7 +53,7 @@ if (!leaveType) {
     });
     return;
 }
-const approve = employee.approvals.filter(obj => obj.approvalType === "reimbursement");
+const approve = employee.approvals.filter(obj => obj.approvalType === "expense");
 
 console.log(leaveType.employeeId)
 

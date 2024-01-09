@@ -104,6 +104,8 @@ const fetchPayrollPeriodDetails = async (req, res) => {
 
         const all = [];
 
+        console.log({employee})
+
         
         const promises = role.map(async (empp) => {
             console.log({ empp });

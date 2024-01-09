@@ -71,7 +71,12 @@ const bulkEmployee = async (req, res) => {
                         approvalId: checkDept.managerId
                     },
                     {
-                        approvalType: 'reimbursement',
+                        approvalType: 'expense',
+                        approval: checkDept.managerName,
+                        approvalId: checkDept.managerId
+                    },
+                    {
+                        approvalType: 'appraisal',
                         approval: checkDept.managerName,
                         approvalId: checkDept.managerId
                     },

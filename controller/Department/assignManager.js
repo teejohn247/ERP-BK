@@ -81,10 +81,16 @@ const assignManager = async (req, res) => {
                         approvalId: managerId
                     },
                     {
-                        approvalType: 'reimbursement',
+                        approvalType: 'expense',
                         approval: `${check.firstName} ${check.lastName}`,
                         approvalId: managerId
-                    }]
+                    },
+                    {
+                        approvalType: 'appraisal',
+                        approval: `${check.firstName} ${check.lastName}`,
+                        approvalId: managerId
+                    },
+                ]
 
 
                    Employee.updateMany({department: department.departmentName}, { 

@@ -18,7 +18,6 @@ const ExpenseRequestsSchema = new mongoose.Schema({
     status: { type: String, default: "Pending" },
     approved: { type: Boolean, default: false },
     dateRequested: { type: String, default: new Date().toISOString() },
-    dateRemitted: { type: Date },
     comment: { type: String },
     dateOfApproval: { type: String},
         employeeDetails: {
