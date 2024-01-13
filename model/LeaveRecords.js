@@ -50,6 +50,10 @@ const LeaveRecordsSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    daysLeft: {
+        type: Number,
+        default: 0
+    },
     leaveApprover: {
         type: String,
         required:true
