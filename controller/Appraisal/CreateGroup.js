@@ -32,6 +32,8 @@ const createGroup = async (req, res) => {
         let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  groupName: name });
         let appraisalPeriod = await Period.findOne({ companyId:company._id, _id: appraisalPeriodId });
         let allEmployees = await Employees.find({ companyId:company._id });
+        let allDepartments = await addDepartment.find({ companyId:company._id });
+
 
 
         console.log({appraisal})
@@ -71,6 +73,10 @@ const createGroup = async (req, res) => {
             let groups = [];
 
             let employees = [];
+            let departments = [];
+            let departmentIds = [];
+
+
 
             for (const employee of allEmployees) {
                 console.log({ employee });
@@ -83,6 +89,24 @@ const createGroup = async (req, res) => {
                     });
         
                     console.log({ groups });
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+
+            for (const department of allDepartments) {
+                console.log({ department });
+        
+                try {
+                    departments.push({
+                        department_id:department._id,
+                        department_name: department.departmentName,
+                    });
+                   
+                    departmentIds.push(department._id);
+        
+                    console.log({ departments });
                 } catch (err) {
                     console.error(err);
                 }
@@ -151,14 +175,61 @@ const createGroup = async (req, res) => {
                                         })
                     
                                     } else {
-                    
-                                        const manager = await AppraisalGroup.findOne({_id: adm._id});
-                    
-                                        res.status(200).json({
-                                            status: 200,
-                                            success: true,
-                                            data: manager
-                                        })
+
+
+
+                                        console.log(adm)
+                                        console.log({departmentIds})
+                                        AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
+                                            $push: { assignedDepartments: departments
+                                            },
+                                       },{ upsert: true },
+                                            async function (
+                                                err,
+                                                result
+                                            ) {
+                                                if (err) {
+                                                    res.status(401).json({
+                                                        status: 401,
+                                                        success: false,
+                                                        error: err
+                                                    })
+                                
+                                                } else {
+                                
+                                                    addDepartment.findOneAndUpdate({ _id:  { $in: departmentIds }}, { 
+                                                        $push: { departments: {
+                                                            appraisalId: adm._id,
+                                                            appraisalName: adm.groupName,
+                                                        }},
+                                                   },{ upsert: true },
+                                                        async function (
+                                                            err,
+                                                            result
+                                                        ) {
+                                                            if (err) {
+                                                                res.status(401).json({
+                                                                    status: 401,
+                                                                    success: false,
+                                                                    error: err
+                                                                })
+                                            
+                                                            } else {
+                                            
+                                                                const manager = await AppraisalGroup.findOne({_id: adm._id});
+                                            
+                                                                res.status(200).json({
+                                                                    status: 200,
+                                                                    success: true,
+                                                                    data: manager
+                                                                })
+                                            
+                                                            }
+                                                        })
+                                
+                                
+                                                }
+                                            })
                     
                                     }
                                 })
@@ -212,12 +283,7 @@ const createGroup = async (req, res) => {
             companyId: req.payload.id,
             companyName: company.companyName,
             description,
-            // appraisalPeriodId: appraisalPeriodId && appraisalPeriodId,
-            // appraisalPeriodName: appraisalPeriod ? appraisalPeriod.appraisalPeriodName : "",
-            // appraisalPeriodStartDate: appraisalPeriod ? appraisalPeriod.StartDate: "",
-            // appraisalPeriodEndDate: appraisalPeriod ? appraisalPeriod.EndDate: "",
-            // appraisalPeriodActiveDate: appraisalPeriod ? appraisalPeriod.activeDate: "",
-            // appraisalPeriodInactiveDate: appraisalPeriod ? appraisalPeriod.inactiveDate : ""
+            
         })
 
         await group.save().then((adm) => {

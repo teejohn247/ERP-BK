@@ -50,8 +50,7 @@ const createPayrollPeriod = async (req, res) => {
         let appraisal = await PayrollPeriod.findOne({ companyId:company._id,  payrollPeriodName: payrollPeriodName });
         let employees = await Employee.find({ companyId: req.payload.id }, {_id: 1, companyRole:1, companyId: 1, companyName: 1, firstName:1, lastName: 1, role:1, designationName:1, department: 1, fullName: 1, profilePic: 1})
 
-        console.log({credits})
-        console.log({debits})
+       
    
 
         if (!company.companyName) {

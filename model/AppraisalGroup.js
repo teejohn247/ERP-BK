@@ -14,7 +14,7 @@ const AppraisalGroupSchema = new mongoose.Schema({
             kpiId: { type: String },
             kpiName: { type: String },
             kpiDescription: { type: String },
-            profilePics: { type: String },
+            // profilePics: { type: String },
             ratingId: { type: String },
             ratingName: { type: String },
             // fields: {
