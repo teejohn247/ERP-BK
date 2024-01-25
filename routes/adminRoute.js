@@ -144,6 +144,9 @@ import fetchHolidayDetails from '../controller/Holiday/fetchHolidayDetails';
 import deleteHoliday from '../controller/Holiday/deleteHoliday';
 import assignApproval from '../controller/Employers/assignApproval';
 import setExpense from '../controller/Employers/setExpense';
+import employeeKPI from '../controller/Appraisal/employeeKpi';
+import rateKPI from '../controller/Appraisal/RateKPI';
+import fetchAppraisalPeriodDetails from '../controller/Appraisal/fetchAppraisalPeriodDetails';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -364,12 +367,11 @@ router.get("/fetchHoliday/:id", auth, fetchHolidayDetails);
 router.delete("/deleteHoliday/:id", auth, deleteHoliday);
 router.patch("/assignApprover", auth, assignApproval);
 router.patch("/setExpense",  setExpense);
+router.patch("/managerRateKpi/:id",  auth, rateKPI);
+router.post("/employeeKpi", auth, employeeKPI);
 
 
-
-
-
-
+router.get("/fetchAppraisalPeriod/:id", auth, fetchAppraisalPeriodDetails);
 
 
 

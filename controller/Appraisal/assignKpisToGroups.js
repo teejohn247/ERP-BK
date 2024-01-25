@@ -116,8 +116,9 @@ const assignKpis = async (req, res) => {
                 "remarks.managerName": "",
                 "remarks.employeeName": "",
                 "remarks.managerComment": "",
-                "remarks.managerRatingId": "",
-                "remarks.employeeRatingId": "",
+                "remarks.managerOverallComment": "",
+                "remarks.managerRating": "",
+                "remarks.employeeRating": "",
 
 
             }},

@@ -72,8 +72,6 @@ const setExpense = async (req, res) => {
                     return;
 
                 } else {
-
-
                 
                                     res.status(200).json({
                                         status: 200,

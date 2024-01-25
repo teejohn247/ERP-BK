@@ -25,7 +25,7 @@ const createKPI = async (req, res) => {
 
     try {
        
-        const { name, description, group} = req.body;
+        const { name, description, group, fields} = req.body;
 
 
         let company = await Company.findOne({ _id: req.payload.id });
@@ -87,10 +87,12 @@ const createKPI = async (req, res) => {
                     kpiId: adm._id,
                     kpiName: name,
                     kpiDescription: description,
+                    fields,
                     "remarks.employeeComment": "",
                     "remarks.managerName": "",
                     "remarks.employeeName": "",
                     "remarks.managerComment": "",
+                    "remarks.managerOverallComment": "",
                     "remarks.managerRatingId": "",
                     "remarks.employeeRatingId": "",
     

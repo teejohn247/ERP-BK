@@ -9,34 +9,37 @@ const AppraisalGroupSchema = new mongoose.Schema({
     companyId: { type: String },
     groupName: { type: String, unique: true },
     description: { type: String },
-    appraisalPeriodId: { type: String },
-    appraisalPeriodName: { type: String },
-    appraisalPeriodStartDate: { type: String },
-    appraisalPeriodEndDate: { type: String },
-    appraisalPeriodActiveDate: { type: String },
-    appraisalPeriodInactiveDate: { type: String },
-    groupKpis:  [
+    groupKpis: [
         {
             kpiId: { type: String },
             kpiName: { type: String },
             kpiDescription: { type: String },
+            profilePics: { type: String },
             ratingId: { type: String },
             ratingName: { type: String },
+            // fields: {
+            //     type: Map,
+            //     of: mongoose.Schema.Types.Mixed,
+            // },
             ratingDescription: { type: String },
             remarks: { 
-                employeeRatingId: { type: String },
-                employeeName: { type: String },
-                managerRatingId: { type: String },
-                managerName: { type: String },
+                employeeRating: { type: String },
+                // employeeName: { type: String },
+                managerRating: { type: String },
+                // managerName: { type: String },
                 employeeComment: { type: String },
                 managerComment: { type: String },
+                // managerOverallComment: { type: String },
+                // employeeSubmissionDate: { type: String },
+                // managerReviewDate:{ type: String },
+                // managerSignature: {type: Boolean},
+                // employeeSignature: {type: Boolean}
              },
         }
     ],
     // potentialRating: { type: String },
     // overallPerformanceRating: { type: String },
     // generalRemarks: { type: String },
-
     assignedDesignations:  [{
         designation_id: {
             type: String,

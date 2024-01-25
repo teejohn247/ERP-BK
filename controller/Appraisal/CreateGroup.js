@@ -6,6 +6,8 @@ import Leave from '../../model/Expense';
 import AppraisalGroup from '../../model/AppraisalGroup';
 import Period from '../../model/AppraisalPeriod';
 import addDepartment from '../../model/Department';
+import Employees from '../../model/Employees';
+
 
 
 
@@ -29,6 +31,7 @@ const createGroup = async (req, res) => {
 
         let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  groupName: name });
         let appraisalPeriod = await Period.findOne({ companyId:company._id, _id: appraisalPeriodId });
+        let allEmployees = await Employees.find({ companyId:company._id });
 
 
         console.log({appraisal})
@@ -63,6 +66,126 @@ const createGroup = async (req, res) => {
         //     }
         // }],
 
+
+        if(name == 'General'){
+            let groups = [];
+
+            let employees = [];
+
+            for (const employee of allEmployees) {
+                console.log({ employee });
+        
+                try {
+                   
+                    groups.push({
+                        employee_id: employee._id,
+                        employee_name: employee.fullName,
+                    });
+        
+                    console.log({ groups });
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            for (const employee of allEmployees) {
+                console.log({ employee });
+        
+                try {
+                   
+                    employees.push(employee._id);
+        
+                    console.log({ employees });
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+    
+           let group = new AppraisalGroup({
+                groupName: name,
+                companyId: req.payload.id,
+                companyName: company.companyName,
+                description,
+                // appraisalPeriodId: appraisalPeriodId && appraisalPeriodId,
+                // appraisalPeriodName: appraisalPeriod ? appraisalPeriod.appraisalPeriodName : "",
+                // appraisalPeriodStartDate: appraisalPeriod ? appraisalPeriod.StartDate: "",
+                // appraisalPeriodEndDate: appraisalPeriod ? appraisalPeriod.EndDate: "",
+                // appraisalPeriodActiveDate: appraisalPeriod ? appraisalPeriod.activeDate: "",
+                // appraisalPeriodInactiveDate: appraisalPeriod ? appraisalPeriod.inactiveDate : ""
+            })
+    
+            await group.save().then((adm) => {
+                console.log(adm)
+                AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
+                    $push: { assignedEmployees: groups
+                    },
+               },{ upsert: true },
+                    async function (
+                        err,
+                        result
+                    ) {
+                        if (err) {
+                            res.status(401).json({
+                                status: 401,
+                                success: false,
+                                error: err
+                            })
+        
+                        } else {
+        
+                            Employees.findOneAndUpdate({ _id:  { $in: employees }}, { 
+                                $push: { assignedAppraisals: {
+                                    appraisalId: adm._id,
+                                    appraisalName: adm.groupName,
+                                }},
+                           },{ upsert: true },
+                                async function (
+                                    err,
+                                    result
+                                ) {
+                                    if (err) {
+                                        res.status(401).json({
+                                            status: 401,
+                                            success: false,
+                                            error: err
+                                        })
+                    
+                                    } else {
+                    
+                                        const manager = await AppraisalGroup.findOne({_id: adm._id});
+                    
+                                        res.status(200).json({
+                                            status: 200,
+                                            success: true,
+                                            data: manager
+                                        })
+                    
+                                    }
+                                })
+        
+        
+                        }
+                    })
+    
+    
+    
+    
+    
+                // res.status(200).json({
+                //     status: 200,
+                //     success: true,
+                //     data: adm
+                // })
+            }).catch((err) => {
+                    console.error(err)
+                    res.status(400).json({
+                        status: 400,
+                        success: false,
+                        error: err
+                    })
+                })
+
+        } else{
         let groups = [];
 
         for (const groupId of departments) {
@@ -89,19 +212,16 @@ const createGroup = async (req, res) => {
             companyId: req.payload.id,
             companyName: company.companyName,
             description,
-            appraisalPeriodId: appraisalPeriodId && appraisalPeriodId,
-            appraisalPeriodName: appraisalPeriod ? appraisalPeriod.appraisalPeriodName : "",
-            appraisalPeriodStartDate: appraisalPeriod ? appraisalPeriod.StartDate: "",
-            appraisalPeriodEndDate: appraisalPeriod ? appraisalPeriod.EndDate: "",
-            appraisalPeriodActiveDate: appraisalPeriod ? appraisalPeriod.activeDate: "",
-            appraisalPeriodInactiveDate: appraisalPeriod ? appraisalPeriod.inactiveDate : ""
+            // appraisalPeriodId: appraisalPeriodId && appraisalPeriodId,
+            // appraisalPeriodName: appraisalPeriod ? appraisalPeriod.appraisalPeriodName : "",
+            // appraisalPeriodStartDate: appraisalPeriod ? appraisalPeriod.StartDate: "",
+            // appraisalPeriodEndDate: appraisalPeriod ? appraisalPeriod.EndDate: "",
+            // appraisalPeriodActiveDate: appraisalPeriod ? appraisalPeriod.activeDate: "",
+            // appraisalPeriodInactiveDate: appraisalPeriod ? appraisalPeriod.inactiveDate : ""
         })
 
         await group.save().then((adm) => {
             console.log(adm)
-
-
-
             AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
                 $push: { assignedDepartments: groups
                 },
@@ -170,6 +290,7 @@ const createGroup = async (req, res) => {
                     error: err
                 })
             })
+        }
     } catch (error) {
         res.status(500).json({
             status: 500,

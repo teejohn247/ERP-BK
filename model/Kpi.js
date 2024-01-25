@@ -7,11 +7,16 @@ const KpiSchema = new mongoose.Schema({
     companyId: { type: String },
     kpiName: { type: String },
     kpiDescription: { type: String },
+    fields: {
+        type: Map,
+        of: mongoose.Schema.Types.Mixed,
+},
     remarks: { 
         employeeRatingId: { type: String, default: "" },
         employeeName: { type: String, default: "" },
         managerRatingId: { type: String, default: "" },
         managerName: { type: String, default: "" },
+        managerOverallComment: { type: String, default: "" },
         employeeComment: { type: String, default: "" },
         managerComment: { type: String, default: "" },
      },
