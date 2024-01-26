@@ -126,6 +126,9 @@ const EmployeeSchema = new mongoose.Schema({
   managerId: { type: String, trim: true },
   managerName: { type: String, trim: true },
   companyRole: { type: String, trim: true },
+  appraisals: [{
+    type: mongoose.Schema.Types.Mixed
+}],
   assignedAppraisals:[
     {
         appraisalId: { type: String, required: true },
@@ -133,7 +136,8 @@ const EmployeeSchema = new mongoose.Schema({
         dateAssigned: {
             type: Date,
             default: new Date().toISOString() 
-        }
+        },
+      
 
     }
 ],
@@ -189,6 +193,23 @@ const EmployeeSchema = new mongoose.Schema({
       type: Number,
       default: 0,
     },
+
+    // kpiAppraisals: [
+    //   {
+    //     expenseTypeId: { type: String, required: true },
+    //     expenseTypeName: { type: String, required: true },
+    //     expenseDate: { type: String, required: true },
+    //     currency: { type: String },
+    //     amount: { type: String, required: true },
+    //     attachment: { type: String },
+    //     approver: { type: String },
+    //     approverId: { type: String },
+    //     dateRemitted: { type: String },
+    //     dateOfApproval: { type: String },
+    //     description: { type: String },
+    //     dateRequested: { type: Date, default: Date.now() },
+    //   },
+    // ],
  
     expenseHistory: [
       {

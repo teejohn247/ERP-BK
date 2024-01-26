@@ -110,6 +110,8 @@ const updateGroup = async (req, res) => {
         }
 
         let emps = [];
+        let emps2 = [];
+
 
         console.log('here')
 
@@ -126,10 +128,11 @@ const updateGroup = async (req, res) => {
 
                 emps.push({
                     employee_id: groupId._id,
-                    employee_name: groupId.employeeName,
+                    employee_name: groupId.fullName,
                 });
+                emps2.push(groupId._id)
     
-                console.log({ group });
+                // console.log({ group });
             } catch (err) {
                 console.error(err);
             }
@@ -202,6 +205,7 @@ const updateGroup = async (req, res) => {
                                                 $push: { assignedAppraisals: {
                                                     appraisalId: req.params.id,
                                                     appraisalName: appraisal.groupName,
+                                                    appraisal
                                                 }},
                                            },{ upsert: true },
                                                 async function (
@@ -217,10 +221,13 @@ const updateGroup = async (req, res) => {
                                     
                                                     } else {
 
+                const appraisals =await AppraisalGroup.findOne({_id : req.params.id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+
+
 
                                      Employees.findOneAndUpdate({ _id:  { $in: oldEmps }}, { 
 
-                                    $pull: { assignedAppraisals: { appraisalId: req.params.id
+                                    $pull: { appraisals: { _id: req.params.id
                                     }},
                                },{ upsert: true },
                                     async function (
@@ -240,6 +247,7 @@ const updateGroup = async (req, res) => {
                                                 $push: { assignedAppraisals: {
                                                     appraisalId: req.params.id,
                                                     appraisalName: appraisal.groupName,
+                                                    appraisal
                                                 }},
                                            },{ upsert: true },
                                                 async function (
@@ -256,11 +264,8 @@ const updateGroup = async (req, res) => {
                                                     }else{
                                                         if(employee.length > 0){
 
-                                                        Employees.findOneAndUpdate({ _id:  { $in: emps }}, { 
-                                                            $push: { assignedAppraisals: {
-                                                                appraisalId: req.params.id,
-                                                                appraisalName: appraisal.groupName,
-                                                            }},
+                                                        Employees.findOneAndUpdate({ _id:  { $in: emps2}}, { 
+                                                            $push: {  appraisals },
                                                        },{ upsert: true },
                                                             async function (
                                                                 err,
@@ -275,7 +280,7 @@ const updateGroup = async (req, res) => {
                                                 
                                                                 } else {
                                                 
-                                                                    const manager = await AppraisalGroup.findOne({_id: groupId});
+                                                                    // const manager = await AppraisalGroup.findOne({_id: groupId});
                                                 
                                                                     res.status(200).json({
                                                                         status: 200,

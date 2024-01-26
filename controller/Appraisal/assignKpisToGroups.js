@@ -112,15 +112,13 @@ const assignKpis = async (req, res) => {
                 kpiId: kpiId,
                 kpiName: kpi.kpiName,
                 kpiDescription: kpi.kpiDescription,
-                "remarks.employeeComment": "",
-                "remarks.managerName": "",
-                "remarks.employeeName": "",
-                "remarks.managerComment": "",
-                "remarks.managerOverallComment": "",
-                "remarks.managerRating": "",
-                "remarks.employeeRating": "",
-
-
+                // "remarks.employeeComment": "",
+                // "remarks.managerName": "",
+                // "remarks.employeeName": "",
+                // "remarks.managerComment": "",
+                // "remarks.managerOverallComment": "",
+                // "remarks.managerRating": "",
+                // "remarks.employeeRating": "",
             }},
        },{ upsert: true },
             async function (

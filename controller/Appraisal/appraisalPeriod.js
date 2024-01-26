@@ -30,7 +30,7 @@ const createPeriod = async (req, res) => {
         let company = await Company.findOne({ _id: req.payload.id });
 
         let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  appraisalPeriodName: name });
-        let employees = await Employee.find({ companyId: req.payload.id }, {_id: 1, companyRole:1, companyId: 1, companyName: 1, firstName:1, lastName: 1, role:1, designationName:1, department: 1, fullName: 1, profilePic: 1})
+        let employees = await Employee.find({ companyId: req.payload.id }, {_id: 1,appraisals: 1, companyRole:1, companyId: 1, companyName: 1, firstName:1, lastName: 1, role:1, designationName:1, department: 1, fullName: 1, profilePic: 1})
 
 
         console.log({appraisal})
@@ -85,7 +85,7 @@ const createPeriod = async (req, res) => {
               designation: empp.designationName,
               profilePic: empp.profilePic,
               role: empp.companyRole,  
-              kpiGroups: []
+              kpiGroups: empp.appraisals
             });
             
             console.log({newAppraisalData});
@@ -108,7 +108,7 @@ const createPeriod = async (req, res) => {
             fullName: emp.fullName,
             profilePic: emp.profilePic,
             role: emp.companyRole, // Assigning role field from Employee model
-            kpiGroups: []
+            // kpiGroups: 
 
            
           }));

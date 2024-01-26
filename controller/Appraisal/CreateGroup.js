@@ -138,8 +138,10 @@ const createGroup = async (req, res) => {
                 // appraisalPeriodInactiveDate: appraisalPeriod ? appraisalPeriod.inactiveDate : ""
             })
     
-            await group.save().then((adm) => {
+            await group.save().then(async (adm) => {
                 console.log(adm)
+                const appraisals =await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+
                 AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
                     $push: { assignedEmployees: groups
                     },
@@ -158,10 +160,8 @@ const createGroup = async (req, res) => {
                         } else {
         
                             Employees.findOneAndUpdate({ _id:  { $in: employees }}, { 
-                                $push: { assignedAppraisals: {
-                                    appraisalId: adm._id,
-                                    appraisalName: adm.groupName,
-                                }},
+                                $push: {  appraisals },
+
                            },{ upsert: true },
                                 async function (
                                     err,
@@ -338,8 +338,11 @@ const createGroup = async (req, res) => {
                 // appraisalPeriodInactiveDate: appraisalPeriod ? appraisalPeriod.inactiveDate : ""
             })
     
-            await group.save().then((adm) => {
+            await group.save().then(async (adm) => {
                 console.log(adm)
+                const appraisals =await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+
+
                 AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
                     $push: { assignedEmployees: groups
                     },
@@ -358,10 +361,7 @@ const createGroup = async (req, res) => {
                         } else {
         
                             Employees.findOneAndUpdate({ _id:  { $in: employeesIds }}, { 
-                                $push: { assignedAppraisals: {
-                                    appraisalId: adm._id,
-                                    appraisalName: adm.groupName,
-                                }},
+                                $push: {  appraisals },
                            },{ upsert: true },
                                 async function (
                                     err,
@@ -556,12 +556,13 @@ const createGroup = async (req, res) => {
                                     
                                                     } else {
 
-                                                        if(employee){
+                                                        if(employee.length > 0){
+                                                           
+                const appraisals =await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+
                                                             Employees.findOneAndUpdate({ _id:  { $in: emps }}, { 
-                                                                $push: { assignedAppraisals: {
-                                                                    appraisalId: adm._id,
-                                                                    appraisalName: adm.groupName,
-                                                                }},
+                                                                $push: {  appraisals },
+
                                                            },{ upsert: true },
                                                                 async function (
                                                                     err,
