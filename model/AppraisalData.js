@@ -13,10 +13,9 @@ const appraisalDataSchema = new mongoose.Schema({
     role: { type: String },
     department:{ type: String },
     designation:{ type: String },
-    dynamicFields: {
-        type: Map,
-        of: mongoose.Schema.Types.Mixed,
-      },
+    kpiGroups: [{
+      type: mongoose.Schema.Types.Mixed
+  }]
 }, { timestamps: true })
 
 

@@ -86,9 +86,8 @@ const createPeriod = async (req, res) => {
               profilePic: empp.profilePic,
               role: empp.companyRole,  
               kpiGroups: []
-
-           
             });
+            
             console.log({newAppraisalData});
 
             const savedData = await newAppraisalData.save();
@@ -109,6 +108,8 @@ const createPeriod = async (req, res) => {
             fullName: emp.fullName,
             profilePic: emp.profilePic,
             role: emp.companyRole, // Assigning role field from Employee model
+            kpiGroups: []
+
            
           }));
 
