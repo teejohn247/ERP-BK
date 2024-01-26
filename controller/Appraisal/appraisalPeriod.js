@@ -85,9 +85,8 @@ const createPeriod = async (req, res) => {
               designation: empp.designationName,
               profilePic: empp.profilePic,
               role: empp.companyRole,  
-              kpiGroups: empp.kpiGroups
-                 // Adding keys from `debits.name` with value 0
-            //  dynamicFields: dynamicFields,
+              kpiGroups: []
+
            
             });
             console.log({newAppraisalData});
