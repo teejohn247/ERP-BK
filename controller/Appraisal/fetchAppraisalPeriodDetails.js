@@ -53,7 +53,7 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
             console.log({ empp });
             
             const period = await PeriodPayData.find({ appraisalPeriodId: empp._id });
-            // console.log({ period });
+            console.log({ period });
             // companyName: { type: String },
             // companyId: { type: String },
             // employeeId:{ type: String },
@@ -85,6 +85,7 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
             all.push({
                 ...empp.toObject(), // Convert Mongoose document to JS object
                 appraisalData: period.map(emp => ({
+
                   _id: emp._id,
                 //   companyId: emp.companyId,
                 //   companyName: emp.companyName,

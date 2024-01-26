@@ -88,13 +88,13 @@ const createKPI = async (req, res) => {
                     kpiName: name,
                     kpiDescription: description,
                     fields,
-                    "remarks.employeeComment": "",
-                    "remarks.managerName": "",
-                    "remarks.employeeName": "",
-                    "remarks.managerComment": "",
-                    "remarks.managerOverallComment": "",
-                    "remarks.managerRatingId": "",
-                    "remarks.employeeRatingId": "",
+                    // "remarks.employeeComment": "",
+                    // "remarks.managerName": "",
+                    // "remarks.employeeName": "",
+                    // "remarks.managerComment": "",
+                    //  "remarks.managerComment": "",
+                    // "remarks.managerRatingId": "",
+                    // "remarks.employeeRatingId": "",
     
     
                 }},
@@ -113,6 +113,7 @@ const createKPI = async (req, res) => {
                     } else {
 
                         console.log({result})
+                        
     
     
                     }
