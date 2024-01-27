@@ -147,6 +147,7 @@ import setExpense from '../controller/Employers/setExpense';
 import employeeKPI from '../controller/Appraisal/employeeKpi';
 import rateKPI from '../controller/Appraisal/RateKPI';
 import fetchAppraisalPeriodDetails from '../controller/Appraisal/fetchAppraisalPeriodDetails';
+import fetchGroupsByPeriod from '../controller/Appraisal/fetchGroupsByPeriod';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -368,10 +369,11 @@ router.delete("/deleteHoliday/:id", auth, deleteHoliday);
 router.patch("/assignApprover", auth, assignApproval);
 router.patch("/setExpense",  setExpense);
 router.patch("/managerRateKpi/:id",  auth, rateKPI);
-router.post("/employeeKpi", auth, employeeKPI);
-
+router.post("/employeeRequestAppraisal", auth, employeeKPI);
 
 router.get("/fetchAppraisalPeriod/:id", auth, fetchAppraisalPeriodDetails);
+router.get("/fetchGroupDetails/:employeeId/:appraisalPeriodId", auth, fetchGroupsByPeriod);
+
 
 
 

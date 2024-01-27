@@ -1,9 +1,9 @@
 
 import dotenv from 'dotenv';
 import Kpi from '../../model/Kpi';
-import AppraisalGroup from '../../model/AppraisalGroup';
 import Employee from '../../model/Employees'
 import EmployeeKpi from '../../model/EmployeeKpis'
+import AppraisalData from '../../model/AppraisalData';
 
 
 
@@ -17,7 +17,7 @@ const rateKPI = async (req, res) => {
 
 
 
-        const { id, kpiId, managersSignature, matrixScore,  managerOverallComment,  kpiGroups} = req.body;
+        const { id, kpiId, managersSignature, matrixScore, appraisalPeriodId,  managerOverallComment,  kpiGroups} = req.body;
         let groups = [];
 
         // const appraisal = await AppraisalGroup.findOne({_id: groups})
@@ -127,11 +127,12 @@ const rateKPI = async (req, res) => {
                 // kpiId: kpiId,
                 // kpiName: kpi.kpiName,
                 // kpiDescription: kpi.kpiDescription,
-                matrixScore: [0,1],
+                matrixScore,
                 managerSignedDate: new Date().toISOString(),
                 managerOverallComment,
                 managersSignature,
                 managerSignStatus: false,
+                appraisalPeriodId,
                 matrixScore,
                 kpiGroups,
                 status: managersSignature ?  "Manager reviewed": "Awaiting Manager Approval",
@@ -151,14 +152,39 @@ const rateKPI = async (req, res) => {
 
                 } else {
 
-                    const manager = await EmployeeKpi.findOne({_id: req.params.id});
-
-                    res.status(200).json({
-                        status: 200,
-                        success: true,
-                        data: manager
-                    })
-
+               
+            AppraisalData.findOneAndUpdate({employeeKpiId: req.params.id, appraisalPeriodId:appraisalPeriodId}, {
+                $set: {
+                    matrixScore,
+                    managerSignedDate: new Date().toISOString(),
+                    managerOverallComment,
+                    managersSignature,
+                    managerSignStatus: false,
+                    appraisalPeriodId,
+                    matrixScore,
+                    kpiGroups,
+                    status: managersSignature ?  "Manager reviewed": "Awaiting Manager Approval",
+                },
+            },
+            { new: true }, // To return the modified document
+                function (
+                    err,
+                    result
+                ) {
+                    if (err) {
+                        res.status(401).json({
+                            status: 401,
+                            success: false,
+                            error: err
+                        })
+                    } else {
+                        res.status(200).json({
+                            status: 200,
+                            success: true,
+                            data: result
+                        })
+                    }
+                })
                 }
             })
 

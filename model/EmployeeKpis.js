@@ -14,6 +14,12 @@ const EmployeeKpiSchema = new mongoose.Schema({
     ratingId: { type: String },
     managerName: { type: String },
     managerId: { type: String },
+
+    startDate: { type: String },
+    endDate: { type: String },
+    activeDate: { type: String },
+    inactiveDate: { type: String },
+
     managerOverallComment: { type: String },
     employeeSubmissionDate: { type: String, default: new Date().toISOString() },
     managerReviewDate:{ type: String },
@@ -24,12 +30,12 @@ const EmployeeKpiSchema = new mongoose.Schema({
     kpiGroups: {
         type: [mongoose.Schema.Types.Mixed],
     },
-    remarks: { 
-    employeeRating: { type: String },
-    managerRating: { type: String },
-    employeeComment: { type: String },
-    managerComment: { type: String },
-    }
+    // remarks: { 
+    // employeeRating: { type: String },
+    // managerRating: { type: String },
+    // employeeComment: { type: String },
+    // managerComment: { type: String },
+    // }
 }, { timestamps: true });
 
 

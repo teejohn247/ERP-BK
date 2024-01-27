@@ -1,6 +1,6 @@
 
 import dotenv from 'dotenv';
-import Role from '../../model/FinalRating';
+import Role from '../../model/EmployeeKpis';
 
 
 

@@ -4,7 +4,10 @@ import Role from '../../model/Role';
 import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import AppraisalGroup from '../../model/Kpi';
+import AppraisalData from '../../model/AppraisalData';
 import Group from '../../model/AppraisalGroup';
+import AppraisalPeriod from '../../model/AppraisalPeriod';
+
 import Kpi from '../../model/Kpi';
 import EmployeeKpi from '../../model/EmployeeKpis';
 import Employee from '../../model/Employees';
@@ -36,10 +39,15 @@ const employeeKPI = async (req, res) => {
 
         // let company = await Company.findOne({ _id: req.payload.id });
        
+
         let employee = await Employee.findOne({ _id: req.payload.id});
 
+        let pperiod = await AppraisalPeriod.findOne({ _id: appraisalPeriodId});
 
 
+
+
+        console.log({pperiod})
 
         // let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  kpiName: name });
 
@@ -63,7 +71,27 @@ const employeeKPI = async (req, res) => {
             return;
         }
 
-
+console.log({       
+    employeeId: req.payload.id,
+    employeeName: employee.fullName,
+    profilePics: employee.profilePics,
+    managerName: employee.managerName,
+    managerId: employee.managerId,
+    matrixScore: [],
+    employeeSignedDate: new Date().toISOString(),
+    employeeSignStatus: employeeSignStatus,
+    managerSignStatus: false,
+    managerSignedDate: "",
+    companyId: req.payload.id,
+    companyName: employee.companyName,
+    status: "Awaiting Manager Approval",
+    appraisalPeriodId,
+    startDate: pperiod.startDate, 
+    endDate: pperiod.endDate,
+    activeDate: pperiod.activeDate, 
+    inactiveDate: pperiod.inactiveDate,
+    kpiGroups,
+})
      
        await new EmployeeKpi({
             employeeId: req.payload.id,
@@ -78,9 +106,14 @@ const employeeKPI = async (req, res) => {
             managerSignedDate: "",
             companyId: req.payload.id,
             companyName: employee.companyName,
+            status: "Awaiting Manager Approval",
             // kpiDescription: kpi.kpiDescription,
             // appraisalGroup,
             appraisalPeriodId,
+            startDate: pperiod.startDate, 
+            endDate: pperiod.endDate,
+            activeDate: pperiod.activeDate, 
+            inactiveDate: pperiod.inactiveDate,
             kpiGroups,
             // "remarks.employeeComment": employeeComment,
             // "remarks.managerName": employee ? employee.managerName : "",
@@ -92,7 +125,7 @@ const employeeKPI = async (req, res) => {
             // "remarks.employeeSignature": signature,
             // "remarks.managerSignature": false,
             // "remarks.employeeRatingId": employeeRatingId,
-        }).save((err, updatedDoc) =>{
+        }).save(async (err, updatedDoc) =>{
             console.log({err})
             if(err){
                 res.status(400).json({
@@ -101,11 +134,49 @@ const employeeKPI = async (req, res) => {
                     data: err
                 })
             }else{
-                res.status(200).json({
-                    status: 200,
-                    success: true,
-                    data: updatedDoc
-                })
+
+                console.log(req.payload.id)
+
+              const data =await AppraisalData.findOne({employeeId: req.payload.id})
+
+              console.log({data})
+
+            AppraisalData.findOneAndUpdate({employeeId: req.payload.id, appraisalPeriodId:appraisalPeriodId}, {
+                    $set: {
+                        employeeId: req.payload.id,
+                        employeeName: employee.fullName,
+                        profilePics: employee.profilePics,
+                        managerName: employee.managerName,
+                        managerId: employee.managerId,
+                        email: employee.email,
+                        employeeKpiId: updatedDoc._id,
+                        kpiGroups
+                    },
+                },
+                { new: true }, // To return the modified document
+                    function (
+                        err,
+                        result
+                    ) {
+                        if (err) {
+                            res.status(401).json({
+                                status: 401,
+                                success: false,
+                                error: err
+                            })
+                        } else {
+                            res.status(200).json({
+                                status: 200,
+                                success: true,
+                                data: result
+                            })
+                        }
+                    })
+                // res.status(200).json({
+                //     status: 200,
+                //     success: true,
+                //     data: updatedDoc
+                // })
             }
           
         })

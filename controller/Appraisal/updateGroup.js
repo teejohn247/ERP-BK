@@ -221,8 +221,7 @@ const updateGroup = async (req, res) => {
                                     
                                                     } else {
 
-                const appraisals =await AppraisalGroup.findOne({_id : req.params.id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
-
+                                       const appraisals =await AppraisalGroup.findOne({_id : req.params.id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
 
 
                                      Employees.findOneAndUpdate({ _id:  { $in: oldEmps }}, { 
