@@ -1,6 +1,10 @@
 
 import dotenv from 'dotenv';
 import Role from '../../model/AppraisalPeriod';
+import Company from '../../model/Company';
+import Employee from '../../model/Employees';
+
+
 
 
 
@@ -21,13 +25,37 @@ const fetchPeriod = async (req, res) => {
 
         const { page, limit } = req.query;
 
+        let company = await Company.findOne({ _id: req.payload.id });
 
-        const role = await Role.find({companyId: req.payload.id}).sort({_id: -1})
+        if(company){
+  
+
+            const role = await Role.find({companyId: req.payload.id}).sort({_id: -1})
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .exec();
+    
+            const count = await Role.find({companyId: req.payload.id}).countDocuments()
+    
+            console.log(role)
+    
+            res.status(200).json({
+                status: 200,
+                success: true,
+                data: role,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page
+            });
+        }else{
+        let emp = await Employee.findOne({ _id: req.payload.id });
+              
+
+        const role = await Role.find({companyId: emp.companyId}).sort({_id: -1})
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
 
-        const count = await Role.find({companyId: req.payload.id}).countDocuments()
+        const count = await Role.find({companyId: emp.companyId}).countDocuments()
 
         console.log(role)
 
@@ -38,6 +66,9 @@ const fetchPeriod = async (req, res) => {
             totalPages: Math.ceil(count / limit),
             currentPage: page
         });
+        }
+
+      
 
         // if(!role){
         //     res.status(404).json({
