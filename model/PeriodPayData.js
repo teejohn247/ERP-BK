@@ -13,7 +13,6 @@ const periodPayDataSchema = new mongoose.Schema({
     role: { type: String },
     department:{ type: String },
     designation:{ type: String },
-
     // bonus: { type: Number, default: 0 },
     // standard: { type: Number, default: 0 },
     // basicPay: { type: Number, default: 0 },

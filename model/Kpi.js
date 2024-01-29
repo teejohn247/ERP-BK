@@ -5,22 +5,26 @@ import mongoose from 'mongoose';
 const KpiSchema = new mongoose.Schema({
     companyName: { type: String },
     companyId: { type: String },
+    employeeId:{ type: String },
     kpiName: { type: String },
     kpiDescription: { type: String },
     fields: {
         type: Map,
         of: mongoose.Schema.Types.Mixed,
-},
+    },
     remarks: { 
-        employeeRatingId: { type: String, default: "" },
-        employeeName: { type: String, default: "" },
-        managerRatingId: { type: String, default: "" },
-        managerName: { type: String, default: "" },
-        managerOverallComment: { type: String, default: "" },
-        employeeComment: { type: String, default: "" },
-        managerComment: { type: String, default: "" },
-     },
-
+    employeeRatingId: { type: String },
+    employeeName: { type: String },
+    managerRatingId: { type: String },
+    managerName: { type: String },
+    employeeComment: { type: String },
+    managerComment: { type: String },
+    managerOverallComment: { type: String },
+    employeeSubmissionDate: { type: String },
+    managerReviewDate:{ type: String },
+    managerSignature: {type: Boolean},
+    employeeSignature: {type: Boolean}
+    }
 }, { timestamps: true });
 
 

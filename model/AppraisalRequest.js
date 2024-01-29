@@ -11,18 +11,18 @@ const AppraisalRequestsSchema = new mongoose.Schema({
     managerReviewDate: { type: String, required: true },
     employeeSignature: { type: Boolean },
     managerSignature: { type: Boolean },
-    status: {type: String, default:"Awaiting manager approval"},
+    status: {type: String, default: "Awaiting manager approval"},
     approver: { type: String },
     approverId: { type: String },
     companyId: { type: String, required: true },
     companyName: { type: String, required: true },
     dateRequested: { type: String, default: new Date().toISOString() },
     comment: { type: String },
-    dateOfApproval: { type: String},
+    dateOfApproval: { type: String },
         employeeDetails: {
             type: Map,
             of: mongoose.Schema.Types.Mixed,
-        }
+    }
 });
 
 module.exports = mongoose.model("AppraisalRequests", AppraisalRequestsSchema);

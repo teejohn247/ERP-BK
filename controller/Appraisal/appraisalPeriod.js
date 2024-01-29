@@ -4,6 +4,8 @@ import Role from '../../model/Role';
 import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import AppraisalGroup from '../../model/AppraisalPeriod';
+import AppraisalGrp from '../../model/AppraisalGroup';
+
 import AppraisalData from '../../model/AppraisalData';
 
 
@@ -30,10 +32,12 @@ const createPeriod = async (req, res) => {
         let company = await Company.findOne({ _id: req.payload.id });
 
         let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  appraisalPeriodName: name });
+        let appraisalGroup = await AppraisalGrp.find({ companyId:company._id });
         let employees = await Employee.find({ companyId: req.payload.id }, {_id: 1,appraisals: 1, companyRole:1, companyId: 1, companyName: 1, firstName:1, lastName: 1, role:1, designationName:1, department: 1, fullName: 1, profilePic: 1})
+        
+        
 
-
-        console.log({appraisal})
+        console.log({appraisalGroup})
 
         if (!company.companyName) {
             res.status(400).json({
@@ -63,63 +67,102 @@ const createPeriod = async (req, res) => {
             inactiveDate 
         })
 
-
-
-
-        await group.save().then(async (adm) => {
-            console.log(adm)
-
-            const promises =  await employees.map(async (empp, i) => {
-
-            console.log({empp});
-
-            const newAppraisalData = new AppraisalData({
-              companyId: empp.companyId,
-              companyName: empp.companyName,
-              payrollPeriodId: adm._id,
-              firstName: empp.firstName,
-              lastName: empp.lastName,
-              fullName: empp.fullName,
-              employeeId: empp._id,
-              appraisalPeriodId: adm._id, 
-              appraisalPeriodName: name, 
-              description, 
-              startDate, 
-              endDate, 
-              activeDate, 
-              inactiveDate ,
-              phone: empp.phoneNumber,
-              department: empp.department,
-              designation: empp.designationName,
-              profilePic: empp.profilePic,
-              role: empp.companyRole,  
-              kpiGroups: empp.appraisals
-            });
-            
-            console.log({newAppraisalData});
-
-            const savedData = await newAppraisalData.save();
-            return savedData;
         
-          });
+let kpis = []
+
+// Iterate over employees
 
 
-          const newAppraisalDatas = await Promise.all(promises);
 
-         
-        const payrollPeriodData = newAppraisalDatas.map(emp => ({
-            companyId: emp.companyId,
-            companyName: emp.companyName,
+
+
+const promises =   await group.save().then(async (adm) => {
+    console.log(adm);
+
+    const promises = [];
+
+    for (const employee of employees) {
+        const kpis = [];
+
+        for (const group of appraisalGroup) {
+
+            console.log('group.assignedEmployees:', group.assignedEmployees);
+            if (group.assignedEmployees) {
+                // const assignedEmployee = group.assignedEmployees.find(emp => emp.employee_id === employee._id);
+
+                const assignedEmployee = group.assignedEmployees.find(emp => emp.employee_id === String(employee._id));
+                console.log({assignedEmployee})
+                if (assignedEmployee) {
+                    const grroup = await AppraisalGrp.find({ companyId:company._id, _id: group._id });
+                    kpis.push({
+                        groupId: group._id, // Assuming group._id is the correct ID
+                        groupName: group.groupName, // Assuming groupName is a property of the group
+                        description: group.description,
+                        groupKpis: group.groupKpis
+                        // Add other fields from the group if needed
+                    });
+                }
+            }
+        }
+
+        console.log({ kpis });
+
+        const newAppraisalData = new AppraisalData({
+            companyId: employee.companyId,
+            companyName: employee.companyName,
             payrollPeriodId: adm._id,
-            firstName: emp.firstName,
-            lastName: emp.lastName, 
-            fullName: emp.fullName,
-            profilePic: emp.profilePic,
-            role: emp.companyRole, // Assigning role field from Employee model
-            // kpiGroups: 
+            firstName: employee.firstName,
+            lastName: employee.lastName,
+            fullName: employee.fullName,
+            employeeId: employee._id,
+            appraisalPeriodId: adm._id,
+            appraisalPeriodName: name,
+            description,
+            startDate,
+            endDate,
+            activeDate,
+            inactiveDate,
+            phone: employee.phoneNumber,
+            department: employee.department,
+            designation: employee.designationName,
+            profilePic: employee.profilePic,
+            role: employee.companyRole,
+            kpiGroups: kpis
+        });
+
+        console.log({ newAppraisalData });
+
+        const savePromise = newAppraisalData.save();
+        promises.push(savePromise);
+    }
+
+    const newAppraisalDatas = await Promise.all(promises);
+    console.log(newAppraisalDatas);
+        //     const promises =  await employees.map(async (empp, i) => {
+
+        //     console.log({empp});
 
            
-          }));
+            
+        //     console.log({newAppraisalData});
+
+        //     const savedData = await newAppraisalData.save();
+        //     return savedData;
+        
+        //   });
+        // const payrollPeriodData = newAppraisalDatas.map(emp => ({
+        //     companyId: emp.companyId,
+        //     companyName: emp.companyName,
+        //     payrollPeriodId: adm._id,
+        //     firstName: emp.firstName,
+        //     lastName: emp.lastName, 
+        //     fullName: emp.fullName,
+        //     profilePic: emp.profilePic,
+        //     role: emp.companyRole, // Assigning role field from Employee model
+        //     // kpiGroups: 
+
+           
+        //   }));
 
 
 

@@ -52,36 +52,9 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
         const promises = role.map(async (empp) => {
             console.log({ empp });
             
-            const period = await PeriodPayData.find({ appraisalPeriodId: empp._id });
+            const period = await PeriodPayData.find({company: employee.companyId, appraisalPeriodId: empp._id });
             console.log({ period });
-            // companyName: { type: String },
-            // companyId: { type: String },
-            // employeeId:{ type: String },
-            // employeeName: { type: String },
-            // profilePics: { type: String },
-            // appraisalGroup:{ type: String },
-            // appraisalPeriodId:{ type: String, required: true },
-            // ratingId: { type: String },
-            // ratingName: { type: String },
-            // kpiId: { type: String },
-            // kpiName: { type: String },
-            // kpiDescription: { type: String },
-            // fields: {
-            //     type: Map,
-            //     of: mongoose.Schema.Types.Mixed,
-            // },
-            // remarks: { 
-            // employeeRatingId: { type: String },
-            // employeeName: { type: String },
-            // managerRatingId: { type: String },
-            // managerName: { type: String },
-            // employeeComment: { type: String },
-            // managerComment: { type: String },
-            // managerOverallComment: { type: String },
-            // employeeSubmissionDate: { type: String },
-            // managerReviewDate:{ type: String },
-            // managerSignature: {type: Boolean},
-            // employeeSignature: {type: Boolean}
+
             all.push({
                 ...empp.toObject(), // Convert Mongoose document to JS object
                 appraisalData: period.map(emp => ({
@@ -99,7 +72,7 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
                   employeeSignStatus: emp.employeeSignStatus,
                   managerSignStatus: emp.managerSignStatus,
                   managerSignedDate: emp.managerSignedDate,
-                  kpiGroups: emp.kpiGroups,
+                  kpiGroups: employee.appraisals,
                   
                 })),
               });
