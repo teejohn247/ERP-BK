@@ -2,9 +2,10 @@
 import dotenv from 'dotenv';
 import Role from '../../model/Debit';
 import PayrollPeriod from '../../model/AppraisalPeriod';
-import PeriodPayData from '../../model/EmployeeKpis'
+import PeriodPayData from '../../model/AppraisalData'
 import Employee from '../../model/Employees';
 import Company from '../../model/Company';
+import AppraisalGroup from '../../model/AppraisalData';
 
 
 
@@ -37,7 +38,22 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
 
         const comp =  await Company.findOne({_id: req.payload.id})
         const employee =  await Employee.findOne({_id: req.payload.id})
+        const appraisalGrp = await AppraisalGroup.find({
+          appraisalPeriodId: req.params.id
+      });
+        console.log('opo',appraisalGrp);
+        const test = [];
 
+        for (const data of appraisalGrp) {
+
+          console.log({data})
+    
+          test.push(
+            data
+          ) 
+    
+    
+        }
 
 
      if(comp){
@@ -48,33 +64,38 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
 
         const all = [];
 
+
+      
+
+
+    console.log({test})
         
         const promises = role.map(async (empp) => {
             console.log({ empp });
             
-            const period = await PeriodPayData.find({company: employee.companyId, appraisalPeriodId: empp._id });
-            console.log({ period });
-
+            const period = await PeriodPayData.find({ appraisalPeriodId: req.params.id});
+           
             all.push({
                 ...empp.toObject(), // Convert Mongoose document to JS object
-                appraisalData: period.map(emp => ({
+                appraisalData: test
+                // appraisalData: period.map(emp => ({
 
-                  _id: emp._id,
-                //   companyId: emp.companyId,
-                //   companyName: emp.companyName,
-                //   appraisalPeriodId: empp._id,
-                  fullName: emp.employeeName,
-                  profilePics: emp.profilePics,
-                  matrixScore: emp.matrixScore,
-                  managerName: emp.managerName,
-                  managerId: emp.managerId,
-                  employeeSignedDate: emp.employeeSignedDate, // Assigning role field from Employee model
-                  employeeSignStatus: emp.employeeSignStatus,
-                  managerSignStatus: emp.managerSignStatus,
-                  managerSignedDate: emp.managerSignedDate,
-                  kpiGroups: employee.appraisals,
+                //   // _id: emp._id,
+                // //   companyId: emp.companyId,
+                // //   companyName: emp.companyName,
+                // //   appraisalPeriodId: empp._id,
+                //   // fullName: emp.employeeName,
+                //   // profilePics: emp.profilePics,
+                //   // matrixScore: emp.matrixScore,
+                //   // managerName: emp.managerName,
+                //   // managerId: emp.managerId,
+                //   // employeeSignedDate: emp.employeeSignedDate, // Assigning role field from Employee model
+                //   // employeeSignStatus: emp.employeeSignStatus,
+                //   // managerSignStatus: emp.managerSignStatus,
+                //   // managerSignedDate: emp.managerSignedDate,
+                //   appraisalData: test
                   
-                })),
+                // })),
               });
           
               // console.log({ all });
@@ -107,20 +128,21 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
         
             all.push({
                 ...empp.toObject(), // Convert Mongoose document to JS object
-                appraisalData: period.map(emp => ({
-                    _id: emp._id,
-                    fullName: emp.employeeName,
-                    profilePics: emp.profilePics,
-                    matrixScore: emp.matrixScore,
-                    managerName: emp.managerName,
-                    managerId: emp.managerId,
-                    employeeSignedDate: emp.employeeSignedDate, // Assigning role field from Employee model
-                    employeeSignStatus: emp.employeeSignStatus,
-                    managerSignStatus: emp.managerSignStatus,
-                    managerSignedDate: emp.managerSignedDate,
-                    kpiGroups: emp.kpiGroups,
+                appraisalData: test
+                // appraisalData: period.map(emp => ({
+                //     _id: emp._id,
+                //     fullName: emp.employeeName,
+                //     profilePics: emp.profilePics,
+                //     matrixScore: emp.matrixScore,
+                //     managerName: emp.managerName,
+                //     managerId: emp.managerId,
+                //     employeeSignedDate: emp.employeeSignedDate, // Assigning role field from Employee model
+                //     employeeSignStatus: emp.employeeSignStatus,
+                //     managerSignStatus: emp.managerSignStatus,
+                //     managerSignedDate: emp.managerSignedDate,
+                //     kpiGroups: emp.kpiGroups,
                     
-                  })),
+                //   })),
               });
           
               // console.log({ all });
