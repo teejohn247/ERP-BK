@@ -4,7 +4,7 @@ import Role from '../../model/Role';
 import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import FinalRating from '../../model/FinalRating';
-import Period from '../../model/PayrollPeriod'
+import Period from '../../model/AppraisalPeriod'
 
 
 
