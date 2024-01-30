@@ -25,7 +25,7 @@ const EmployeeKpiSchema = new mongoose.Schema({
     managerReviewDate:{ type: String },
     managerSignature: {type: Boolean},
     employeeSignature: {type: Boolean},
-    status: {type: String, default: "Awaiting manager approval"},
+    status: {type: String, default: "Pending"},
     kpiDescription: { type: String },
     kpiGroups: {
         type: [mongoose.Schema.Types.Mixed],

@@ -65,9 +65,10 @@ const updateGroup = async (req, res) => {
                 //     department_id: data._department_id,
                 //     department_name: data.department_name,
                 // });
-               
+                const assignedDept = appraisal.assignedDepartments.find(emp => emp.appraisalId === String(data.departmentId));
+                if(!assignedDept){
                 oldDepartments.push(data.department_id);
-    
+                }
                 console.log({ data });
             } catch (err) {
                 console.error(err);
@@ -91,18 +92,60 @@ const updateGroup = async (req, res) => {
         }
 
         let departments = [];
+        let strictIds = []
+        const deptEmp = [];
 
         for (const department of allDepartments) {
             console.log({ department });
-    
+
+            const assignedDept = appraisal.assignedDepartments.find(emp => emp.appraisalId === String(department._id));
+            const assignedEmp= await Employees.find({ departmentId: department._id });
+
+
+console.log({assignedEmp})
+
+
+                
             try {
+            if(!assignedDept){
+
                 departments.push({
                     department_id:department._id,
                     department_name: department.departmentName,
                 });
-               
+            }
+
+            for(const emm of assignedEmp ){
+                if(emm.assignedAppraisals.length > 0){
+
+                console.log("lol", assignedEmp.assignedAppraisals)
+            const assignedEm =emm.assignedAppraisals.find(emp => emp.appraisalId === String(req.params.id));
+            strictIds.push(emm._id)
+
+            console.log({strictIds})
+
+            if(!assignedEm){
+
+                deptEmp.push({
+                    appraisalId: appraisal._id,
+                    appraisalName: appraisal.groupName,
+                });
+            console.log({assignedEm})
+
+            }
+            }else{
+                strictIds.push(emm._id)
+                console.log({strictIds})
+                deptEmp.push({
+                    appraisalId: appraisal._id,
+                    appraisalName: appraisal.groupName,
+                });
+            }
+
+
+
+            }
                 // departmentIds.push(department._id);
-    
                 console.log({ departments });
             } catch (err) {
                 console.error(err);
@@ -119,19 +162,25 @@ const updateGroup = async (req, res) => {
 
             console.log({employee})
 
+
+
             if(employee.length > 0){
 
         for (const groupId of employee) {
             console.log({ groupId });
+
     
             try {
 
+            const assignedEmp = appraisal.assignedEmployees.find(emp => emp.employeeId === String(groupId._id));
+
+             if(!assignedEmp){
                 emps.push({
                     employee_id: groupId._id,
                     employee_name: groupId.fullName,
                 });
                 emps2.push(groupId._id)
-    
+             }
                 // console.log({ group });
             } catch (err) {
                 console.error(err);
@@ -167,6 +216,8 @@ const updateGroup = async (req, res) => {
 
                 } else {
 
+                console.log('8998')
+
                     AppraisalGroup.findOneAndUpdate({ _id: req.params.id}, { 
                         $push: { assignedDepartments: departments
                         },
@@ -184,6 +235,9 @@ const updateGroup = async (req, res) => {
             
                             } else {
 
+                console.log('899800')
+
+
                                 addDepartment.findOneAndUpdate({ _id:  { $in: oldDepartments }}, { 
                                     $pull: { assignedAppraisals: { appraisalId: req.params.id
                                     }},
@@ -200,6 +254,7 @@ const updateGroup = async (req, res) => {
                                             })
                         
                                         } else {
+                console.log('898898')
                         
                                             addDepartment.findOneAndUpdate({ _id:  { $in: departmentIds }}, { 
                                                 $push: { assignedAppraisals: {
@@ -223,6 +278,7 @@ const updateGroup = async (req, res) => {
 
                                        const appraisals =await AppraisalGroup.findOne({_id : req.params.id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
 
+                                       console.log('128998')
 
                                      Employees.findOneAndUpdate({ _id:  { $in: oldEmps }}, { 
 
@@ -241,13 +297,13 @@ const updateGroup = async (req, res) => {
                                             })
                         
                                         } else {
+
+                                       console.log('1028998')
+                                       console.log({strictIds})
+if(strictIds.length > 0){
                         
-                                            addDepartment.findOneAndUpdate({ _id:  { $in: departmentIds }}, { 
-                                                $push: { assignedAppraisals: {
-                                                    appraisalId: req.params.id,
-                                                    appraisalName: appraisal.groupName,
-                                                    appraisal
-                                                }},
+                                            Employees.findOneAndUpdate({ _id:  { $in: strictIds }}, { 
+                                                $push: { assignedAppraisals: deptEmp}
                                            },{ upsert: true },
                                                 async function (
                                                     err,
@@ -260,7 +316,11 @@ const updateGroup = async (req, res) => {
                                                             error: err
                                                         })
                                     
-                                                    }else{
+                                                    }
+                                                    else{
+                                                        console.log('19928998')
+
+                                                        console.log({result})
                                                         if(employee.length > 0){
 
                                                         Employees.findOneAndUpdate({ _id:  { $in: emps2}}, { 
@@ -286,7 +346,7 @@ const updateGroup = async (req, res) => {
                                                                         success: true,
                                                                         data: "Successfully assigned"
                                                                     })
-                                                
+                                                return
                                                                 }
                                                             })
                                                     }else{
@@ -296,10 +356,22 @@ const updateGroup = async (req, res) => {
                                                             data: "Update Successful"
                                                         })
 
+                                                        return
+
                                                     }
                                                 
                                                 }
                                                 })
+                                            } else {
+
+                                            res.status(200).json({
+                                                status: 200,
+                                                success: true,
+                                                data: "Successfully assigned"
+                                            })
+
+                                            return;
+                                        }
                                             
                                         }
                                     })  

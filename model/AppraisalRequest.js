@@ -11,7 +11,7 @@ const AppraisalRequestsSchema = new mongoose.Schema({
     managerReviewDate: { type: String, required: true },
     employeeSignature: { type: Boolean },
     managerSignature: { type: Boolean },
-    status: {type: String, default: "Awaiting manager approval"},
+    status: {type: String, default: "Pending"},
     approver: { type: String },
     approverId: { type: String },
     companyId: { type: String, required: true },

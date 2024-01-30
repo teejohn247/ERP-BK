@@ -106,7 +106,7 @@ console.log({
             managerSignedDate: "",
             companyId: req.payload.id,
             companyName: employee.companyName,
-            status: "Awaiting Manager Approval",
+            status: "Awaiting Manager Review",
             // kpiDescription: kpi.kpiDescription,
             // appraisalGroup,
             appraisalPeriodId,

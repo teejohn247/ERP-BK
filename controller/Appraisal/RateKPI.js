@@ -135,7 +135,7 @@ const rateKPI = async (req, res) => {
                 appraisalPeriodId,
                 matrixScore,
                 kpiGroups,
-                status: managersSignature ?  "Manager reviewed": "Awaiting Manager Approval",
+                status: managersSignature ?  "Manager reviewed": "Awaiting Manager Review",
            
             },
        },{ upsert: true },
@@ -163,7 +163,7 @@ const rateKPI = async (req, res) => {
                     appraisalPeriodId,
                     matrixScore,
                     kpiGroups,
-                    status: managersSignature ?  "Manager reviewed": "Awaiting Manager Approval",
+                    status: managersSignature ?  "Manager reviewed": "Awaiting Manager Review",
                 },
             },
             { new: true }, // To return the modified document

@@ -228,6 +228,8 @@ const inviteEmployee = async (req, res) => {
         await employee.save().then(async(adm) => {
 
 
+
+
             const token = utils.encodeToken(adm._id, false, adm.email);
 
             console.log({token})
@@ -259,6 +261,72 @@ const inviteEmployee = async (req, res) => {
             await sendEmail(req, res, email, receivers, 'Employee Invitation', resp);
     
             console.log('{employee}2')
+
+console.log('checkDept.assignedAppraisals',checkDept.assignedAppraisals)
+let approverGrp = []
+
+            for (const group of checkDept.assignedAppraisals) {
+
+                approverGrp.push({
+                    appraisalId: group.appraisalId,
+                    appraisalName: group.appraisalName})
+            }
+
+
+            Employee.findOneAndUpdate({ _id: adm._id}, { 
+                $push: {assignedAppraisals: approverGrp},
+           },{ upsert: true },
+                async function (
+                    err,
+                    result
+                ) {
+                    if (err) {
+                        res.status(401).json({
+                            status: 401,
+                            success: false,
+                            error: err
+                        })
+    
+                    } else {
+                        console.log('gous',{result})
+    
+                        // const manager = await AppraisalGroup.findOne({_id: groupId});
+    
+                        // res.status(200).json({
+                        //     status: 200,
+                        //     success: true,
+                        //     data: "Successfully assigned"
+                        // })
+    
+                    }
+                })
+
+            // }
+        // }else{
+        //     res.status(200).json({
+        //         status: 200,
+        //         success: true,
+        //         data: "Update Successful"
+        //     })
+
+        // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
          
             AuditTrail.findOneAndUpdate({ companyId: company[0]._id}, 
@@ -270,7 +338,7 @@ const inviteEmployee = async (req, res) => {
                     dateTime: new Date()
                  }}
                },
-                    function (
+                    async function (
                         err,
                         result
                     ) {
@@ -285,11 +353,14 @@ const inviteEmployee = async (req, res) => {
                         } else {
 
                             console.log({result})
+
+                       let checkUsers = await Employee.findOne({ email });
+
         
                                 res.status(200).json({
                                     status: 200,
                                     success: true,
-                                    data: employee
+                                    data:checkUsers
                                 })
                         }
                     })
