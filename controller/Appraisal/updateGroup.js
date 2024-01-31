@@ -65,11 +65,11 @@ const updateGroup = async (req, res) => {
                 //     department_id: data._department_id,
                 //     department_name: data.department_name,
                 // });
-                const assignedDept = appraisal.assignedDepartments.find(emp => emp.appraisalId === String(data.departmentId));
+                const assignedDept = appraisal.assignedDepartments.find(emp => String(emp.appraisalId) === String(data.departmentId));
                 if(!assignedDept){
                 oldDepartments.push(data.department_id);
                 }
-                console.log({ data });
+                console.log({  oldDepartments});
             } catch (err) {
                 console.error(err);
             }
@@ -98,11 +98,11 @@ const updateGroup = async (req, res) => {
         for (const department of allDepartments) {
             console.log({ department });
 
-            const assignedDept = appraisal.assignedDepartments.find(emp => emp.appraisalId === String(department._id));
+            const assignedDept = appraisal.assignedDepartments.find(emp => String(emp.department_id) === String(department._id));
             const assignedEmp= await Employees.find({ departmentId: department._id });
 
 
-console.log({assignedEmp})
+console.log({assignedDept})
 
 
                 
@@ -116,16 +116,16 @@ console.log({assignedEmp})
             }
 
             for(const emm of assignedEmp ){
-                if(emm.assignedAppraisals.length > 0){
+                if(emm.appraisals.length > 0){
 
-                console.log("lol", assignedEmp.assignedAppraisals)
-            const assignedEm =emm.assignedAppraisals.find(emp => emp.appraisalId === String(req.params.id));
-            strictIds.push(emm._id)
+                console.log("lol", assignedEmp.appraisals)
+            const assignedEm =emm.appraisals.find(emp => String(emp.appraisalId) === String(req.params.id));
+            // strictIds.push(emm._id)
 
-            console.log({strictIds})
+            console.log({assignedEm})
 
             if(!assignedEm){
-
+                strictIds.push(emm._id)
                 deptEmp.push({
                     appraisalId: appraisal._id,
                     appraisalName: appraisal.groupName,
@@ -199,7 +199,7 @@ console.log({assignedEmp})
                 companyId: req.payload.id,
                 companyName: company.companyName,
                 description: description && description,
-                assignedDepartments: []
+                // assignedDepartments: []
             }
        },
             function (
@@ -235,25 +235,50 @@ console.log({assignedEmp})
             
                             } else {
 
+
+
                 console.log('899800')
 
+                if(oldDepartments.length > 0){
+                    addDepartment.findOneAndUpdate({ _id:  { $in: oldDepartments }}, { 
+                        $pull: { assignedAppraisals: { appraisalId: req.params.id
+                        }},
+                   },{ upsert: true },
+                        async function (
+                            err,
+                            result
+                        ) {
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    success: false,
+                                    error: err
+                                })
+            
+                            } else {
+                                console.log({result})
+                            }
+                        })
 
-                                addDepartment.findOneAndUpdate({ _id:  { $in: oldDepartments }}, { 
-                                    $pull: { assignedAppraisals: { appraisalId: req.params.id
-                                    }},
-                               },{ upsert: true },
-                                    async function (
-                                        err,
-                                        result
-                                    ) {
-                                        if (err) {
-                                            res.status(401).json({
-                                                status: 401,
-                                                success: false,
-                                                error: err
-                                            })
+                }
+
+
+                            //     addDepartment.findOneAndUpdate({ _id:  { $in: oldDepartments }}, { 
+                            //         $pull: { assignedAppraisals: { appraisalId: req.params.id
+                            //         }},
+                            //    },{ upsert: true },
+                            //         async function (
+                            //             err,
+                            //             result
+                            //         ) {
+                            //             if (err) {
+                            //                 res.status(401).json({
+                            //                     status: 401,
+                            //                     success: false,
+                            //                     error: err
+                            //                 })
                         
-                                        } else {
+                            //             } else {
                 console.log('898898')
                         
                                             addDepartment.findOneAndUpdate({ _id:  { $in: departmentIds }}, { 
@@ -280,23 +305,54 @@ console.log({assignedEmp})
 
                                        console.log('128998')
 
-                                     Employees.findOneAndUpdate({ _id:  { $in: oldEmps }}, { 
 
-                                    $pull: { appraisals: { _id: req.params.id
-                                    }},
-                               },{ upsert: true },
-                                    async function (
-                                        err,
-                                        result
-                                    ) {
-                                        if (err) {
-                                            res.status(401).json({
-                                                status: 401,
-                                                success: false,
-                                                error: err
+                                       if(oldEmps.length > 0){
+
+
+
+                                        Employees.findOneAndUpdate({ _id:  { $in: oldEmps }}, { 
+
+                                            $pull: { appraisals: { _id: req.params.id
+                                            }},
+                                       },{ upsert: true },
+                                            async function (
+                                                err,
+                                                result
+                                            ) {
+                                                if (err) {
+                                                    res.status(401).json({
+                                                        status: 401,
+                                                        success: false,
+                                                        error: err
+                                                    })
+                                
+                                                } else {
+                                                }
                                             })
+
+                                       }
+
+
+
+
+
+                            //          Employees.findOneAndUpdate({ _id:  { $in: oldEmps }}, { 
+
+                            //         $pull: { appraisals: { _id: req.params.id
+                            //         }},
+                            //    },{ upsert: true },
+                            //         async function (
+                            //             err,
+                            //             result
+                            //         ) {
+                            //             if (err) {
+                            //                 res.status(401).json({
+                            //                     status: 401,
+                            //                     success: false,
+                            //                     error: err
+                            //                 })
                         
-                                        } else {
+                            //             } else {
 
                                        console.log('1028998')
                                        console.log({strictIds})
@@ -373,15 +429,15 @@ if(strictIds.length > 0){
                                             return;
                                         }
                                             
-                                        }
-                                    })  
+                                    //     }
+                                    // })  
                                 } 
 
 
-                                })
+                            //     })
             
             
-                            }
+                            // }
                         })
                    
 

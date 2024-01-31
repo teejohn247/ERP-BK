@@ -36,7 +36,7 @@ const fetchHoliday= async (req, res) => {
 
         console.log(role.length)
 
-        if(role.length < 1){
+        if(role.length < 0){
 
         const emp= await Employee.findOne({_id: req.payload.id})
         const empp = await Role.find({companyId: emp.companyId})
@@ -68,8 +68,7 @@ const fetchHoliday= async (req, res) => {
             status: 200,
             success: true,
             data: role,
-            totalPages: Math.ceil(count / limit),
-            currentPage: page
+        
         })
 
         return;

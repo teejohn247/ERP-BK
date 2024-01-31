@@ -90,7 +90,7 @@ const promises =   await group.save().then(async (adm) => {
             if (group.assignedEmployees) {
                 // const assignedEmployee = group.assignedEmployees.find(emp => emp.employee_id === employee._id);
 
-                const assignedEmployee = group.assignedEmployees.find(emp => emp.employee_id === String(employee._id));
+                const assignedEmployee = group.assignedEmployees.find(emp => String(emp.employee_id) === String(employee._id));
                 console.log({assignedEmployee})
                 if (assignedEmployee) {
                     const grroup = await AppraisalGrp.find({ companyId:company._id, _id: group._id });

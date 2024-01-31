@@ -46,12 +46,20 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
 
         for (const data of appraisalGrp) {
 
-          console.log({data})
+          console.log(data.employeeId)
+        const emppp =  await Employee.findOne({_id: data.employeeId})
+
+        console.log(emppp.appraisals)
+        data.assignedGroups = emppp.appraisals
+
+        const plainData = data.toObject();
     
-          test.push(
-            data
-          ) 
-    
+          test.push(plainData)
+
+            // Push data with updated fields to test array
+
+
+    console.log({data})
     
         }
 
