@@ -168,12 +168,14 @@ console.log({assignedDept})
 
         for (const groupId of employee) {
             console.log({ groupId });
+            console.log(appraisal.assignedEmployees)
 
     
             try {
 
-            const assignedEmp = appraisal.assignedEmployees.find(emp => emp.employeeId === String(groupId._id));
+            const assignedEmp = appraisal.assignedEmployees.find(emp => emp.employee_id === String(groupId._id));
 
+            console.log({assignedEmp})
              if(!assignedEmp){
                 emps.push({
                     employee_id: groupId._id,
@@ -219,7 +221,8 @@ console.log({assignedDept})
                 console.log('8998')
 
                     AppraisalGroup.findOneAndUpdate({ _id: req.params.id}, { 
-                        $push: { assignedDepartments: departments
+                        $push: { assignedDepartments: departments, 
+                            ...(emps.length > 0 && { assignedEmployees: emps })
                         },
                    },{ upsert: true },
                         async function (

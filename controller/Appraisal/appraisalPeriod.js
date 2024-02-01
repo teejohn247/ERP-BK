@@ -87,11 +87,14 @@ const promises =   await group.save().then(async (adm) => {
         for (const group of appraisalGroup) {
 
             console.log('group.assignedEmployees:', group.assignedEmployees);
+
+
             if (group.assignedEmployees) {
                 // const assignedEmployee = group.assignedEmployees.find(emp => emp.employee_id === employee._id);
 
                 const assignedEmployee = group.assignedEmployees.find(emp => String(emp.employee_id) === String(employee._id));
                 console.log({assignedEmployee})
+
                 if (assignedEmployee) {
                     const grroup = await AppraisalGrp.find({ companyId:company._id, _id: group._id });
                     kpis.push({
@@ -103,9 +106,13 @@ const promises =   await group.save().then(async (adm) => {
                     });
                 }
             }
+
+
         }
 
+
         console.log({ kpis });
+
 
         const newAppraisalData = new AppraisalData({
             companyId: employee.companyId,

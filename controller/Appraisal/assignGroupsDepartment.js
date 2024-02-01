@@ -17,6 +17,9 @@ const assignGroupsDepartment = async (req, res) => {
 
         const { departments, appraisalId } = req.body;
         const appraisal = await AppraisalGroup.findOne({_id: appraisalId})
+        // const employ = await Employees.findOne({_id: })
+        const allEmployees = await Employees.findOne({companyId: req.body.id})
+
 
         console.log({appraisal})
 
@@ -67,6 +70,27 @@ const assignGroupsDepartment = async (req, res) => {
         let emps = [];
         let emps2 = [];
 
+
+        let employees = [];
+        let departmentIds = [];
+
+
+
+        for (const employee of allEmployees) {
+            console.log({ employee });
+    
+            try {
+               
+                groups.push({
+                    employee_id: employee._id,
+                    employee_name: employee.fullName,
+                });
+    
+                console.log({ groups });
+            } catch (err) {
+                console.error(err);
+            }
+        }
 
         console.log('here')
 
