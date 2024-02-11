@@ -43,6 +43,8 @@ const employeeKPI = async (req, res) => {
         let employee = await Employee.findOne({ _id: req.payload.id});
 
         let pperiod = await AppraisalPeriod.findOne({ _id: appraisalPeriodId});
+        // let group = await AppraisalGroup.findOne({ _id: appraisalPeriodId});
+
 
 
 
@@ -89,6 +91,9 @@ console.log({
     startDate: pperiod.startDate, 
     endDate: pperiod.endDate,
     activeDate: pperiod.activeDate, 
+    appraisalName: pperiod.appraisalPeriodName,
+    companyRole: employee.role,
+
     inactiveDate: pperiod.inactiveDate,
     kpiGroups,
 })
@@ -106,6 +111,8 @@ console.log({
             managerSignedDate: "",
             companyId: req.payload.id,
             companyName: employee.companyName,
+            companyRole: employee.role,
+            appraisalName: pperiod && pperiod.appraisalPeriodName,
             status: "Awaiting Manager Review",
             // kpiDescription: kpi.kpiDescription,
             // appraisalGroup,

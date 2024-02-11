@@ -9,12 +9,15 @@ const appraisalDataSchema = new mongoose.Schema({
     lastName: { type: String },
     fullName: { type: String },
     profilePic: { type: String },
-    // appraisalPeriodId: { type: mongoose.Schema.Types.ObjectId, ref: 'AppraisalPeriod' },
+    appraisalPeriodName: { type: String },
+
     // role: { type: String },
     department:{ type: String },
     designation:{ type: String },
     companyName: { type: String },
     companyId: { type: String },
+    companyRole: { type: String },
+
     employeeId:{ type: String },
     employeeName: { type: String },
     profilePics: { type: String },
