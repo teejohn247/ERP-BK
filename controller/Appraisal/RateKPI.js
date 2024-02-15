@@ -17,7 +17,7 @@ const rateKPI = async (req, res) => {
 
 
 
-        const { id, kpiId, managersSignature, matrixScore, appraisalPeriodId,  managerOverallComment,  kpiGroups} = req.body;
+        const { id, kpiId, managersSignature, matrixScore,  managerSignStatus, appraisalPeriodId,  managerOverallComment,  kpiGroups} = req.body;
         let groups = [];
 
         // const appraisal = await AppraisalGroup.findOne({_id: groups})
@@ -131,11 +131,12 @@ const rateKPI = async (req, res) => {
                 managerSignedDate: new Date().toISOString(),
                 managerOverallComment,
                 managersSignature,
-                managerSignStatus: false,
+                managerSignStatus,
                 appraisalPeriodId,
                 matrixScore,
                 kpiGroups,
-                status: managersSignature ?  "Manager reviewed": "Awaiting Manager Review",
+                status: managerSignStatus == true ?  "Manager reviewed": "Awaiting Manager Review",
+
            
             },
        },{ upsert: true },
@@ -158,12 +159,12 @@ const rateKPI = async (req, res) => {
                     matrixScore,
                     managerSignedDate: new Date().toISOString(),
                     managerOverallComment,
-                    managersSignature,
-                    managerSignStatus: false,
+                    managersSignature: managerSignStatus,
+                    managerSignStatus: managerSignStatus,
                     appraisalPeriodId,
                     matrixScore,
                     kpiGroups,
-                    status: managersSignature ?  "Manager reviewed": "Awaiting Manager Review",
+                    status: managerSignStatus == true ?  "Manager reviewed": "Awaiting Manager Review",
                 },
             },
             { new: true }, // To return the modified document
@@ -181,7 +182,7 @@ const rateKPI = async (req, res) => {
                         res.status(200).json({
                             status: 200,
                             success: true,
-                            data: result
+                            data: "Success"
                         })
                     }
                 })
