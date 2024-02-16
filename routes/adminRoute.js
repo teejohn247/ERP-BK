@@ -148,6 +148,11 @@ import employeeKPI from '../controller/Appraisal/employeeKpi';
 import rateKPI from '../controller/Appraisal/RateKPI';
 import fetchAppraisalPeriodDetails from '../controller/Appraisal/fetchAppraisalPeriodDetails';
 import fetchGroupsByPeriod from '../controller/Appraisal/fetchGroupsByPeriod';
+import createMeeting from '../controller/Meeting/createMeeting';
+import updateMeeting from '../controller/Meeting/updateMeeting';
+import fetchMeeting from '../controller/Meeting/fetchMeeting';
+import fetchMeetingDetails from '../controller/Meeting/fetchMeetingDetails';
+import deleteMeeting from '../controller/Meeting/deleteMeeting';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -374,8 +379,11 @@ router.post("/employeeRequestAppraisal", auth, employeeKPI);
 router.get("/fetchAppraisalPeriod/:id", auth, fetchAppraisalPeriodDetails);
 router.get("/fetchGroupDetails/:employeeId/:appraisalPeriodId", auth, fetchGroupsByPeriod);
 
-
-
+router.post("/createMeeting", auth, createMeeting);
+router.patch("/updateMeeting/:id", auth, updateMeeting);
+router.get("/fetchMeetings", auth, fetchMeeting);
+router.get("/fetchMeeting/:id", auth, fetchMeetingDetails);
+router.delete("/deleteMeeting/:id", auth, deleteMeeting);
 
 
 
