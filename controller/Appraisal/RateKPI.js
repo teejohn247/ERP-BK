@@ -130,12 +130,13 @@ const rateKPI = async (req, res) => {
                 matrixScore,
                 managerSignedDate: new Date().toISOString(),
                 managerOverallComment,
+                managerSubmissionDate: new Date().toISOString(),
                 managersSignature,
                 managerSignStatus,
                 appraisalPeriodId,
                 matrixScore,
                 kpiGroups,
-                status: managerSignStatus == true ?  "Manager reviewed": "Awaiting Manager Review",
+                status: "Manager reviewed",
 
            
             },
@@ -162,9 +163,10 @@ const rateKPI = async (req, res) => {
                     managersSignature: managerSignStatus,
                     managerSignStatus: managerSignStatus,
                     appraisalPeriodId,
+                    managerSubmissionDate: new Date().toISOString(),
                     matrixScore,
                     kpiGroups,
-                    status: managerSignStatus == true ?  "Manager reviewed": "Awaiting Manager Review",
+                    status: "Manager reviewed",
                 },
             },
             { new: true }, // To return the modified document

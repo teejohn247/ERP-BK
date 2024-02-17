@@ -29,6 +29,7 @@ const appraisalDataSchema = new mongoose.Schema({
     managerId: { type: String },
     email: { type: String },
     employeeKpiId: { type: String },
+    managerSubmissionDate: { type:Date },
 
     startDate: { type: String },
     endDate: { type: String },

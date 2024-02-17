@@ -34,6 +34,7 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
         .exec();
 
 
+        
         console.log(role)
 
         const comp =  await Company.findOne({_id: req.payload.id})

@@ -19,6 +19,7 @@ const EmployeeKpiSchema = new mongoose.Schema({
     endDate: { type: String },
     activeDate: { type: String },
     inactiveDate: { type: String },
+    managerSubmissionDate: { type:Date },
 
     managerOverallComment: { type: String },
     employeeSubmissionDate: { type: String, default: new Date().toISOString() },
