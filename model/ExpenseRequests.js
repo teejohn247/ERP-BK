@@ -6,7 +6,7 @@ const ExpenseRequestsSchema = new mongoose.Schema({
     employeeName: { type: String, required: true },
     expenseTypeId: { type: String, required: true },
     expenseTypeName: { type: String, required: true },
-    expenseDate: { type: String, required: true },
+    expenseDate: { type: Date, required: true },
     amount: { type: String, required: true },
     attachment: { type: String },
     approver: { type: String },

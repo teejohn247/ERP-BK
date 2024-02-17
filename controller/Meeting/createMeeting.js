@@ -60,7 +60,7 @@ const createMeeting = async (req, res) => {
             console.log({ groupId });
     
             try {
-                const group = await Employee.findOne({ _id: groupId });
+                const group = await Employee.findOne({ email: groupId });
 
                 console.log({group})
                 

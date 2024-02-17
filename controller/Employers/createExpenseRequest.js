@@ -7,7 +7,7 @@ import Expense from "../../model/Expense";
 import ExpenseRequest from "../../model/ExpenseRequests";
 import { emailTemp } from '../../emailTemplate';
 import { sendEmail } from '../../config/email';
-
+import moment  from "moment";
 const sgMail = require("@sendgrid/mail");
 
 dotenv.config();
@@ -19,6 +19,11 @@ const createExpenseRequest = async (req, res) => {
 
   try {
     const { expenseTypeId, expenseDate, amount, image, description } = req.body;
+
+
+const [day, month, year] = expenseDate.split('-'); // Split the string into day, month, and year parts
+const isoDate = new Date(`${year}-${month}-${day}`).toISOString();
+console.log('1234',isoDate)
 
 
     let expense = await Expense.findOne({ _id: expenseTypeId });
@@ -82,7 +87,7 @@ const createExpenseRequest = async (req, res) => {
       companyName: employee.companyName,
       expenseTypeId,
       expenseTypeName: expense.expenseType,
-      expenseDate,
+      expenseDate: isoDate,
       attachment: image,
       approver: approve[0].approval,
       approverId: approve[0].approvalId,
@@ -132,7 +137,7 @@ const createExpenseRequest = async (req, res) => {
                         companyName: employee.companyName,
                         expenseTypeId,
                         expenseTypeName: expense.expenseCardName,
-                        expenseDate,
+                        expenseDate:  isoDate,
                         attachment: image,
                         approver: approve[0].approval,
                         approverId: approve[0].approvalId,
