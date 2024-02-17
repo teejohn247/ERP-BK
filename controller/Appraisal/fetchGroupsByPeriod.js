@@ -21,9 +21,8 @@ const fetchGroupsByPeriod = async (req, res) => {
 
         const { employeeId, appraisalPeriodId } = req.params;
 
-        const empp = await Employee.findOne({_id:employeeId })
-        console.log({empp})
-
+        const emop = await Employee.findOne({_id: employeeId})
+        console.log({emop});
 
         const appraisalGroups = await AppraisalGroup.find({
             employeeId: employeeId,
