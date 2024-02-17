@@ -1,7 +1,7 @@
 
 import dotenv from 'dotenv';
 import AppraisalGroup from '../../model/AppraisalData';
-
+import Employee from '../../model/Employees';
 
 
 const sgMail = require('@sendgrid/mail')
@@ -20,6 +20,9 @@ const fetchGroupsByPeriod = async (req, res) => {
     try {
 
         const { employeeId, appraisalPeriodId } = req.params;
+
+        const empp = await Employee.findOne({_id:employeeId })
+        console.log({empp})
 
 
         const appraisalGroups = await AppraisalGroup.find({

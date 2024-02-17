@@ -157,11 +157,12 @@ console.log({
                         managerId: employee.managerId,
                         email: employee.email,
                         employeeKpiId: updatedDoc._id,
-                        kpiGroups
+                        kpiGroups,
+                        status: "Awaiting Manager Review"
                     },
                 },
                 { new: true }, // To return the modified document
-                    function (
+                    async function (
                         err,
                         result
                     ) {
@@ -172,6 +173,9 @@ console.log({
                                 error: err
                             })
                         } else {
+
+              const updatedData =await AppraisalData.findOne({_id: updatedDoc._id})
+
                             res.status(200).json({
                                 status: 200,
                                 success: true,
