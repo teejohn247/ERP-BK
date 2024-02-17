@@ -5,6 +5,7 @@ import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import AppraisalGroup from '../../model/Kpi';
 import Group from '../../model/AppraisalGroup';
+import Employees from '../../model/Employees';
 
 
 
@@ -25,14 +26,16 @@ const createKPI = async (req, res) => {
 
     try {
        
-        const { name, description, group, fields} = req.body;
+        const { name, description, group, employeeIds, fields} = req.body;
 
 
         let company = await Company.findOne({ _id: req.payload.id });
 
         let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  kpiName: name });
+        let groupArray= await Group.findOne({ _id: group });
 
-        console.log({appraisal})
+
+        console.log({groupArray})
 
         if (!company.companyName) {
             res.status(400).json({
@@ -51,86 +54,131 @@ const createKPI = async (req, res) => {
             return;
         }
 
-       let groups = new AppraisalGroup({
-            kpiName: name,
-            companyId: req.payload.id,
-            companyName: company.companyName,
-            description,
-        })
 
 
-        const dd = []
-        await groups.save().then(async (adm) => {
-            console.log(adm)
+        if(groupArray.groupName == "specific" || groupArray.groupName == "Specific" ){
+            let groups = [];
 
-            let checks_group = await AppraisalGroup.find({ _id:  group},
-                {groupKpis: { $elemMatch: { kpiId: adm._id } } })
+        // let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  groupName: name });
+
+
+        //     // let employees = [];
+        //     let departments = [];
+        //     let departmentIds = [];
+
+        //     if (appraisal) {
+        //         res.status(400).json({
+        //             status: 400,
+        //             error: 'This appraisal name already exist'
+        //         })
+        //         return;
+        //     }
+
+console.log('lope')
     
-                        checks_group.map((chk) => {
-                            if(chk.groupKpis.length > 0){
-                                dd.push(chk.groupKpis)
-                            }
-                        })
-    
-    
-                if(dd.length > 0){
-                    res.status(404).json({
-                        status:404,
-                        success: false,
-                        error:'kpi has already been assigned to group'
-                    })
-                    return
+            for (const groupId of employeeIds) {
+                console.log({ groupId });
+        
+                try {
+                    const group = await Employees.findOne({ _id: groupId });
+
+                    console.log({group})
+                    
+                    groups.push({
+                        employee_id: groupId,
+                        employee_name: group.fullName,
+                    });
+                    console.log({ group });
+                } catch (err) {
+                    console.error(err);
                 }
+            }
     
-            Group.findOneAndUpdate({ _id: group }, { 
-                $push: { groupKpis: {
-                    kpiId: adm._id,
+           let group = new AppraisalGroup({
                     kpiName: name,
-                    kpiDescription: description,
-                    fields,
-                    // "remarks.employeeComment": "",
-                    // "remarks.managerName": "",
-                    // "remarks.employeeName": "",
-                    // "remarks.managerComment": "",
-                    //  "remarks.managerComment": "",
-                    // "remarks.managerRatingId": "",
-                    // "remarks.employeeRatingId": "",
+                    companyId: req.payload.id,
+                    companyName: company.companyName,
+                    description,
+                    assignedEmployees: groups
+            })
     
-    
-                }},
-           },{ upsert: true },
-                async function (
-                    err,
-                    result
-                ) {
-                    if (err) {
-                        res.status(401).json({
-                            status: 401,
-                            success: false,
-                            error: err
-                        })
-    
-                    } else {
+            await group.save().then(async (adm) => {
+                console.log(adm)
+                // const appraisals = await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
 
-                        console.log({result})
-                        
-    
-    
-                    }
-                })
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: adm
-            })
-        }).catch((err) => {
-                console.error(err)
-                res.status(400).json({
-                    status: 400,
-                    success: false,
-                    error: err
-                })
-            })
+
+            //     AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
+            //         $push: { assignedEmployees: groups
+            //         },
+            //    },{ upsert: true },
+            //         async function (
+            //             err,
+            //             result
+            //         ) {
+            //             if (err) {
+            //                 res.status(401).json({
+            //                     status: 401,
+            //                     success: false,
+            //                     error: err
+            //                 })
+        
+            //             } else {
+        
+                        //     Employees.findOneAndUpdate({ _id:  { $in: employeeIds }}, { 
+                        //         $push: {  appraisals },
+                        //    },{ upsert: true },
+                        //         async function (
+                        //             err,
+                        //             result
+                        //         ) {
+                        //             if (err) {
+                        //                 res.status(401).json({
+                        //                     status: 401,
+                        //                     success: false,
+                        //                     error: err
+                        //                 })
+                    
+                        //             } else {
+
+                        //                 const manager = await AppraisalGroup.findOne({_id: adm._id});
+                                            
+                                        res.status(200).json({
+                                            status: 200,
+                                            success: true,
+                                            data: adm
+                                        })
+
+                                        return;
+                    
+
+                    
+                        //             }
+                        //         })
+        
+        
+                    })
+                }
+
+                else{
+                    let groups = new AppraisalGroup({
+                        kpiName: name,
+                        companyId: req.payload.id,
+                        companyName: company.companyName,
+                        description,
+                    })
+            
+                    await groups.save().then(async (adm) => {
+                        res.status(200).json({
+                            status: 200,
+                            success: true,
+                            data: adm
+                        })
+            
+                        return;
+                    })
+                }
+
+   
     } catch (error) {
         res.status(500).json({
             status: 500,

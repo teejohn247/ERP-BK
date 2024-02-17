@@ -23,8 +23,22 @@ const KpiSchema = new mongoose.Schema({
     employeeSubmissionDate: { type: String },
     managerReviewDate:{ type: String },
     managerSignature: {type: Boolean},
-    employeeSignature: {type: Boolean}
-    }
+    employeeSignature: {type: Boolean},
+
+    
+    },
+    assignedEmployees:  [{
+        employee_id: {
+            type: String,
+        },
+        employee_name: {
+            type: String
+        },
+        date_assigned: {
+            type: Date,
+            default: new Date().toISOString() 
+        }
+    }],
 }, { timestamps: true });
 
 
