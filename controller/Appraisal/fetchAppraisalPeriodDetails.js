@@ -40,27 +40,33 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
         const comp =  await Company.findOne({_id: req.payload.id})
         const employee =  await Employee.findOne({_id: req.payload.id})
         const appraisalGrp = await AppraisalGroup.find({
-          appraisalPeriodId: req.params.id
+          appraisalPeriodId: req.params.id,
+          employeeId: { $ne: req.payload.id.toString() }
       });
         console.log('opo',appraisalGrp);
-        const test = [];
+        var test = [];
 
         for (const data of appraisalGrp) {
 
-          console.log(data.employeeId)
-        const emppp =  await Employee.findOne({_id: data.employeeId})
+          console.log(typeof(data.employeeId), typeof(req.payload.id))
+          console.log("1222", req.payload.id, data.employeeId,  data.employeeId == req.payload.id)
 
-        console.log(emppp.appraisals)
-        data.assignedGroups = emppp.appraisals
+          if(data.employeeId.toString() !== req.payload.id.toString()){
+            const emppp =  await Employee.findOne({_id: data.employeeId})
 
-        const plainData = data.toObject();
+            console.log(emppp.appraisals)
+            data.assignedGroups = emppp.appraisals
     
-          test.push(plainData)
-
-            // Push data with updated fields to test array
-
-
-    console.log({data})
+            const plainData = data.toObject();
+        
+            String(data.employeeId) !== String(req.payload.id) &&  test.push(plainData)
+    
+                // Push data with updated fields to test array
+    
+    
+        console.log({test})
+          }
+      
     
         }
 
@@ -86,7 +92,7 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
            
             all.push({
                 ...empp.toObject(), // Convert Mongoose document to JS object
-                appraisalData: test
+                appraisalData: test,
                 // appraisalData: period.map(emp => ({
 
                 //   // _id: emp._id,
@@ -126,6 +132,7 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
         const all = [];
 
         console.log({employee})
+        // console.log({test})
 
         
         const promises = role.map(async (empp) => {
@@ -133,8 +140,7 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
             
             const period = await PeriodPayData.find({ appraisalPeriodId: empp._id, employeeId: req.payload.id});
 
-            console.log({ period });
-        
+            console.log('filter', test.filter(obj => obj._id.toString() !== req.payload.id.toString()) );
             all.push({
                 ...empp.toObject(), // Convert Mongoose document to JS object
                 appraisalData: test
