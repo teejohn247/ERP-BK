@@ -153,6 +153,11 @@ import updateMeeting from '../controller/Meeting/updateMeeting';
 import fetchMeeting from '../controller/Meeting/fetchMeeting';
 import fetchMeetingDetails from '../controller/Meeting/fetchMeetingDetails';
 import deleteMeeting from '../controller/Meeting/deleteMeeting';
+import createVisit from '../controller/Visitors/createVisit';
+import updateVisitor from '../controller/Visitors/updateVisitor';
+import checkIn from '../controller/Visitors/checkIn';
+import checkOut from '../controller/Visitors/checkOut';
+import fetchVisits from '../controller/Visitors/fetchVisits';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -386,15 +391,11 @@ router.get("/fetchMeeting/:id", auth, fetchMeetingDetails);
 router.delete("/deleteMeeting/:id", auth, deleteMeeting);
 
 
-
-
-
-
-
-
-
-
-
+router.post("/bookVisitor", auth, createVisit);
+router.patch("/updateVisit/:id", auth, updateVisitor);
+router.get("/fetchVisits", auth, fetchVisits);
+router.patch("/checkIn/:id", auth, checkIn);
+router.patch("/checkOut/:id", auth, checkOut);
 
 
 
