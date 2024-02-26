@@ -13,6 +13,9 @@ const VisitorSchema = new mongoose.Schema({
     checkOut:{ type: Date },
     purpose:{ type: String },
     visitDate:{ type: Date },
+    phoneNumber: { type: String },
+    email: { type: String },
+    
 }, { timestamps: true });
 
 

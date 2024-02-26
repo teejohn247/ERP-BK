@@ -49,7 +49,6 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
         for (const data of appraisalGrp) {
 
           console.log(typeof(data.employeeId), typeof(req.payload.id))
-          console.log("1222", req.payload.id, data.employeeId,  data.employeeId == req.payload.id)
 
           if(data.employeeId.toString() !== req.payload.id.toString()){
             const emppp =  await Employee.findOne({_id: data.employeeId})
