@@ -36,7 +36,6 @@ const leaveApplication = async (req, res) => {
 
         const check = await Employee.findOne({ _id: req.payload.id });
 
-
         let employee = await Employee.findOne({ _id: req.payload.id })
     
         console.log(employee, 'ologo')

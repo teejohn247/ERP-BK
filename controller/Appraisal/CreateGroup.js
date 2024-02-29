@@ -197,7 +197,7 @@ const createGroup = async (req, res) => {
                                 
                                                 } else {
                                 
-                                                    addDepartment.findOneAndUpdate({ _id:  { $in: departmentIds }}, { 
+                                                    addDepartment.updateMany({ _id:  { $in: departmentIds }}, { 
                                                         $push: { departments: {
                                                             appraisalId: adm._id,
                                                             appraisalName: adm.groupName,
@@ -295,35 +295,6 @@ const createGroup = async (req, res) => {
             }
 
 
-            // for (const department of allDepartments) {
-            //     console.log({ department });
-        
-            //     try {
-            //         departments.push({
-            //             department_id:department._id,
-            //             department_name: department.departmentName,
-            //         });
-                   
-            //         departmentIds.push(department._id);
-        
-            //         console.log({ departments });
-            //     } catch (err) {
-            //         console.error(err);
-            //     }
-            // }
-
-            // for (const employee of allEmployees) {
-            //     console.log({ employee });
-        
-            //     try {
-                   
-            //         employees.push(employee._id);
-        
-            //         console.log({ employees });
-            //     } catch (err) {
-            //         console.error(err);
-            //     }
-            // }
     
            let group = new AppraisalGroup({
                 groupName: name,
@@ -360,7 +331,7 @@ const createGroup = async (req, res) => {
         
                         } else {
         
-                            Employees.findOneAndUpdate({ _id:  { $in: employeesIds }}, { 
+                            Employees.updateMany({ _id:  { $in: employeesIds }}, { 
                                 $push: {  appraisals },
                            },{ upsert: true },
                                 async function (
@@ -488,7 +459,7 @@ const createGroup = async (req, res) => {
         
                         } else {
         
-                            addDepartment.findOneAndUpdate({ _id:  { $in: departments }}, { 
+                            addDepartment.updateMany({ _id:  { $in: departments }}, { 
                                 $push: { assignedAppraisals: {
                                     appraisalId: adm._id,
                                     appraisalName: adm.groupName,
@@ -558,9 +529,11 @@ const createGroup = async (req, res) => {
 
                                                         if(employee.length > 0){
                                                            
-                const appraisals =await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+                                                          const appraisals =await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+console.log({emps});
+console.log({appraisals});
 
-                                                            Employees.findOneAndUpdate({ _id:  { $in: emps }}, { 
+                                                            Employees.updateMany({ _id:  { $in: emps }}, { 
                                                                 $push: {  appraisals },
 
                                                            },{ upsert: true },
@@ -576,6 +549,8 @@ const createGroup = async (req, res) => {
                                                                         })
                                                     
                                                                     } else {
+
+                                                                        console.log({result})
                                 
                                                                         const manager = await AppraisalGroup.findOne({_id: adm._id});
                                                                             

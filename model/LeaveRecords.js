@@ -29,7 +29,6 @@ const LeaveRecordsSchema = new mongoose.Schema({
     leaveTypeName: {
         type: String,
        required:true
-
     },
     leaveStartDate: {
         type: String,
