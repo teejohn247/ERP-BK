@@ -38,10 +38,14 @@ const fetchPayrollPrd = async (req, res) => {
         const employee =  await Employee.findOne({_id: req.payload.id})
 
 
-
      if(comp){
 
         const totals = await PeriodPayData.aggregate([
+          {
+            $match: {
+              companyId: req.payload.id
+            }
+          },
             {
               $lookup: {
                 from: 'payrollperiods', // Replace 'payrollperiods' with the actual collection name of PayrollPeriod
@@ -70,9 +74,6 @@ const fetchPayrollPrd = async (req, res) => {
           ]);
 
           console.log({totals})
-
-
-
       
           res.status(200).json({
             status: 200,
@@ -83,8 +84,6 @@ const fetchPayrollPrd = async (req, res) => {
         });
         return
       }
-
-
 
       else if(employee){
 
