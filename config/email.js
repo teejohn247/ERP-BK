@@ -39,7 +39,7 @@ export const sendEmail = async (
 
     const senders = {
       email: process.env.SMTP_USERNAME,
-      name: 'SILO'
+      name: 'Greenpeg'
     }
     
     console.log(({

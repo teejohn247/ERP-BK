@@ -74,7 +74,7 @@ const createKPI = async (req, res) => {
         //         return;
         //     }
 
-console.log('lope')
+            console.log('lope')
     
             for (const groupId of employeeIds) {
                 console.log({ groupId });
@@ -104,43 +104,42 @@ console.log('lope')
     
             await group.save().then(async (adm) => {
                 console.log(adm)
-                // const appraisals = await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+                const appraisals = await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
 
-
-            //     AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
-            //         $push: { assignedEmployees: groups
-            //         },
-            //    },{ upsert: true },
-            //         async function (
-            //             err,
-            //             result
-            //         ) {
-            //             if (err) {
-            //                 res.status(401).json({
-            //                     status: 401,
-            //                     success: false,
-            //                     error: err
-            //                 })
+                AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
+                    $push: { assignedEmployees: groups
+                    },
+               },{ upsert: true },
+                    async function (
+                        err,
+                        result
+                    ) {
+                        if (err) {
+                            res.status(401).json({
+                                status: 401,
+                                success: false,
+                                error: err
+                            })
         
-            //             } else {
+                        } else {
         
-                        //     Employees.findOneAndUpdate({ _id:  { $in: employeeIds }}, { 
-                        //         $push: {  appraisals },
-                        //    },{ upsert: true },
-                        //         async function (
-                        //             err,
-                        //             result
-                        //         ) {
-                        //             if (err) {
-                        //                 res.status(401).json({
-                        //                     status: 401,
-                        //                     success: false,
-                        //                     error: err
-                        //                 })
+                            Employees.findOneAndUpdate({ _id:  { $in: employeeIds }}, { 
+                                $push: {  appraisals },
+                           },{ upsert: true },
+                                async function (
+                                    err,
+                                    result
+                                ) {
+                                    if (err) {
+                                        res.status(401).json({
+                                            status: 401,
+                                            success: false,
+                                            error: err
+                                        })
                     
-                        //             } else {
+                                    } else {
 
-                        //                 const manager = await AppraisalGroup.findOne({_id: adm._id});
+                                        const manager = await AppraisalGroup.findOne({_id: adm._id});
                                             
                                         res.status(200).json({
                                             status: 200,
@@ -152,13 +151,19 @@ console.log('lope')
                     
 
                     
-                        //             }
-                        //         })
-        
-        
+                                    }
+                                })
+                            }
+                            })
                     })
                 }
+            // }
 
+                // kpiName: name,
+                // companyId: req.payload.id,
+                // companyName: company.companyName,
+                // description,
+                // assignedEmployees: groups
                 else{
                     let groups = new AppraisalGroup({
                         kpiName: name,
@@ -168,6 +173,40 @@ console.log('lope')
                     })
             
                     await groups.save().then(async (adm) => {
+
+                        console.log({adm})
+
+                        Group.findOneAndUpdate({ _id: group }, { 
+                            $push: { groupKpis: {
+                                kpiId: adm._id,
+                                kpiName: name,
+                                kpiDescription: description,
+                            }},
+                       },{ upsert: true },
+                            async function (
+                                err,
+                                result
+                            ) {
+                                if (err) {
+                                    res.status(401).json({
+                                        status: 401,
+                                        success: false,
+                                        error: err
+                                    })
+                
+                                } else {
+                
+                                    // const manager = await AppraisalGroup.findOne({_id: groupId});
+                                    console.log({result})
+                
+                                    // res.status(200).json({
+                                    //     status: 200,
+                                    //     success: true,
+                                    //     data: "Successfully assigned"
+                                    // })
+                
+                                }
+                            })
                         res.status(200).json({
                             status: 200,
                             success: true,
