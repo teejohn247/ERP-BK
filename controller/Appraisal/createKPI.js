@@ -31,6 +31,8 @@ const createKPI = async (req, res) => {
 
         let company = await Company.findOne({ _id: req.payload.id });
 
+        console.log({company})
+
         let appraisal = await AppraisalGroup.findOne({ companyId:company._id,  kpiName: name });
         let groupArray= await Group.findOne({ _id: group });
 
@@ -55,7 +57,7 @@ const createKPI = async (req, res) => {
         }
 
 
-
+console.log({groupArray})
         if(groupArray.groupName == "specific" || groupArray.groupName == "Specific" ){
             let groups = [];
 

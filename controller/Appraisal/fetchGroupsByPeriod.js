@@ -1,6 +1,8 @@
 
 import dotenv from 'dotenv';
 import AppraisalGroup from '../../model/AppraisalData';
+import Appraisals from '../../model/AppraisalGroup';
+
 import Employee from '../../model/Employees';
 
 
@@ -26,18 +28,38 @@ const fetchGroupsByPeriod = async (req, res) => {
 
         const appraisalGroups = await AppraisalGroup.find({
             employeeId: employeeId,
-            appraisalPeriodId: appraisalPeriodId
+            // appraisalPeriodId: appraisalPeriodId
         });
 
+       const groups =await Appraisals.find({
+            assignedEmployees: {
+              $elemMatch: {
+                employee_id: employeeId
+              }
+            }
+          }, {_id: 1, groupName:1, groupKpis: 1, description: 1});
 
-      
+          if (groups.length > 0) {
+            // Ensure appraisalGroups is initialized as an object with a kpiGroups array
+            if (!appraisalGroups.kpiGroups) {
+              appraisalGroups.kpiGroups = [];
+            }
+            // Push groups into appraisalGroups.kpiGroups
+            await groups.forEach(group => {
+                const plainGroup = group.toObject();
+              appraisalGroups.kpiGroups.push(plainGroup);
+            });
 
-        res.status(200).json({
-            status: 200,
-            success: true,
-            data: appraisalGroups
-        });
+            console.log(appraisalGroups, 'here'); // Check the updated kpiGroups
 
+            res.status(200).json({
+                status: 200,
+                success: true,
+                data: appraisalGroups
+            });
+          } else {
+            console.log("No matching groups found.");
+          }
     } catch (error) {
         res.status(500).json({
             status: 500,

@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import Department from '../../model/Department';
 import Company from '../../model/Company';
 import Employee from '../../model/Employees';
-
+import AppraisalGroup from '../../model/AppraisalGroup';
 
 
 
@@ -57,7 +57,7 @@ const addDepartment = async (req, res) => {
         })
 
 
-        await department.save().then((adm) => {
+        await department.save().then(async (adm) => {
 
                 //        Employee.updateMany({department: department.departmentName}, { 
                 //         $set: { 
@@ -101,22 +101,101 @@ const addDepartment = async (req, res) => {
                         })
     
                     }
-                        res.status(200).json({
-                            status: 200,
-                            success: true,
-                            data: adm
-                        })
+                        // res.status(200).json({
+                        //     status: 200,
+                        //     success: true,
+                        //     data: adm
+                        // })
+
+                        const appraisal = await AppraisalGroup.findOne({companyId: req.payload.id, groupName: "General"})
     
                     
-               
+                        console.log({appraisal})
+                        AppraisalGroup.findOneAndUpdate({companyId: req.payload.id,
+                            groupName : "General" }, { 
+                            $push: { assignedDepartments: {department_id: adm._id,
+                                department_name: adm.departmentName}
+                            },
+                       },{ upsert: true },
 
-            // sgMail.send(msg)
-            console.log(adm)
-            // res.status(200).json({
-            //     status: 200,
-            //     success: true,
-            //     data: adm
-            // })
+                            async function (
+                                err,
+                                result
+                            ) {
+                                if (err) {
+                                    res.status(401).json({
+                                        status: 401,
+                                        success: false,
+                                        error: err
+                                    })
+                
+                                } else {
+
+                                    Department.findOneAndUpdate({ _id: adm._id}, { 
+                                        $push: { departments: {
+                                            appraisalId: appraisal._id,
+                                            appraisalName: appraisal.groupName,
+                                        }},
+                                   },{ upsert: true },
+                                        async function (
+                                            err,
+                                            result
+                                        ) {
+                                            if (err) {
+                                                res.status(401).json({
+                                                    status: 401,
+                                                    success: false,
+                                                    error: err
+                                                })
+                            
+                                            } else {
+                            
+                                                const manager = await Department.findOne({_id: adm._id});
+                            
+                                                res.status(200).json({
+                                                    status: 200,
+                                                    success: true,
+                                                    data: manager
+                                                })
+
+                                                
+                            
+                                            }
+                                        })
+                
+                                //     addDepartment.findOneAndUpdate({ _id:  adm._id}, { 
+                                //         $push: { departments: {
+                                //             appraisalId: adm._id,
+                                //             appraisalName: adm.groupName,
+                                //         }},
+                                //    },{ upsert: true },
+                                //         async function (
+                                //             err,
+                                //             result
+                                //         ) {
+                                //             if (err) {
+                                //                 res.status(401).json({
+                                //                     status: 401,
+                                //                     success: false,
+                                //                     error: err
+                                //                 })
+                            
+                                //             } else {
+                            
+                                //                 const manager = await AppraisalGroup.findOne({_id: adm._id});
+                            
+                                //                 res.status(200).json({
+                                //                     status: 200,
+                                //                     success: true,
+                                //                     data: manager
+                                //                 })
+                            
+                                //             }
+                                //         })
+                
+                
+                                }
+                            })
         }).catch((err) => {
                 console.error(err)
                 res.status(400).json({

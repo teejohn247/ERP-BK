@@ -2,7 +2,7 @@
 import dotenv from 'dotenv';
 import Company from '../../model/Company';
 import AuditTrail from '../../model/AuditTrail';
-
+import AppraisalGroup from '../../model/AppraisalGroup';
 import bcrypt from 'bcrypt';
 
 
@@ -61,6 +61,25 @@ const createCompany = async (req, res) => {
                         companyName: companyName,
                         companyId: company._id
                     }).save()
+
+
+                  new AppraisalGroup({
+                        groupName: 'General',
+                        companyId: req.payload.id,
+                        companyName: company.companyName,
+                        description: 'General Group',
+                    }).save()
+
+                    new AppraisalGroup({
+                        groupName: 'Specific',
+                        companyId: req.payload.id,
+                        companyName: company.companyName,
+                        description: 'Specific Group',
+                    }).save()
+
+
+
+
 
                     res.status(200).json({
                         status: 200,

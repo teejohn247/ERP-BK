@@ -6,7 +6,9 @@ import Admin from '../../model/Company';
 import bcrypt from 'bcrypt';
 import HTTP_STATUS from 'http-status-codes';
 import jwt_decode from 'jwt-decode';
+import AppraisalGroup from '../../model/AppraisalGroup';
 import utils from '../../config/utils';
+import Employee from '../../model/Employees';
 
 const sgMail = require('@sendgrid/mail')
 dotenv.config();
@@ -83,7 +85,6 @@ const verifyEmployee = async (req, res) => {
     
     
                 if (employee.firstTimeLogin == undefined) {
-                    console.log("here")
                         await employee.updateOne({
                             firstTimeLogin: true, 
                         });
@@ -99,9 +100,60 @@ const verifyEmployee = async (req, res) => {
                         });
                     }
     
-                   let registered = await Company.findOne({ email: req.decode.email });
         
                     const token = utils.encodeToken(employee._id, false, employee.email);
+                    console.log("here")
+
+                    const appraisals = await AppraisalGroup.findOne({companyId:employee.companyId, groupName : "General"}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+                    AppraisalGroup.findOneAndUpdate({companyId:employee.companyId, groupName : "General"}, { 
+                        $push: { assignedEmployees:
+                            {employee_id: employee._id,
+                            employee_name: employee.fullName}
+                        },
+                   },{ upsert: true },
+                        async function (
+                            err,
+                            result
+                        ) {
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    success: false,
+                                    error: err
+                                })
+            
+                            } else {
+
+                                console.log({appraisals})
+            
+                                Employee.findOneAndUpdate({ _id: employee._id }, { 
+                                    $push: {  appraisals },
+    
+                               },{ upsert: true },
+                                    async function (
+                                        err,
+                                        result
+                                    ) {
+                                        if (err) {
+                                            res.status(401).json({
+                                                status: 401,
+                                                success: false,
+                                                error: err
+                                            })
+                        
+                                        } else {
+    
+    
+                        
+                                        }
+                                    })
+            
+            
+                            }
+                        })
+
+                        let registered = await Company.findOne({ email: req.decode.email });
+
         
                     res.status(200).json({
                         status: 200,

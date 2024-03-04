@@ -5,7 +5,6 @@ import Company from '../../model/Company';
 import Leave from '../../model/Expense';
 import AppraisalGroup from '../../model/AppraisalPeriod';
 import AppraisalGrp from '../../model/AppraisalGroup';
-
 import AppraisalData from '../../model/AppraisalData';
 
 
@@ -15,7 +14,6 @@ import Employee from '../../model/Employees';
 const sgMail = require('@sendgrid/mail')
 
 dotenv.config();
-
 
 
 
@@ -97,6 +95,7 @@ const promises =   await group.save().then(async (adm) => {
 
                 if (assignedEmployee) {
                     const grroup = await AppraisalGrp.find({ companyId:company._id, _id: group._id });
+                    console.log({grroup});
                     kpis.push({
                         groupId: group._id, // Assuming group._id is the correct ID
                         groupName: group.groupName, // Assuming groupName is a property of the group
