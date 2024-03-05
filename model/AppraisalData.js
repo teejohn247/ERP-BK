@@ -17,7 +17,6 @@ const appraisalDataSchema = new mongoose.Schema({
     companyName: { type: String },
     companyId: { type: String },
     companyRole: { type: String },
-
     employeeId:{ type: String },
     employeeName: { type: String },
     profilePics: { type: String },
@@ -30,12 +29,10 @@ const appraisalDataSchema = new mongoose.Schema({
     email: { type: String },
     employeeKpiId: { type: String },
     managerSubmissionDate: { type:Date },
-
     startDate: { type: String },
     endDate: { type: String },
     activeDate: { type: String },
     inactiveDate: { type: String },
-
     managerOverallComment: { type: String },
     employeeSubmissionDate: { type: String, default: new Date().toISOString() },
     managerReviewDate:{ type: String },
@@ -43,10 +40,10 @@ const appraisalDataSchema = new mongoose.Schema({
     employeeSignature: {type: Boolean},
     status: {type: String, default: "Pending"},
     kpiDescription: { type: String },
-
     kpiGroups: [{
       type: mongoose.Schema.Types.Mixed
-  }]
+    }],
+    
 }, { timestamps: true })
 
 

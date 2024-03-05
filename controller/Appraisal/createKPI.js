@@ -6,6 +6,7 @@ import Leave from '../../model/Expense';
 import AppraisalGroup from '../../model/Kpi';
 import Group from '../../model/AppraisalGroup';
 import Employees from '../../model/Employees';
+import AppraisalData from '../../model/AppraisalData';
 
 
 
@@ -104,6 +105,7 @@ console.log({groupArray})
                     assignedEmployees: groups
             })
     
+
             await group.save().then(async (adm) => {
                 console.log(adm)
                 const appraisals = await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
@@ -198,24 +200,66 @@ console.log({groupArray})
                 
                                 } else {
                 
-                                    // const manager = await AppraisalGroup.findOne({_id: groupId});
-                                    console.log({result})
+                                    const manager = await AppraisalData.find({companyId: req.payload.id, "kpiGroups.$.groupId": group });
+                                    console.log('2345',{manager})
                 
                                     // res.status(200).json({
                                     //     status: 200,
                                     //     success: true,
                                     //     data: "Successfully assigned"
                                     // })
+
+                                    console.log({group})
+
+ console.log(req.payload.id, '123')
+                            AppraisalData.update({companyId: req.payload.id }, {
+                                    $push: {
+                                      "kpiGroups.$[group].groupKpis": {
+                                        kpiId: adm._id,
+                                        kpiName: name,
+                                        kpiDescription: description
+                                      }
+                                    }
+                                  },
+                                  {
+                                    arrayFilters: [{ "group.groupId": group }]
+                                  
+                            }, // Update multiple documents
+                            async function (
+                                err,
+                                result
+                            ) {
+                                if (err) {
+                                    res.status(401).json({
+                                        status: 401,
+                                        success: false,
+                                        error: err
+                                    })
+                
+                                } else {
+                
+                                    // const manager = await AppraisalGroup.findOne({_id: groupId});
+                                    console.log('2',{result})
+                
+                                    // res.status(200).json({
+                                    //     status: 200,
+                                    //     success: true,
+                                    //     data: "Successfully assigned"
+                                    // })
+                                    res.status(200).json({
+                                        status: 200,
+                                        success: true,
+                                        data: adm
+                                    })
+                        
+                                    return;
                 
                                 }
                             })
-                        res.status(200).json({
-                            status: 200,
-                            success: true,
-                            data: adm
-                        })
-            
-                        return;
+                
+                                }
+                            })
+                     
                     })
                 }
 

@@ -32,8 +32,6 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
-
-
         
         console.log(role)
 
@@ -47,6 +45,9 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
         var test = [];
 
         for (const data of appraisalGrp) {
+
+          
+          console.log('2300',data.kpiGroups);
 
           console.log(typeof(data.employeeId), typeof(req.payload.id))
 
@@ -63,11 +64,12 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
                 // Push data with updated fields to test array
     
     
-        console.log({test})
           }
       
     
         }
+
+
 
 
      if(comp){
@@ -82,7 +84,9 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
       
 
 
-    console.log({test})
+        console.log(test)
+        console.log('123',test.kpiGroups)
+
         
         const promises = role.map(async (empp) => {
             console.log({ empp });
