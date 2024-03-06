@@ -39,6 +39,8 @@ const createKPI = async (req, res) => {
 
 
         console.log({groupArray})
+        console.log({appraisal})
+
 
         if (!company.companyName) {
             res.status(400).json({

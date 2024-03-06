@@ -46,7 +46,7 @@ const inviteEmployee = async (req, res) => {
         console.log({checkDept});
 
         let company = await Company.find({ _id: req.payload.id });
-        let checkUser = await Employee.findOne({ email });
+        let checkUser = await Employee.findOne({companyId: req.payload.id, email: email });
 
 
         console.log(checkUser);
@@ -354,7 +354,7 @@ let approverGrp = []
 
                             console.log({result})
 
-                       let checkUsers = await Employee.findOne({ email });
+                       let checkUsers = await Employee.findOne({companyId: req.payload.id, email });
 
         
                                 res.status(200).json({

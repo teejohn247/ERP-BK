@@ -101,7 +101,7 @@ const EmployeeSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  email: { type: String, required: true, unique: true, trim: true },
+  email: { type: String, required: true, trim: true },
 
   nationality: { type: String, trim: true },
     country: { type: String,  trim: true },

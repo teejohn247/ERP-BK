@@ -41,9 +41,22 @@ const appraisalDataSchema = new mongoose.Schema({
     status: {type: String, default: "Pending"},
     kpiDescription: { type: String },
     kpiGroups: [{
-      type: mongoose.Schema.Types.Mixed
+      groupId: { type: String },
+      groupName: { type: String, unique: true },
+      description: { type: String },
+      groupKpis: [{
+      kpiId: { type: String },
+      kpiName: { type: String },
+      kpiDescription: { type: String },
+      remarks: { 
+          employeeRating: { type: String },
+          managerRating: { type: String },
+          employeeComment: { type: String },
+          managerComment: { type: String },
+       },
+      }]
     }],
-    
+ 
 }, { timestamps: true })
 
 

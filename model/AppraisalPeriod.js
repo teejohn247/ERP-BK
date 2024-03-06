@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 const AppraisalPeriodSchema = new mongoose.Schema({
     companyName: { type: String },
     companyId: { type: String },
-    appraisalPeriodName: { type: String, unique: true },
+    appraisalPeriodName: { type: String},
     description: { type: String },
     startDate: { type: String },
     endDate: { type: String },
