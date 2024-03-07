@@ -40,8 +40,7 @@ const fetchAppraisalPeriodDetails = async (req, res) => {
         const appraisalGrp = await AppraisalGroup.find({
           appraisalPeriodId: req.params.id,
           employeeId: { $ne: req.payload.id.toString() }
-      }).sort({ createdAt: -1 }) // Assuming createdAt is the timestamp field
-      .limit(1);
+      })
         console.log('opo',appraisalGrp);
         var test = [];
 

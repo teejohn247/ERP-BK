@@ -29,7 +29,8 @@ const fetchGroupsByPeriod = async (req, res) => {
         const appraisalGroups = await AppraisalGroup.find({
             employeeId: employeeId,
             // appraisalPeriodId: appraisalPeriodId
-        });
+        }).sort({ createdAt: -1 }) // Assuming createdAt is the timestamp field
+        .limit(1);
 
        const groups =await Appraisals.find({
             assignedEmployees: {
