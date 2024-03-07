@@ -59,7 +59,7 @@ const createKPI = async (req, res) => {
         if (appraisal) {
             res.status(400).json({
                 status: 400,
-                error: 'This appraisal name already exist'
+                error: 'This kpi name already exist'
             })
             return;
         }
@@ -96,7 +96,7 @@ console.log({groupArray})
                     
                     groups.push({
                         employee_id: groupId,
-                        employee_name: group.fullName,
+                        employee_name: group1.fullName,
                     });
                     console.log({ group1 });
                 } catch (err) {
@@ -112,9 +112,11 @@ console.log({groupArray})
                     assignedEmployees: groups
             }).save().then(async (adm) => {
                 console.log({adm})
-                const appraisals = await AppraisalGroup.findOne({_id : adm._id}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+                const appraisals = await Group.findOne({_id : group}, {_id: 1, groupName:1, groupKpis: 1, description: 1})
+                
+                console.log({appraisals})
 
-                AppraisalGroup.findOneAndUpdate({ _id: adm._id}, { 
+                Group.findOneAndUpdate({ _id:  group}, { 
                     $push: { assignedEmployees: groups
                     },
                },{ upsert: true },
@@ -130,10 +132,9 @@ console.log({groupArray})
                             })
         
                         } else {
-                            console.log({appraisals})
 
                            Employees.findOneAndUpdate({ _id:  { $in: employeeIds }}, { 
-                                $push: {  appraisals },
+                                $push: { appraisals },
                            },{ upsert: true },
                                 async function (
                                     err,
