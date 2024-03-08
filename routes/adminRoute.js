@@ -158,6 +158,7 @@ import updateVisitor from '../controller/Visitors/updateVisitor';
 import checkIn from '../controller/Visitors/checkIn';
 import checkOut from '../controller/Visitors/checkOut';
 import fetchVisits from '../controller/Visitors/fetchVisits';
+import calender from '../controller/Holiday/calender';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -389,6 +390,7 @@ router.patch("/updateMeeting/:id", auth, updateMeeting);
 router.get("/fetchMeetings", auth, fetchMeeting);
 router.get("/fetchMeeting/:id", auth, fetchMeetingDetails);
 router.delete("/deleteMeeting/:id", auth, deleteMeeting);
+router.get("/fetchCalender", auth, calender);
 
 
 router.post("/bookVisitor", auth, createVisit);

@@ -102,7 +102,7 @@ const createMeeting = async (req, res) => {
             meetingDateTime,
             location,
             invitedGuests: groups,
-            companyId: req.payload.id,
+            companyId: emp.companyId,
             companyName: company.companyName,
             employeeId: req.payload.id
            
