@@ -53,13 +53,14 @@ const createVisit = async (req, res) => {
             companyId: emp.companyId,
             companyName: emp.companyName,
             employeeId,
-            employeeName: emp.employeeId,
+            employeeName: emp.fullName,
             checkIn,
             phoneNumber,
             email,
             checkOut,
             purpose,
             visitDate,
+            status: "Expected"
         })
 
         await group.save().then((adm) => {

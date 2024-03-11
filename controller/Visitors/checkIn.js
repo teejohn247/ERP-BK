@@ -51,6 +51,7 @@ const checkIn = async (req, res) => {
         Visitor.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
                 checkIn: checkInTime && checkInTime,
+                status: "Active"
             }
        },
             function (
