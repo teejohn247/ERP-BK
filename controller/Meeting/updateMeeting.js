@@ -22,7 +22,7 @@ const updateMeeting = async (req, res) => {
 
     try {
    
-        const { meetingDateTime, location, invitedGuests } = req.body;
+        const { meetingDate, location, meetingStartTime, meetingEndTime, invitedGuests } = req.body;
 
 
         const check = await Holiday.findOne({ _id: req.params.id });
@@ -61,7 +61,9 @@ const updateMeeting = async (req, res) => {
 
         Holiday.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
-                meetingDateTime: meetingDateTime && meetingDateTime,
+                meetingDate: meetingDate && meetingDate,
+                meetingStartTime: meetingStartTime && meetingStartTime,
+                meetingEndTime: meetingEndTime && meetingEndTime,
                 location : location && location,
                 invitedGuests: groups
             }

@@ -12,11 +12,12 @@ const VisitorSchema = new mongoose.Schema({
     checkIn:{ type: Date },
     checkOut:{ type: Date },
     purpose:{ type: String },
+    expectedCheckInTime:{ type: Date },
+    expectedCheckOutTime:{ type: Date },
     visitDate:{ type: Date },
     phoneNumber: { type: String },
     email: { type: String },
     status: {type: String, default: "Expected"}
-    
 }, { timestamps: true });
 
 

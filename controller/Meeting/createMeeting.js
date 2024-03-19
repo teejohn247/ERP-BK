@@ -23,7 +23,7 @@ const createMeeting = async (req, res) => {
 
     try {
        
-        const { meetingDateTime, location, invitedGuests } = req.body;
+        const { meetingDate, location, meetingStartTime, meetingEndTime, invitedGuests } = req.body;
         // companyName: { type: String },
         // companyId: { type: String },
         // employeeId:{ type: String },
@@ -45,7 +45,7 @@ const createMeeting = async (req, res) => {
         let company = await Company.findOne({ _id: emp.companyId });
         console.log({company})
 
-        if(!meetingDateTime || meetingDateTime == ''){
+        if(!meetingDate || meetingDate == ''){
 
             res.status(400).json({
                 status: 400,
@@ -99,8 +99,10 @@ const createMeeting = async (req, res) => {
         // }
 
        let holiday = new Holiday({
-            meetingDateTime,
+            meetingDate,
             location,
+            meetingStartTime,
+            meetingEndTime,
             invitedGuests: groups,
             companyId: emp.companyId,
             companyName: company.companyName,

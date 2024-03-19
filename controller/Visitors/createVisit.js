@@ -22,7 +22,7 @@ const createVisit = async (req, res) => {
 
     try {
  
-        const { employeeId, guestName, checkIn, checkOut, purpose, phoneNumber, email, visitDate} = req.body;
+        const { employeeId, guestName, checkIn,expectedCheckInTime, expectedCheckOutTime, checkOut, purpose, phoneNumber, email, visitDate} = req.body;
 
 
         // let company = await Company.findOne({ _id: req.payload.id });
@@ -56,6 +56,8 @@ const createVisit = async (req, res) => {
             employeeName: emp.fullName,
             checkIn,
             phoneNumber,
+            expectedCheckInTime,
+            expectedCheckOutTime,
             email,
             checkOut,
             purpose,

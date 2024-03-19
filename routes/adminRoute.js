@@ -159,6 +159,14 @@ import checkIn from '../controller/Visitors/checkIn';
 import checkOut from '../controller/Visitors/checkOut';
 import fetchVisits from '../controller/Visitors/fetchVisits';
 import calender from '../controller/Holiday/calender';
+import createJobListing from '../controller/JobListings/createJobListing';
+import fetchJobListings from '../controller/JobListings/fetchJobListings';
+import updateJobListing from '../controller/JobListings/updateJobListing';
+import deleteJobListing from '../controller/JobListings/deleteJobListing';
+import fetchJobListingDetails from '../controller/JobListings/fetchJobListingDetails';
+import publishJobListing from '../controller/JobListings/publishJobListing';
+import createForm from '../controller/JobListings/createForm';
+import updateForm from '../controller/JobListings/updateForm';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -286,10 +294,8 @@ router.get("/fetchLeave", auth, fetchLeaves);
 router.get("/fetchLeave/:id", auth, fetchLeavesDetails);
 router.patch("/updateDesignation/:id", auth, updateDesignation);
 router.delete("/deleteDesignation/:id", auth, deleteDesignation);
-
 router.delete("/deleteDebit/:id", auth, deleteDebit);
 router.delete("/deleteCredit/:id", auth, deleteCredit);
-
 router.post("/leaveApplication", auth, leaveApplication);
 router.patch("/leaveAction", auth, leaveAction);
 router.get("/getLeaveRecords", auth, getLeaveRecords);
@@ -338,9 +344,7 @@ router.delete("/deleteGroup/:id", auth, deleteGroup);
 router.delete("/deleteAppraisal/:id", auth, deleteFinal);
 router.delete("/deleteCompany", auth, deleteCompany);
 router.delete("/deleteExpenseRequest/:id", auth, deleteExpenseRequest);
-
 router.delete("/deletePayrollPeriod/:id", auth, deletePeriod);
-
 router.post("/createRole", auth, createRole);
 router.post("/createPermissions", auth, createPermissions);
 router.get("/fetchPermissions", auth, fetchPermissions);
@@ -381,24 +385,33 @@ router.patch("/assignApprover", auth, assignApproval);
 router.patch("/setExpense",  setExpense);
 router.patch("/managerRateKpi/:id",  auth, rateKPI);
 router.post("/employeeRequestAppraisal", auth, employeeKPI);
-
 router.get("/fetchAppraisalPeriod/:id", auth, fetchAppraisalPeriodDetails);
 router.get("/fetchGroupDetails/:employeeId/:appraisalPeriodId", auth, fetchGroupsByPeriod);
-
 router.post("/createMeeting", auth, createMeeting);
 router.patch("/updateMeeting/:id", auth, updateMeeting);
 router.get("/fetchMeetings", auth, fetchMeeting);
 router.get("/fetchMeeting/:id", auth, fetchMeetingDetails);
 router.delete("/deleteMeeting/:id", auth, deleteMeeting);
 router.get("/fetchCalender", auth, calender);
-
-
 router.post("/bookVisitor", auth, createVisit);
 router.patch("/updateVisit/:id", auth, updateVisitor);
 router.get("/fetchVisits", auth, fetchVisits);
 router.patch("/checkIn/:id", auth, checkIn);
 router.patch("/checkOut/:id", auth, checkOut);
+router.post("/createJobListing", auth, createJobListing);
 
+router.post("/createForm", auth, createForm);
+router.patch("/updateForm", auth, updateForm);
+
+router.get("/fetchJobListings", auth, fetchJobListings);
+router.get("/fetchJobListing/:id", auth, fetchJobListingDetails);
+router.patch("/fetchJobListing/:id", auth, updateJobListing);
+router.patch("/publishJob/:id", auth, publishJobListing);
+router.delete("/deleteJobListing/:id", auth, deleteJobListing);
+
+
+router.post("/createForm", auth, createForm);
+router.patch("/updateForm/:id", auth, updateForm);
 
 
 

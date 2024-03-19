@@ -108,7 +108,7 @@ app.get('/test', async (req, res) => {
     
             <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
     
-            You have been invited to join <a href="https://greenpeg-hrm-15cf632a6d01.herokuapp.com/set-password">Greenpeg ERP Platform</a> as an employee 
+            You have been invited to join <a href="https://silo-hrm-15cf632a6d01.herokuapp.com/set-password">silo ERP Platform</a> as an employee 
     
             <br><br>
             </p>
@@ -126,7 +126,7 @@ app.get('/test', async (req, res) => {
     
             await sendEmail(req, res, 'teejohn247@gmail.com', receivers, 'Employee Invitation', resp);
   res.json({
-    message: 'Welcome to Greenpeg ERP Api'
+    message: 'Welcome to silo ERP Api'
   });
 });
 

@@ -100,7 +100,7 @@ return `<!DOCTYPE html>
                                 Cheers,
                             </p>
                             <p style=" text-align: left !important; line-height: 24px;font-size: 16px;">
-                                Greenpeg Team
+                                Silo Team
                             </p>
                         </div>
                     </div>
@@ -112,7 +112,7 @@ return `<!DOCTYPE html>
         <tr>
             <td style="background-color: #04ABB4;  padding: 56px 0; font-size: 16px; text-align: center !important">
                 <div style="margin: 0 auto;">
-                    <p style="padding-top: 12px; color: white">Email: contactus@Greenpeg.com</p>
+                    <p style="padding-top: 12px; color: white">Email: contactus@silo.com</p>
                     <div style="padding-top: 12px">
                       
                     </div>
