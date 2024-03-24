@@ -54,6 +54,7 @@ const addCompany = async (req, res) => {
         });
 
         await company.save();
+        
 
         res.status(200).json({
             status: 200,

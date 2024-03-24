@@ -23,7 +23,7 @@ return `<!DOCTYPE html>
         p {
             margin: 0;
         }
-<!--         .wrapper {
+<!--        .wrapper {
             font-family: "Inter";
             font-size: 0;
             text-align: center;

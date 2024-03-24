@@ -4,18 +4,12 @@ import Role from '../../model/Role';
 import Company from '../../model/Company';
 import JobPostForms from '../../model/JobPostForms';
 import JobPost from '../../model/JobPost';
-
 import Employee from '../../model/Employees';
 import Department from '../../model/Department';
-
-
-
 
 const sgMail = require('@sendgrid/mail')
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_KEY);
-
-
 
 const updateForm = async (req, res) => {
 

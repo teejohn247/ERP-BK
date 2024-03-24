@@ -399,17 +399,13 @@ router.get("/fetchVisits", auth, fetchVisits);
 router.patch("/checkIn/:id", auth, checkIn);
 router.patch("/checkOut/:id", auth, checkOut);
 router.post("/createJobListing", auth, createJobListing);
-
 router.post("/createForm", auth, createForm);
 router.patch("/updateForm", auth, updateForm);
-
 router.get("/fetchJobListings", auth, fetchJobListings);
 router.get("/fetchJobListing/:id", auth, fetchJobListingDetails);
 router.patch("/fetchJobListing/:id", auth, updateJobListing);
 router.patch("/publishJob/:id", auth, publishJobListing);
 router.delete("/deleteJobListing/:id", auth, deleteJobListing);
-
-
 router.post("/createForm", auth, createForm);
 router.patch("/updateForm/:id", auth, updateForm);
 

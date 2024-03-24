@@ -196,6 +196,36 @@ const createGroup = async (req, res) => {
                                                     })
                                 
                                                 } else {
+
+                                                    addDepartment.updateMany({ _id:  { $in: departmentIds }}, { 
+                                                        $push: { departments: {
+                                                            appraisalId: adm._id,
+                                                            appraisalName: adm.groupName,
+                                                        }},
+                                                   },{ upsert: true },
+                                                        async function (
+                                                            err,
+                                                            result
+                                                        ) {
+                                                            if (err) {
+                                                                res.status(401).json({
+                                                                    status: 401,
+                                                                    success: false,
+                                                                    error: err
+                                                                })
+                                            
+                                                            } else {
+                                            
+                                                                const manager = await AppraisalGroup.findOne({_id: adm._id});
+                                            
+                                                                res.status(200).json({
+                                                                    status: 200,
+                                                                    success: true,
+                                                                    data: manager
+                                                                })
+                                            
+                                                            }
+                                                        })
                                 
                                                     addDepartment.updateMany({ _id:  { $in: departmentIds }}, { 
                                                         $push: { departments: {
@@ -239,14 +269,6 @@ const createGroup = async (req, res) => {
                     })
     
     
-    
-    
-    
-                // res.status(200).json({
-                //     status: 200,
-                //     success: true,
-                //     data: adm
-                // })
             }).catch((err) => {
                     console.error(err)
                     res.status(400).json({

@@ -91,88 +91,88 @@ const updateEmployee = async (req, res) => {
     
     
     
-                                    //         console.log(adm)
-                                    //         console.log({departmentIds})
-                                    //         AppraisalGroup.findOneAndUpdate({ groupName : "General" }, { 
-                                    //             $push: { assignedDepartments: departments
-                                    //             },
-                                    //        },{ upsert: true },
-                                    //             async function (
-                                    //                 err,
-                                    //                 result
-                                    //             ) {
-                                    //                 if (err) {
-                                    //                     res.status(401).json({
-                                    //                         status: 401,
-                                    //                         success: false,
-                                    //                         error: err
-                                    //                     })
+                                        //     console.log(adm)
+                                        //     console.log({departmentIds})
+                                        //     AppraisalGroup.findOneAndUpdate({ groupName : "General" }, { 
+                                        //         $push: { assignedDepartments: departments
+                                        //         },
+                                        //    },{ upsert: true },
+                                        //         async function (
+                                        //             err,
+                                        //             result
+                                        //         ) {
+                                        //             if (err) {
+                                        //                 res.status(401).json({
+                                        //                     status: 401,
+                                        //                     success: false,
+                                        //                     error: err
+                                        //                 })
                                     
-                                    //                 } else {
+                                        //             } else {
     
-                                    //                     addDepartment.updateMany({ _id:  { $in: departmentIds }}, { 
-                                    //                         $push: { departments: {
-                                    //                             appraisalId: adm._id,
-                                    //                             appraisalName: adm.groupName,
-                                    //                         }},
-                                    //                    },{ upsert: true },
-                                    //                         async function (
-                                    //                             err,
-                                    //                             result
-                                    //                         ) {
-                                    //                             if (err) {
-                                    //                                 res.status(401).json({
-                                    //                                     status: 401,
-                                    //                                     success: false,
-                                    //                                     error: err
-                                    //                                 })
+                                        //                 addDepartment.updateMany({ _id:  { $in: departmentIds }}, { 
+                                        //                     $push: { departments: {
+                                        //                         appraisalId: adm._id,
+                                        //                         appraisalName: adm.groupName,
+                                        //                     }},
+                                        //                },{ upsert: true },
+                                        //                     async function (
+                                        //                         err,
+                                        //                         result
+                                        //                     ) {
+                                        //                         if (err) {
+                                        //                             res.status(401).json({
+                                        //                                 status: 401,
+                                        //                                 success: false,
+                                        //                                 error: err
+                                        //                             })
                                                 
-                                    //                             } else {
+                                        //                         } else {
                                                 
-                                    //                                 const manager = await AppraisalGroup.findOne({_id: adm._id});
+                                        //                             const manager = await AppraisalGroup.findOne({_id: adm._id});
                                                 
-                                    //                                 res.status(200).json({
-                                    //                                     status: 200,
-                                    //                                     success: true,
-                                    //                                     data: manager
-                                    //                                 })
+                                        //                             res.status(200).json({
+                                        //                                 status: 200,
+                                        //                                 success: true,
+                                        //                                 data: manager
+                                        //                             })
                                                 
-                                    //                             }
-                                    //                         })
+                                        //                         }
+                                        //                     })
                                     
-                                    //                     addDepartment.updateMany({ _id:  { $in: departmentIds }}, { 
-                                    //                         $push: { departments: {
-                                    //                             appraisalId: adm._id,
-                                    //                             appraisalName: adm.groupName,
-                                    //                         }},
-                                    //                    },{ upsert: true },
-                                    //                         async function (
-                                    //                             err,
-                                    //                             result
-                                    //                         ) {
-                                    //                             if (err) {
-                                    //                                 res.status(401).json({
-                                    //                                     status: 401,
-                                    //                                     success: false,
-                                    //                                     error: err
-                                    //                                 })
+                                        //                 addDepartment.updateMany({ _id:  { $in: departmentIds }}, { 
+                                        //                     $push: { departments: {
+                                        //                         appraisalId: adm._id,
+                                        //                         appraisalName: adm.groupName,
+                                        //                     }},
+                                        //                },{ upsert: true },
+                                        //                     async function (
+                                        //                         err,
+                                        //                         result
+                                        //                     ) {
+                                        //                         if (err) {
+                                        //                             res.status(401).json({
+                                        //                                 status: 401,
+                                        //                                 success: false,
+                                        //                                 error: err
+                                        //                             })
                                                 
-                                    //                             } else {
+                                        //                         } else {
                                                 
-                                    //                                 const manager = await AppraisalGroup.findOne({_id: adm._id});
+                                        //                             const manager = await AppraisalGroup.findOne({_id: adm._id});
                                                 
-                                    //                                 res.status(200).json({
-                                    //                                     status: 200,
-                                    //                                     success: true,
-                                    //                                     data: manager
-                                    //                                 })
+                                        //                             res.status(200).json({
+                                        //                                 status: 200,
+                                        //                                 success: true,
+                                        //                                 data: manager
+                                        //                             })
                                                 
-                                    //                             }
-                                    //                         })
+                                        //                         }
+                                        //                     })
                                     
                                     
-                                    //                 }
-                                    //             })
+                                        //             }
+                                        //         })
                         
                                         }
                                     })
