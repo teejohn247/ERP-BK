@@ -6,7 +6,7 @@ import Holiday from '../../model/Holidays';
 import Leave from '../../model/LeaveRecords';
 import Meeting from '../../model/Meetings';
 import mongoose from 'mongoose';
-
+import Company  from '../../model/Company';
 
 
 
@@ -29,63 +29,15 @@ const calender = async (req, res) => {
         // const { holidayName, description, date } = req.body;
 
         const emp = await Employee.findOne({_id: req.payload.id})
+        const comp = await Company.findOne({_id: req.payload.id})
+
 
         console.log({emp});
-        // const aggregationResult = await Meeting.aggregate([
-        //     {
-        //         $match: {
-        //             employeeId: req.payload.id      // Convert req.payload.id to ObjectId
-        //         }
-        //     },
-        //     {
-        //         $lookup: {
-        //             from: 'holidays',
-        //             localField: 'companyId',
-        //             foreignField: 'companyId',
-        //             as: 'holidays'
-        //         }
-        //     },
-        //     {
-        //         $lookup: {
-        //             from: 'leaverecords',
-        //             localField: 'employeeId',
-        //             foreignField: 'userId',
-        //             as: 'leaveRecords'
-        //         }
-        //     },
-        //     {
-        //         $group: {
-        //             _id: '$employeeId',
-        //             meetingDateTime: {
-        //                 $push: {
-        //                     dateTime: '$meetingDateTime',
-        //                     invitedGuests: '$invitedGuests',
-        //                     location: '$location'
-        //                 }
-        //             },
-        //             leaveStartDates: {
-        //                 $push: {
-        //                     $cond: [
-        //                         { $ne: ['$leaveRecords', []] },
-        //                         { $map: { input: '$leaveRecords', as: 'record', in: { startDate: '$$record.leaveStartDate', endDate: '$$record.leaveEndDate' } } },
-        //                         []
-        //                     ]
-        //                 }
-        //             },
-        //             holiday: { $addToSet: '$holidays' }
-        //         }
-        //     },
-        //     {
-        //         $project: {
-        //             _id: 1,
-        //             meetingDateTime: 1,
-        //             leaveStartDates: {
-        //                 $filter: { input: '$leaveStartDates', as: 'date', cond: { $ne: ['$$date', []] } }
-        //             },
-        //             holiday: { $filter: { input: '$holiday', as: 'h', cond: { $ne: ['$$h', []] } } }
-        //         }
-        //     }
-        // ]);
+        console.log({comp});
+
+
+        if(emp){
+
 // First, fetch meetings for the employee
 const meetings = await Meeting.aggregate([
     {
@@ -174,6 +126,76 @@ res.status(200).json({
     success: true,
     data: aggregationResult
 })
+}else if(comp){
+
+    console.log('heer')
+const meetings = await Meeting.aggregate([
+    {
+        $match: {
+            companyId: req.payload.id
+        }
+    },
+    {
+        $group: {
+            _id: '$companyId',
+            meetingDateTime: {
+                $push: {
+                    dateTime: '$meetingDateTime',
+                    invitedGuests: '$invitedGuests',
+                    location: '$location'
+                }
+            }
+        }
+    }
+]);
+
+console.log({meetings})
+
+// Initialize arrays for holidays and leave records
+let holidays = [];
+let leaveRecords = [];
+
+ 
+    // If there are no meetings, still fetch holidays and leave records for the employee
+
+
+    // Look up holidays for the employee
+    holidays = await Holiday.aggregate([
+        {
+            $match: {
+                companyId:req.payload.id
+            }
+        }
+    ]);
+console.log({holidays})
+    // Look up leave records for the employee
+    leaveRecords = await Leave.aggregate([
+        {
+            $match: {
+                companyId: req.payload.id
+
+            }
+        }
+    ]);
+
+
+// Combine the results and return
+const aggregationResult = {
+    meetings: meetings.length > 0 ? meetings[0].meetingDateTime : [],
+    holidays: holidays,
+    leaveRecords: leaveRecords
+};
+
+// Return the combined result
+// aggregationResult;
+
+
+res.status(200).json({
+    status: 200,
+    success: true,
+    data: aggregationResult
+})
+}
 
         
     } catch (error) {
