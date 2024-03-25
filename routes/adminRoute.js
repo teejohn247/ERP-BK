@@ -167,6 +167,7 @@ import fetchJobListingDetails from '../controller/JobListings/fetchJobListingDet
 import publishJobListing from '../controller/JobListings/publishJobListing';
 import createForm from '../controller/JobListings/createForm';
 import updateForm from '../controller/JobListings/updateForm';
+import apply from '../controller/JobListings/apply';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -247,6 +248,8 @@ router.get('/forgotPassword', forgotPassword);
 router.patch('/changePassword', auth, changePassword);
 router.patch('/verifyPassword', verifyToken);
 router.post("/addImage", auth, upload.single("my_file"), imageUploader, addImage);
+router.post("/jobApplication", auth, upload.single("resumeCV"), imageUploader, apply);
+
 router.post('/addEmployee', auth, inviteEmployee);
 router.patch('/addLeaveType/:roleId', auth, addLeave);
 // router.patch('/addHmo/:id', auth, addHmo);

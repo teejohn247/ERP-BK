@@ -21,7 +21,7 @@ const apply = async (req, res) => {
 
     try {
        
-        const { jobTitle, jobTitleID, email, phone, resumeCV, coverLetter, linkedInUrl, howDidYouHearAboutUs, ethnicity, gender } = req.body;
+        const { firstName, lastName, jobTitle, jobTitleID, email, phone, resumeCV, coverLetter, linkedInUrl, howDidYouHearAboutUs, ethnicity, gender } = req.body;
   
 
         let job = await Job.findOne({ _id: jobTitleID });
@@ -37,6 +37,8 @@ const apply = async (req, res) => {
         }
        
        let jobPost = new JobPost({
+            firstName, 
+            lastName,
             jobTitle, 
             departmentId: job.departmentId,
             departmentName: job.departmentName,
@@ -45,7 +47,7 @@ const apply = async (req, res) => {
             jobTitleID,
             email, 
             phone, 
-            resumeCV, 
+            resumeCV: req.body.image, 
             coverLetter, 
             linkedInUrl, 
             howDidYouHearAboutUs, 

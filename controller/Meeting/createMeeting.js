@@ -23,7 +23,7 @@ const createMeeting = async (req, res) => {
 
     try {
        
-        const { meetingDate, location, meetingStartTime, meetingEndTime, invitedGuests } = req.body;
+        const { meetingDate,  location, meetingStartTime, meetingEndTime, meetingTitle, meetingDescription, invitedGuests } = req.body;
         // companyName: { type: String },
         // companyId: { type: String },
         // employeeId:{ type: String },
@@ -103,6 +103,8 @@ const createMeeting = async (req, res) => {
             location,
             meetingStartTime,
             meetingEndTime,
+            meetingTitle,
+            meetingDescription,
             invitedGuests: groups,
             companyId: emp.companyId,
             companyName: company.companyName,

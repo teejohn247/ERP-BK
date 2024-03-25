@@ -7,7 +7,11 @@ const MeetingSchema = new mongoose.Schema({
     companyId: { type: String },
     employeeId:{ type: String },
     location:{ type: String },
+    meetingTitle:{ type: String },
+    meetingDescription:{ type: String },
     meetingDate:{ type:Date },
+    meetingStartTime:{ type:Date },
+    meetingEndTime:{ type:Date },
     invitedGuests:[
         {
             employeeId: { type: String },
