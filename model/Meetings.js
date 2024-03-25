@@ -9,7 +9,7 @@ const MeetingSchema = new mongoose.Schema({
     location:{ type: String },
     meetingTitle:{ type: String },
     meetingDescription:{ type: String },
-    meetingDate:{ type:Date },
+    // meetingDate:{ type:Date },
     meetingStartTime:{ type:Date },
     meetingEndTime:{ type:Date },
     invitedGuests:[

@@ -23,7 +23,7 @@ const updateVisitor = async (req, res) => {
     try {
  
         const { employeeId, guestName, expectedCheckInTime,
-            expectedCheckOutTime, checkIn, checkOut, purpose,  phoneNumber, email, visitDate} = req.body;
+            expectedCheckOutTime, checkIn, checkOut, purpose,  phoneNumber, email} = req.body;
 
 
         let emp = await Visitor.findOne({ _id: req.params.id});
@@ -50,7 +50,6 @@ const updateVisitor = async (req, res) => {
                 purpose,
                 phoneNumber, 
                 email,
-                visitDate,
             }
        },
             function (

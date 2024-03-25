@@ -61,7 +61,6 @@ const createVisit = async (req, res) => {
             email,
             checkOut,
             purpose,
-            visitDate,
             status: "Expected"
         })
 

@@ -14,7 +14,6 @@ const VisitorSchema = new mongoose.Schema({
     purpose:{ type: String },
     expectedCheckInTime:{ type: Date },
     expectedCheckOutTime:{ type: Date },
-    visitDate:{ type: Date },
     phoneNumber: { type: String },
     email: { type: String },
     status: {type: String, default: "Expected"}

@@ -395,7 +395,7 @@ router.patch("/updateMeeting/:id", auth, updateMeeting);
 router.get("/fetchMeetings", auth, fetchMeeting);
 router.get("/fetchMeeting/:id", auth, fetchMeetingDetails);
 router.delete("/deleteMeeting/:id", auth, deleteMeeting);
-router.get("/fetchCalender", auth, calender);
+router.get("/fetchCalendar", auth, calender);
 router.post("/bookVisitor", auth, createVisit);
 router.patch("/updateVisit/:id", auth, updateVisitor);
 router.get("/fetchVisits", auth, fetchVisits);
