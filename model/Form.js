@@ -23,6 +23,7 @@ const FormSchema = new mongoose.Schema({
     physicalDisability: {type: String},
     ethnicity: {type: String },
     gender: {type: String, required: true },
+    selected: {type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("Form", FormSchema);

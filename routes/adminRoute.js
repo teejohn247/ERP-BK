@@ -168,6 +168,9 @@ import publishJobListing from '../controller/JobListings/publishJobListing';
 import createForm from '../controller/JobListings/createForm';
 import updateForm from '../controller/JobListings/updateForm';
 import apply from '../controller/JobListings/apply';
+import selectApplication from '../controller/JobListings/selectApplication';
+import fetchSelectedApplications from '../controller/JobListings/fetchSelectedApplications';
+import listApplications from '../controller/JobListings/listApplications';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -411,6 +414,12 @@ router.patch("/publishJob/:id", auth, publishJobListing);
 router.delete("/deleteJobListing/:id", auth, deleteJobListing);
 router.post("/createForm", auth, createForm);
 router.patch("/updateForm/:id", auth, updateForm);
+router.patch("/selectApplication/:id", auth, selectApplication);
+router.get("/listJobApplications/:jobTitleID", auth, listApplications);
+
+router.get("/fetchSelectedApplicants/:id", auth, fetchSelectedApplications);
+
+
 
 
 

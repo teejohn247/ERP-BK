@@ -22,7 +22,7 @@ const listApplications = async (req, res) => {
 
     try {
 
-        const role = await JobPost.find({_id: req.params.id})
+        const role = await JobPost.find({jobTitleID: req.params.jobTitleID})
 
         console.log(role)
 
