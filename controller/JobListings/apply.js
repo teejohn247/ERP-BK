@@ -25,7 +25,7 @@ const apply = async (req, res) => {
   
 
         let job = await Job.findOne({ _id: jobTitleID });
-        console.log({job})
+        console.log("rcv",req.body.cv)
 
         if (!job) {
 
@@ -57,11 +57,50 @@ const apply = async (req, res) => {
         
         await jobPost.save().then((adm) => {
             console.log(adm)
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: adm
-            })
+            Job.findOneAndUpdate({ _id:  jobTitleID}, { 
+                $push: {  applications: {
+                    firstName, 
+                    lastName,
+                    jobTitle, 
+                    departmentId: job.departmentId,
+                    departmentName: job.departmentName,
+                    companyId: job.companyId,
+                    companyName: job.companyName,
+                    jobTitleID,
+                    email, 
+                    phone, 
+                    resumeCV: req.body.image, 
+                    coverLetter, 
+                    linkedInUrl, 
+                    howDidYouHearAboutUs, 
+                    ethnicity, 
+                    gender,
+                    applicationId: adm._id
+                } },
+           },{ upsert: true },
+                async function (
+                    err,
+                    result
+                ) {
+                    if (err) {
+                        res.status(401).json({
+                            status: 401,
+                            success: false,
+                            error: err
+                        })
+    
+                    } else {
+
+                        res.status(200).json({
+                            status: 200,
+                            success: true,
+                            data: adm
+                        })
+    
+                    }
+                })
+
+           
         }).catch((err) => {
                 console.error(err)
                 res.status(400).json({

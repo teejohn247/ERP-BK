@@ -25,21 +25,25 @@ const createJobListing = async (req, res) => {
         let company = await Company.findOne({ _id: req.payload.id });
         console.log({company})
 
-        const department = await Department.findOne({_id: departmentId})
-        console.log({department})
+      
 
         const employee = await Employee.findOne({_id: hiringManagerID ? hiringManagerID : department.managerID})
 
+        const user = await Employee.findOne({_id: req.payload.id })
+
+        const department = await Department.findOne({_id: departmentId})
+        
+        console.log({department})
         console.log({employee})
 
-        if (!company) {
+        // if (!company) {
 
-            res.status(400).json({
-                status: 400,
-                error: 'This company does not exist'
-            })
-            return;
-        }
+        //     res.status(400).json({
+        //         status: 400,
+        //         error: 'This company does not exist'
+        //     })
+        //     return;
+        // }
 
         if (!department) {
 
@@ -68,8 +72,8 @@ const createJobListing = async (req, res) => {
             jobType, 
             departmentId,
             departmentName: department.departmentName,
-            companyId: req.payload.id,
-            companyName: company.companyName,
+            companyId: company ? req.payload.id : user.companyId,
+            companyName: company ? company.companyName : user.companyName,
             hiringManagerID,
             hiringManager: employee.fullName
         })

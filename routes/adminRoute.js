@@ -416,7 +416,6 @@ router.post("/createForm", auth, createForm);
 router.patch("/updateForm/:id", auth, updateForm);
 router.patch("/selectApplication/:id", auth, selectApplication);
 router.get("/listJobApplications/:jobTitleID", auth, listApplications);
-
 router.get("/fetchSelectedApplicants/:id", auth, fetchSelectedApplications);
 
 

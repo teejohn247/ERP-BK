@@ -2,7 +2,7 @@
 import dotenv from 'dotenv';
 import Role from '../../model/Role';
 import Company from '../../model/Company';
-import JobPostForms from '../../model/JobPostForms';
+import JobPostForms from '../../model/JobPost';
 import JobPost from '../../model/Form';
 import Employee from '../../model/Employees';
 import Department from '../../model/Department';
@@ -62,11 +62,31 @@ const selectApplication = async (req, res) => {
 
                 } else {
                     console.log({result})
-                    res.status(200).json({
-                        status: 200,
-                        success: true,
-                        data: "Application Selected Successfully"
-                    })
+                    JobPostForms.updateOne(
+                        { "_id": job.jobTitleID, "applications.applicationId": req.params.id },
+                        { $set: { "applications.$.selected": selected } },
+                        function (
+                            err,
+                            result
+                        ) {
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    success: false,
+                                    error: err
+            
+                                })
+            
+                            } else {
+                                res.status(200).json({
+                                    status: 200,
+                                    success: true,
+                                    data: "Application Selected Successfully"
+                                })
+                            }
+                        }
+                     )
+                 
 
                 }
             })
