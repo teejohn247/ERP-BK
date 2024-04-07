@@ -25,7 +25,9 @@ import signUp from '../controller/Company/signUp';
 import createDesignation from '../controller/createDesignation/createDesignation';
 import fetchDesignation from '../controller/createDesignation/fetchDesignation';
 // import upload from '../config/multer.config';
-import imageUploader from '../middleware/uploadFile'
+import imageUploader from '../middleware/uploadFile';
+import uploadFiles from '../middleware/uploadGC';
+
 // import upload from '../middleware/uploadFile';
 import addImage from '../controller/addImage';
 import { cloudinaryConfig }  from '../config/cloudinary';
@@ -172,12 +174,33 @@ import selectApplication from '../controller/JobListings/selectApplication';
 import fetchSelectedApplications from '../controller/JobListings/fetchSelectedApplications';
 import listApplications from '../controller/JobListings/listApplications';
 
+
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
 const mult = multer({ dest: "uploads/" });
 const cloudinary = require("cloudinary").v2;
 const Multer = require("multer");
 const csv = require('csvtojson');
+
+// Initialize Google Cloud Storage
+
+
+// Multer configuration for file uploads
+const multerConfig = multer.memoryStorage();
+
+// Middleware for file uploads
+const uploadgoogle = multer({
+    storage: multerConfig,
+    fileFilter: (req, file, cb) => {
+        // Check file types here if needed
+        console.log(req.files)
+        cb(null, true);
+    }
+}).fields([
+    { name: 'resumeCV', maxCount: 1 },
+    { name: 'coverLetterFile', maxCount: 1 }
+]);
+
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME, 
@@ -251,8 +274,23 @@ router.get('/forgotPassword', forgotPassword);
 router.patch('/changePassword', auth, changePassword);
 router.patch('/verifyPassword', verifyToken);
 router.post("/addImage", auth, upload.single("my_file"), imageUploader, addImage);
-router.post("/jobApplication", auth, upload.single("resumeCV"), imageUploader, apply);
+// router.post("/jobApplication", auth, upload.single("resumeCV"), imageUploader, apply);
+router.post("/jobApplication", auth, uploadgoogle,  async (req, res, next) => {
+  try {
+    console.log(req.files['resumeCV'][0])
+      const resumeCV = req.files['resumeCV'][0];
+      const coverLetterFile = req.files['coverLetterFile'][0];
 
+      // Upload files to Google Cloud Storage
+      await uploadFiles(req, resumeCV, 'resumeCV');
+      await uploadFiles(req, coverLetterFile, 'otherFile');
+
+     next()
+  } catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Error uploading files.");
+  }
+}, apply);
 router.post('/addEmployee', auth, inviteEmployee);
 router.patch('/addLeaveType/:roleId', auth, addLeave);
 // router.patch('/addHmo/:id', auth, addHmo);

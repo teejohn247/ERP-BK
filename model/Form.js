@@ -17,6 +17,7 @@ const FormSchema = new mongoose.Schema({
     phone: { type: String, required: true },
     resumeCV: { type: String, required: true },
     coverLetter: { type: String},
+    coverLetterFile: { type: String},
     departmentId: { type: String, required: true },
     linkedInUrl: {type: String },
     howDidYouHearAboutUs: {type: String},

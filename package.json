@@ -24,6 +24,7 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/register": "^7.4.4",
     "@getbrevo/brevo": "^1.0.1",
+    "@google-cloud/storage": "^7.9.0",
     "@sendgrid/mail": "^7.7.0",
     "@types/multer": "^1.4.7",
     "aws-sdk": "^2.1304.0",

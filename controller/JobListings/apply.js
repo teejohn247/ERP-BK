@@ -21,11 +21,13 @@ const apply = async (req, res) => {
 
     try {
        
-        const { firstName, lastName, jobTitle, jobTitleID, email, phone, resumeCV, coverLetter, linkedInUrl, howDidYouHearAboutUs, ethnicity, gender } = req.body;
+        const { firstName, lastName, jobTitle, jobTitleID, email, phone,coverLetter, linkedInUrl, howDidYouHearAboutUs, ethnicity, gender } = req.body;
   
 
         let job = await Job.findOne({ _id: jobTitleID });
         console.log("rcv",req.body.cv)
+        console.log("rcvletter",req.body.letter)
+
 
         if (!job) {
 
@@ -47,8 +49,9 @@ const apply = async (req, res) => {
             jobTitleID,
             email, 
             phone, 
-            resumeCV: req.body.image, 
-            coverLetter, 
+            resumeCV: req.body.cv, 
+            coverLetter: coverLetter, 
+            coverLetterFile: req.body.letter, 
             linkedInUrl, 
             howDidYouHearAboutUs, 
             ethnicity, 
@@ -69,8 +72,9 @@ const apply = async (req, res) => {
                     jobTitleID,
                     email, 
                     phone, 
-                    resumeCV: req.body.image, 
-                    coverLetter, 
+                    resumeCV: req.body.cv, 
+                    coverLetter,
+                    coverLetterFile: req.body.letter, 
                     linkedInUrl, 
                     howDidYouHearAboutUs, 
                     ethnicity, 
