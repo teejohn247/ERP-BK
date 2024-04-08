@@ -40,7 +40,7 @@ const forgotPassword = async (req, res) => {
 
         Please, complete your reset your password using this link
         <br>
-				<a href="https://silo-hrm-15cf632a6d01.herokuapp.com/set-password/${token}"><button>Reset Password</button></a>
+				<a href="https://xped8-ca9291a9a7e0.herokuapp.com/set-password/${token}"><button>Reset Password</button></a>
         <br><br>
         </p>
         <div>`;
