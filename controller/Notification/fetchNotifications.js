@@ -1,4 +1,6 @@
-import Notificatiotions from '../../model/Notification'
+import Notifications from '../../model/Notification';
+import Employee from '../../model/Employees';
+
 import dotenv from 'dotenv';
 
 
@@ -9,12 +11,15 @@ const fetchNotifications = async(req, res) => {
     try{
         const { page, limit } = req.query;
 
-        const notification = await Notificatiotions.find()
+        let employee = await Employee.findOne({ _id: req.payload.id })
+
+
+        const notification = await Notifications.find({companyId: employee.companyId, recipientId: req.payload.id, read: false })
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
 
-        const count = await Notificatiotions.find().countDocuments()
+        const count = await Notifications.find().countDocuments({companyId: employee.companyId, recipientId: req.payload.id, read: false })
 
 
         if(!notification){

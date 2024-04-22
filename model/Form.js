@@ -25,6 +25,7 @@ const FormSchema = new mongoose.Schema({
     ethnicity: {type: String },
     gender: {type: String, required: true },
     selected: {type: Boolean, default: false },
+    stage: {type: String }
 });
 
 module.exports = mongoose.model("Form", FormSchema);

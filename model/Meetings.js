@@ -20,7 +20,10 @@ const MeetingSchema = new mongoose.Schema({
          
         }
     ],
-    
+    zoomLink: {
+        type: Map,
+        of: mongoose.Schema.Types.Mixed,
+},
 }, { timestamps: true });
 
 

@@ -12,7 +12,7 @@ import Department from "../../model/Department";
 import LeaveRecords from '../../model/LeaveRecords';
 import Leave from '../../model/Leaves'
 import { sendEmail } from '../../config/email';
-
+import Notification from '../../model/Notification';
 const sgMail = require('@sendgrid/mail')
 
 dotenv.config();
@@ -104,8 +104,6 @@ const leaveApplication = async (req, res) => {
         const approve = check.approvals.filter(obj => obj.approvalType === "leave");
 
         console.log({approve});
-
-
 
         const exists = check.leaveAssignment.some(obj => obj.leaveTypeId === leaveTypeId);
 
@@ -233,7 +231,16 @@ const leaveApplication = async (req, res) => {
     
             await sendEmail(req, res, check.email, receiverEmployee, 'Leave Application Notification', respEmployee);
 
-            
+
+            let notification = new Notification({
+                created_by:req.payload.id,
+                companyName: check.companyName,
+                companyId: check.companyId,
+                recipientId: checkManager._id,
+                notificationType: `Leave Application`,
+                notificationContent: `${adm.firstName ? adm.firstName : adm.fullName} has requested for a leave.`
+            })
+            await notification.save();
         })
 
         Employee.findOneAndUpdate({ _id: req.payload.id}, { 

@@ -44,6 +44,7 @@ const JobPostSchema = new mongoose.Schema({
         gender: {type: String, required: true },
         selected: {type: Boolean, default: false },
         applicationId: {type: String, required: true },
+        stage: {type: String}
 
     }],
     form: {

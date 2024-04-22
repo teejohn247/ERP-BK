@@ -3,32 +3,12 @@ import moment from 'moment/moment';
 
 
 const NotificationsSchema = new mongoose.Schema({
-    notificationName: {type: String, required: true, unique: true},
-    enabled:{
+    notificationType: {type: String, required: true, unique: true},
+    notificationContent: {type: String, required: true, unique: true},
+    recipientId: {type: String, required: true, unique: true},
+    read:{
         type: Boolean, default: false
     },
-    availableTo: [{
-        schools: {
-            type: Boolean,
-            default: false
-        },
-        nigeniusAdmin: {
-            type: Boolean,
-            default: false
-        }
-    }],
-    assigned_to:  [{
-        school_id: {
-            type: String,
-        },
-        school_name: {
-            type: String
-        },
-        date_assigned: {
-            type: Date,
-            default: new Date().toISOString() 
-        }
-    }],
     created_by: {type: String, required: true},
 }, { timestamps: true })
 

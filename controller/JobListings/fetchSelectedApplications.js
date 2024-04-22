@@ -24,10 +24,14 @@ const fetchSelectedApplications = async (req, res) => {
 
         const { page, limit } = req.query;
 
-        const company = await Company.findOne({companyId: req.payload.id});
+        const company = await Company.findOne({_id: req.payload.id});
         const employee = await Employee.findOne({_id: req.payload.id});
 
-        console.log(req.payload.id)
+        console.log({company})
+        console.log({employee})
+
+
+
 
 
         if(company) {
@@ -48,10 +52,13 @@ const fetchSelectedApplications = async (req, res) => {
     
                 return
         }else if(employee){
+            console.log(employee.companyId)
             const jobListing = await JobPost.find({companyId: employee.companyId, jobTitleID: req.params.id, selected: true})
             .limit(limit * 1)
             .skip((page - 1) * limit)
             .exec();
+
+            console.log({jobListing})
     
                 const count = await JobPost.find({companyId: employee.companyId,  jobTitleID: req.params.id, selected: true}).countDocuments()
     

@@ -11,11 +11,11 @@ const sgMail = require('@sendgrid/mail')
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
-const selectApplication = async (req, res) => {
+const changeStage = async (req, res) => {
 
     try {
        
-        const { selected } = req.body;
+        const { stage } = req.body;
 
 
         let company = await Company.findOne({ _id: req.payload.id });
@@ -57,7 +57,7 @@ const selectApplication = async (req, res) => {
         if(company){
            JobPost.findOneAndUpdate({ _id: req.params.id}, { 
                 $set: { 
-                    selected: selected, 
+                    stage: stage, 
                 }
             },
                 function (
@@ -76,7 +76,7 @@ const selectApplication = async (req, res) => {
                         console.log({result})
                         JobPostForms.updateOne(
                             { "_id": job.jobTitleID, "applications.applicationId": req.params.id },
-                            { $set: { "applications.$.selected": selected } },
+                            { $set: { "applications.$.stage": stage } },
                             function (
                                 err,
                                 result
@@ -93,7 +93,7 @@ const selectApplication = async (req, res) => {
                                     res.status(200).json({
                                         status: 200,
                                         success: true,
-                                        data: "Application Selected Successfully"
+                                        data: "Application stage updated"
                                     })
                                 }
                             }
@@ -107,7 +107,7 @@ const selectApplication = async (req, res) => {
 
            JobPost.findOneAndUpdate({ _id: req.params.id}, { 
                 $set: { 
-                    selected: selected, 
+                    stage: stage, 
                 }
             },
                 function (
@@ -128,7 +128,7 @@ const selectApplication = async (req, res) => {
                         console.log({result})
                         JobPostForms.updateOne(
                             { "_id": job.jobTitleID, "applications.applicationId": req.params.id },
-                            { $set: { "applications.$.selected": selected } },
+                            { $set: { "applications.$.stage": stage } },
                             function (
                                 err,
                                 result
@@ -145,7 +145,7 @@ const selectApplication = async (req, res) => {
                                     res.status(200).json({
                                         status: 200,
                                         success: true,
-                                        data: "Application Selected Successfully"
+                                        data: "Application stage updated"
                                     })
 
                                     return;
@@ -169,4 +169,4 @@ const selectApplication = async (req, res) => {
         })
     }
 }
-export default selectApplication;
+export default changeStage;

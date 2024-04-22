@@ -10,6 +10,7 @@ import LeaveRecords from '../../model/LeaveRecords';
 import { sendEmail } from '../../config/email';
 import daysUsed from '../../cron/daysUsed';
 import Holidays from '../../model/Holidays';
+import Notification from '../../model/Notification';
 
 const { differenceInDays, addDays, isSaturday, isSunday } = require('date-fns');
 // const { parse, format } = require('date-fns-tz');
@@ -168,14 +169,12 @@ findEmployee()
 
 
     const result = approved
-? leaveAssignment[0].noOfLeaveDays === undefined
-? daysWithoutWeekends
-: leaveAssignment[0].noOfLeaveDays - daysWithoutWeekends
-: approved === false && leaveAssignment[0].noOfLeaveDays;
+    ? leaveAssignment[0].noOfLeaveDays === undefined
+    ? daysWithoutWeekends
+    : leaveAssignment[0].noOfLeaveDays - daysWithoutWeekends
+    : approved === false && leaveAssignment[0].noOfLeaveDays;
 
-    console.log({result});
-
-
+        console.log({result});
 
 
     await leaveType.updateOne({
@@ -266,6 +265,16 @@ findEmployee()
                               ]
                         
                                 await sendEmail(req, res, check.email, receivers, 'Leave Application Notification', resp);
+
+                                let notification = new Notification({
+                                  created_by: req.payload.id,
+                                  companyName: check.companyName,
+                                  companyId: check.companyId,
+                                  recipientId: check._id,
+                                  notificationType: `Leave Application`,
+                                  notificationContent: ` Your leave request has been ${approved == true ? "Approved" : "Declined"}`
+                              })
+                              await notification.save();
             
                                 res.status(200).json({
                                     status: 200,
@@ -281,18 +290,6 @@ findEmployee()
      
 
     });
-
-
-
-
-
-
-
-
-
-
-
-
   })
   .catch((err) => {
     console.error('Error fetching employee:', err);
