@@ -19,21 +19,24 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
 
-const listApplications = async (req, res) => {
+const listMasterApplications = async (req, res) => {
 
     try {
 
-        const company = await Company.findOne({companyId: req.payload.id});
+        const company = await Company.findOne({_id: req.payload.id});
         const employee = await Employee.findOne({_id: req.payload.id});
 
         console.log(req.payload.id)
+        console.log({company})
+
+        console.log({employee})
 
 
         if(company) {
 
         const role = await JobPost.find({companyId: req.payload.id})
 
-        console.log(role)
+        console.log({role})
 
         if(!role){
             res.status(404).json({
@@ -53,7 +56,7 @@ const listApplications = async (req, res) => {
     }else{
         const role = await JobPost.find({companyId: employee.companyId})
 
-        console.log(role)
+        // console.log(role)
 
         if(!role){
             res.status(404).json({
@@ -81,7 +84,7 @@ const listApplications = async (req, res) => {
         })
     }
 }
-export default listApplications;
+export default listMasterApplications;
 
 
 

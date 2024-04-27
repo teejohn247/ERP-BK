@@ -178,6 +178,10 @@ import readNotification from '../controller/Notification/readNotification';
 import meetIntegration from '../helpers/meetIntegration';
 import zoomIntegration from '../helpers/zoomIntegration';
 import changeStage from '../controller/JobListings/changeStage';
+import exportEmployees from '../controller/Employers/exportEmployees';
+import checkInOut from '../controller/Visitors/checkInOut';
+import fetchAttendance from '../controller/Visitors/fetchAttendance';
+import listMasterApplications from '../controller/JobListings/listAllApplications';
 
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
@@ -464,6 +468,14 @@ router.post("/createGoogleMeeting", zoomIntegration);
 router.get("/fetchNotifications", auth, fetchNotifications);
 router.patch("/markAsRead/:id", auth, readNotification);
 router.patch("/changeStageStatus/:id", auth, changeStage);
+router.get("/exportEmployees", auth, exportEmployees);
+router.patch("/checkInOut", auth, checkInOut);
+router.get("/fetchAttendance", auth, fetchAttendance);
+router.get("/masterList", auth, listMasterApplications);
+
+
+
+
 
 
 

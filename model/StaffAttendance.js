@@ -3,22 +3,18 @@
 import { Timestamp } from 'mongodb';
 import mongoose from 'mongoose';
 
-const VisitorSchema = new mongoose.Schema({
+const StaffAttendanceSchema = new mongoose.Schema({
     companyName: { type: String },
     companyId: { type: String },
     employeeId:{ type: String },
     employeeName:{ type: String },
-    guestName:{ type: String },
+    departmentId: { type: String,  trim: true },
+    department: { type: String, required: true, trim: true },
     checkIn:{ type: Date },
     checkOut:{ type: Date },
-    purpose:{ type: String },
-    expectedCheckInTime:{ type: Date },
-    expectedCheckOutTime:{ type: Date },
-    phoneNumber: { type: String },
     email: { type: String },
     checkedInStatus: { type: String, default: "Inactive" },
-    status: {type: String, default: "Expected"}
 }, { timestamps: true });
 
 
-module.exports = mongoose.model("Visitor", VisitorSchema);
+module.exports = mongoose.model("StaffAttendance", StaffAttendanceSchema);
