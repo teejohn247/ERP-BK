@@ -13,6 +13,7 @@ import { cloudinaryConfig } from './config/cloudinary';
 import { sendEmail } from './config/email';
 import { emailTemp } from './emailTemplate';
 import daysUsed from './cron/daysUsed';
+import dailyAttendance from './controller/Visitors/dailyAttendance';
 const cron = require("node-cron");
 
 const upload = multer()
@@ -99,6 +100,19 @@ cron.schedule("* * * * *", async function () {
 
 });
 
+
+cron.schedule('0 0 * * *', async function () {
+  try {
+      console.log('Running a task every day at 12:00 AM local time');
+
+      // Your code to execute at 12:00 AM
+      const ans = await dailyAttendance;
+      console.log(ans);
+      
+  } catch (error) {
+      console.error('An error occurred:', error);
+  }
+});
 app.get('/test', async (req, res) => {
 
   let data = `<div>

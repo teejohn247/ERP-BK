@@ -8,12 +8,15 @@ const StaffAttendanceSchema = new mongoose.Schema({
     companyId: { type: String },
     employeeId:{ type: String },
     employeeName:{ type: String },
+    employeeImage:{ type: String },
     departmentId: { type: String,  trim: true },
     department: { type: String, required: true, trim: true },
     checkIn:{ type: Date },
     checkOut:{ type: Date },
+    date: {type: Date },
     email: { type: String },
-    checkedInStatus: { type: String, default: "Inactive" },
+    checkOutBySystem:  { type: Boolean, default: false },
+    attendanceStatus: { type: Boolean, default: false },
 }, { timestamps: true });
 
 

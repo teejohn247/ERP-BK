@@ -64,73 +64,55 @@ const checkInOut = async (req, res) => {
 
     console.log(lastCheckInDate !== currentDate, lastCheckInDate,currentDate)
 
-    if (lastCheckInDate !== currentDate) {
+    if (!lastCheckInDate) {
 
-        // companyName: { type: String },
-        // companyId: { type: String },
-        // employeeId:{ type: String },
-        // employeeName:{ type: String },
-        // departmentId: { type: String,  trim: true },
-        // department: { type: String, required: true, trim: true },
-        // checkIn:{ type: Date },
-        // checkOut:{ type: Date },
-        // email: { type: String },
-        // If the last entry was not made today, create a new entry
-        // updateQuery = {
-        //     checkIn: currentTime,
-        //     checkedInStatus: "Active"
-        // };
+    
 
         console.log('here')
 
-        let group = new Attendance ({
-            companyId: emp.companyId,
-            companyName: emp.companyName,
-            employeeId: req.payload.id,
-            employeeName: emp.fullName,
-            department: emp.department,
-            departmentId:emp.departmentId,
-            email: emp.email,
-            checkIn: currentTime,
-            checkedInStatus: "Active" 
-        })
-
-        console.log("here2")
-        await group.save().then((adm) => {
-            console.log(adm)
-            res.status(200).json({
-                status: 200,
-                success: true,
-                data: adm
-            })
-            return;
-        }).catch((err) => {
-                console.error(err)
-                res.status(400).json({
-                    status: 400,
+   
+        Attendance.findOneAndUpdate({ employeeId: att.employeeId }, { checkIn: currentTime,
+            attendanceStatus: true}, { new: true }, async function (err, result) {
+            if (err) {
+                return res.status(401).json({
+                    status: 401,
                     success: false,
                     error: err
-                })
-            })
+                });
+            } else {
+                const att2 = await Attendance.findOne({
+                    employeeId: req.payload.id, // Assuming req.payload.id is the user ID
+                    createdAt: { $gte: today, $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000) } // Find documents created today
+                  });
+                return res.status(200).json({
+                    status: 200,
+                    success: true,
+                    data: att2
+                });
+    
+            }
+        });
+       
             return;
     } else {
 
-        console.log('okay', att.checkedInStatus)
+        console.log('okay', att.attendanceStatus)
         // If the last entry was made today, update the existing entry
-        if (att.checkedInStatus === "Active") {
+        if (att.attendanceStatus === true) {
             // Visitor is currently checked in, so update the check-out time
             updateQuery = {
                 checkOut: currentTime,
-                checkedInStatus: "Inactive"
+                attendanceStatus: false
             };
         } else {
             // Visitor is currently checked out, so update the check-in time
             updateQuery = {
                 checkIn: currentTime,
-                checkedInStatus: "Active"
+                checkOut: null,
+                attendanceStatus: true
             };
         }
-    }
+
 
     console.log({updateQuery})
 
@@ -152,19 +134,20 @@ const checkInOut = async (req, res) => {
                 data: att2
             });
 
-            return;
         }
     });
+    }
+
 
         
 
-    //     if (emp.checkedInStatus === "Active") {
+    //     if (emp.attendanceStatus === true) {
     //     Visitor.findOneAndUpdate({ _id: req.params.id}, { 
     //         $set: { 
     //             // checkIn: checkInTime && checkInTime,
-    //             // status: "Active"
+    //             // status: true
     //             checkOut: new Date(),
-    //             checkedInStatus: "Inactive"
+    //             attendanceStatus: false
                 
     //         }
     //    },
@@ -188,13 +171,13 @@ const checkInOut = async (req, res) => {
 
     //             }
     //         })
-    //     } else if(emp.checkedInStatus === "Inactive"){
+    //     } else if(emp.attendanceStatus === false){
     //         Visitor.findOneAndUpdate({ _id: req.params.id}, { 
     //             $set: { 
     //                 // checkIn: checkInTime && checkInTime,
-    //                 // status: "Active"
+    //                 // status: true
     //                 checkIn: new Date(),
-    //                 checkedInStatus: "Active"
+    //                 attendanceStatus: true
                     
     //             }
     //        },

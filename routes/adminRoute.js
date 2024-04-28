@@ -182,6 +182,8 @@ import exportEmployees from '../controller/Employers/exportEmployees';
 import checkInOut from '../controller/Visitors/checkInOut';
 import fetchAttendance from '../controller/Visitors/fetchAttendance';
 import listMasterApplications from '../controller/JobListings/listAllApplications';
+import dailyAttendance from '../controller/Visitors/dailyAttendance';
+import fetchTodaysAttendance from '../controller/Visitors/fetchTodaysAttendance';
 
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
@@ -470,17 +472,11 @@ router.patch("/markAsRead/:id", auth, readNotification);
 router.patch("/changeStageStatus/:id", auth, changeStage);
 router.get("/exportEmployees", auth, exportEmployees);
 router.patch("/checkInOut", auth, checkInOut);
-router.get("/fetchAttendance", auth, fetchAttendance);
+// router.get("/fetchAttendance", auth, fetchAttendance);
 router.get("/masterList", auth, listMasterApplications);
+router.post("/attendanceSheet", dailyAttendance);
 
-
-
-
-
-
-
-
-
+router.get("/fetchAttendance", auth, fetchTodaysAttendance);
 
 
 
