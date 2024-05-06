@@ -16,7 +16,7 @@ dotenv.config();
 
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
-const dailyAttendance = async () => {
+const dailyAttendance = async (req, res) => {
     try {
         // Get the current date
         const currentDate = new Date();
@@ -68,6 +68,7 @@ const dailyAttendance = async () => {
                     const savedEmployee = await group.save();
                     console.log(savedEmployee);
                     savedEmployees.push(savedEmployee);
+               
                 } catch (err) {
                     console.error(err);
                     throw err;
@@ -76,10 +77,16 @@ const dailyAttendance = async () => {
 
             // Wait for all StaffAttendance entries to be saved for this company
             await Promise.all(employeeTablePromises);
+            
         }
 
         console.log("Daily attendance operation completed");
-        return savedEmployees;
+        // return savedEmployees;
+        res.status(200).json({
+            status: 200,
+            success: true,
+            data: "New Attendance Sheet Created"
+        })
     } catch (error) {
         console.error(error);
         throw error;

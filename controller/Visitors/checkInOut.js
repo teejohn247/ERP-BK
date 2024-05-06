@@ -114,8 +114,6 @@ const checkInOut = async (req, res) => {
         }
 
 
-    console.log({updateQuery})
-
     Attendance.findOneAndUpdate({ employeeId: att.employeeId }, updateQuery, { new: true }, async function (err, result) {
         if (err) {
             return res.status(401).json({
