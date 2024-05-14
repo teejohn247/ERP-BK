@@ -34,6 +34,23 @@ function generateXLSX(jsonData) {
     return xlsxFilePath;
   }
 
+  function removeArrayFields(obj) {
+    if (typeof obj !== 'object' || obj === null) {
+        return obj;
+    }
+    
+    const newObj = {};
+    for (const key in obj) {
+        if (!Array.isArray(obj[key]) && typeof obj[key] === 'object') {
+            newObj[key] = removeArrayFields(obj[key]);
+        } else if (!Array.isArray(obj[key])) {
+            newObj[key] = obj[key];
+        }
+    }
+    console.log({newObj})
+    return newObj;
+}
+
 const exportEmployees = async (req, res) => {
 
     try {
@@ -60,8 +77,66 @@ const exportEmployees = async (req, res) => {
             })
             return
         }else{
-          // Generate XLSX file from employee data
-          console.log({employee})
+// Define an array of fields to keep
+const fieldsToExclude = ['expenseDetails', 'approvals', 'leaveAssignment', 'assignedAppraisals', 'officialInformation', 'paymentInformation', 'appraisals'];
+
+// Create a new array of employee objects with only the specified fields
+console.log({employee})
+const modifiedSampleEmployees = await employee.map(employe => {
+    const modifiedEmployee = {};
+    for (const key in employe) {
+        if ((key in employe) && !fieldsToExclude.includes(key)) {
+            modifiedEmployee[key] = employe[key];
+        }
+    }
+    // fieldsToKeep.forEach(field => {
+    //     fieldsToKeep.forEach(field => {
+    //         if (field in employe) {
+    //             modifiedEmployee[field] = employe[field];
+    //         }
+    //     });
+    // });
+    return modifiedEmployee;
+});
+
+// Now modifiedSampleEmployees contains a new array of objects with only the specified fields from each object
+console.log({modifiedSampleEmployees});
+
+const sampleEmployees = [
+    {
+        expenseDetails: { /* Object */ },
+        _id: new ObjectId("65b4d42ba8df395abcee8ebd"),
+        companyName: 'Silo',
+        companyId: '658dd2c50b614dd1fcd2085a',
+        activeStatus: true,
+        firstName: 'Favour',
+        lastName: 'Princewill',
+        // Other fields...
+    },
+    // More employee objects...
+];
+
+// // Define an array of fields to keep
+// const fieldsToKeep = ['_id', 'companyName', 'companyId', 'activeStatus', 'firstName', 'lastName'];
+
+// // Create a new array of employee objects with only the specified fields
+// const modifiedSampleEmployees = employee.map(employe => {
+//     console.log({employe})
+//     const modifiedEmployee = {};
+//     fieldsToKeep.forEach(field => {
+
+//         console.log(employe.hasOwnProperty(field), {field})
+//         if (employe.hasOwnProperty(field)) {
+//             modifiedEmployee[field] = employe[field];
+//         }
+//     });
+//     return modifiedEmployee;
+// });
+
+// Now modifiedSampleEmployees contains a new array of objects with only the specified fields from each object
+console.log({modifiedSampleEmployees});
+
+ 
     const xlsxFilePath = generateXLSX(employee);
     console.log({xlsxFilePath})
 

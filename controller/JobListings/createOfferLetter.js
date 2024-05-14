@@ -125,10 +125,7 @@ const createOfferLetter = async (req, res) => {
     
                     }
                 })
-                
-   
 
-        
     } catch (error) {
         res.status(500).json({
             status: 500,

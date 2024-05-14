@@ -34,6 +34,7 @@ const updateEmployeeAdmin = async (req, res) => {
             employmentType } = req.body;
 
         let company = await Company.find({ _id: req.payload.id });
+
         console.log({company})
 
         if (!req.params.id) {
@@ -68,6 +69,9 @@ const updateEmployeeAdmin = async (req, res) => {
             });
             return;
         }
+
+
+
         }
       
         if (!check) {
@@ -110,7 +114,7 @@ const updateEmployeeAdmin = async (req, res) => {
                     nextOfKinRelationship: nextOfKinRelationship && nextOfKinRelationship
                 }
         },
-            function (
+            async function (
                 err,
                 result
             ) {
@@ -125,43 +129,88 @@ const updateEmployeeAdmin = async (req, res) => {
                     return;
 
                 } else {
-                    const checkUpdated = Employee.findOne({ _id: req.params.id })
-                    AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
-                        { $push: { humanResources: { 
-        
-                            userName: checkUpdated.firstName && checkUpdated.lastName,
-                            email: checkUpdated.email && checkUpdated.email,
-                            action: `Super admin updated ${checkUpdated.firstName} ${checkUpdated.lastName} records`,
-                            dateTime: new Date()
 
-                         }}
-                       },
-                            async function (
-                                err,
-                                result
-                            ) {
-                                if (err) {
-                                    res.status(401).json({
-                                        status: 401,
-                                        success: false,
-                                        error: err
-                
-                                    })
-                                    return;
-                
-                                } else {
-                  
-                                    const updated = await Employee.findOne({ _id: req.params.id})
-                
-                                    res.status(200).json({
-                                        status: 200,
-                                        success: true,
-                                        data: updated
-                                    })
-                                    return;
-                
-                                }
-                            })
+                    if(checkDept){
+                       const check = await Employee.findOne({ _id: checkDept.managerId });
+
+
+                       const approval = [{
+                        approvalType: 'leave',
+                        approval: `${check.firstName} ${check.lastName}`,
+                        approvalId: checkDept.managerId
+                    },
+                    {
+                        approvalType: 'expense',
+                        approval: `${check.firstName} ${check.lastName}`,
+                        approvalId: checkDept.managerId
+                    },
+                    {
+                        approvalType: 'appraisal',
+                        approval: `${check.firstName} ${check.lastName}`,
+                        approvalId: checkDept.managerId
+                    }]
+
+                       Employee.findOneAndUpdate({ _id: req.params.id}, { 
+                        $set: { 
+                            approvals: approval
+                        }
+                   },{ upsert: true },
+                        async function (
+                            err,
+                            result
+                        ) {
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    success: false,
+                                    error: err
+            
+                                })
+            
+                                return;
+            
+                            } else {
+                                
+                            }
+                        })
+                    }  
+
+                    const checkUpdated = Employee.findOne({ _id: req.params.id })
+                                AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
+                                    { $push: { humanResources: { 
+                                        userName: checkUpdated.firstName && checkUpdated.lastName,
+                                        email: checkUpdated.email && checkUpdated.email,
+                                        action: `Super admin updated ${checkUpdated.firstName} ${checkUpdated.lastName} records`,
+                                        dateTime: new Date()
+            
+                                     }}
+                                   },
+                                        async function (
+                                            err,
+                                            result
+                                        ) {
+                                            if (err) {
+                                                res.status(401).json({
+                                                    status: 401,
+                                                    success: false,
+                                                    error: err
+                            
+                                                })
+                                                return;
+                            
+                                            } else {
+                              
+                                                const updated = await Employee.findOne({ _id: req.params.id})
+                            
+                                                res.status(200).json({
+                                                    status: 200,
+                                                    success: true,
+                                                    data: updated
+                                                })
+                                                return;
+                            
+                                            }
+                                        })
                 }
             })
 

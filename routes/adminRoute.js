@@ -184,6 +184,7 @@ import fetchAttendance from '../controller/Visitors/fetchAttendance';
 import listMasterApplications from '../controller/JobListings/listAllApplications';
 import dailyAttendance from '../controller/Visitors/dailyAttendance';
 import fetchTodaysAttendance from '../controller/Visitors/fetchTodaysAttendance';
+import createOfferLetter from '../controller/JobListings/createOfferLetter';
 
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
@@ -475,9 +476,8 @@ router.patch("/checkInOut", auth, checkInOut);
 // router.get("/fetchAttendance", auth, fetchAttendance);
 router.get("/masterList", auth, listMasterApplications);
 router.post("/attendanceSheet", dailyAttendance);
-
 router.get("/fetchAttendance", auth, fetchTodaysAttendance);
-
+router.get("/fetchAttendance", auth, mult.single("file"), createOfferLetter);
 
 
 
