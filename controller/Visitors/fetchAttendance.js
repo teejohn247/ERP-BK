@@ -95,52 +95,6 @@ const fetchAttendance = async (req, res) => {
      currentPage: page
  });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-            // if(!role){
-            //     res.status(404).json({
-            //         status:404,
-            //         success: false,
-            //         error:'No booked visit'
-
-            //     })
-            //     return
-            
-            // }else{
-            //     res.status(200).json({
-            //         status: 200,
-            //         success: true,
-            //         data: role,
-            //         totalPages: Math.ceil(count / limit),
-            //         currentPage: page
-            //     })
-            // }
         }else{
             const emp = await StaffAttendance.findOne({ employeeId: req.payload.id });
 
