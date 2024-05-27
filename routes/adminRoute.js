@@ -185,6 +185,17 @@ import listMasterApplications from '../controller/JobListings/listAllApplication
 import dailyAttendance from '../controller/Visitors/dailyAttendance';
 import fetchTodaysAttendance from '../controller/Visitors/fetchTodaysAttendance';
 import createOfferLetter from '../controller/JobListings/createOfferLetter';
+import createContact from '../controller/CRM/Contacts/createContact';
+import fetchContact from '../controller/CRM/Contacts/fetchContact';
+import fetchSingleContact from '../controller/CRM/Contacts/fetchSingleContact';
+import addActivity from '../controller/CRM/Contacts/addActivity';
+import deleteActivity from '../controller/CRM/Contacts/deleteActivity';
+import addNotes from '../controller/CRM/Contacts/addNotes';
+import deleteNote from '../controller/CRM/Contacts/deleteNote';
+import createAgent from '../controller/Employers/createAgent';
+import updateAgent from '../controller/Employers/updateAgent';
+import deleteAgent from '../controller/Employers/deleteAgent';
+import fetchAgents from '../controller/Employers/fetchAgents';
 
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
@@ -478,6 +489,27 @@ router.get("/masterList", auth, listMasterApplications);
 router.post("/attendanceSheet", dailyAttendance);
 router.get("/fetchAttendance", auth, fetchTodaysAttendance);
 router.get("/fetchAttendance", auth, mult.single("file"), createOfferLetter);
+
+
+router.post("/createContact",auth, createContact);
+router.post("/addContactActivity/:contactId",auth, mult.single("file"), addActivity);
+router.delete("/deleteContactActivity/:contactId/:activityId",auth, deleteActivity);
+
+router.post("/addContactNote/:contactId",auth, mult.single("file"), addNotes);
+router.delete("/deleteContactNote/:contactId/:noteId",auth, deleteNote);
+
+
+router.get("/fetchContacts",auth, fetchContact);
+router.get("/fetchContact/:id",auth, fetchSingleContact);
+
+router.post("/createAgent",auth,createAgent);
+router.patch("/updateAgent/:id",auth,updateAgent);
+router.delete("/deleteAgent/:id",auth,deleteAgent);
+router.get("/fetchAgents",auth,fetchAgents);
+
+
+
+
 
 
 

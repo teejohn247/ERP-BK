@@ -16,6 +16,10 @@ async function exportFile(filePath){
     const fileName = path.basename(filePath);
     await bucket.upload(filePath, {
       destination: fileName,
+      public: true,  // This makes the file publicly accessible
+      metadata: {
+        cacheControl: 'public, max-age=31536000',
+      },
     });
     return `https://storage.googleapis.com/${bucketName}/${fileName}`;
   } catch (error) {

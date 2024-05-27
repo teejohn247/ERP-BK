@@ -5,6 +5,7 @@ const CompanySchema = new mongoose.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true  },
     companyAddress: { type: String},
+    owner: { type: String},
     generalSettings: {
         type: Map,
         of: mongoose.Schema.Types.Mixed,
