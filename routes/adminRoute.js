@@ -196,6 +196,8 @@ import createAgent from '../controller/Employers/createAgent';
 import updateAgent from '../controller/Employers/updateAgent';
 import deleteAgent from '../controller/Employers/deleteAgent';
 import fetchAgents from '../controller/Employers/fetchAgents';
+import deleteContact from '../controller/CRM/Contacts/deleteContact';
+import updateContact from '../controller/CRM/Contacts/updateContact';
 
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
@@ -501,6 +503,8 @@ router.delete("/deleteContactNote/:contactId/:noteId",auth, deleteNote);
 
 router.get("/fetchContacts",auth, fetchContact);
 router.get("/fetchContact/:id",auth, fetchSingleContact);
+router.patch("/updateContact/:contactId",auth, updateContact);
+router.delete("/deleteContact/:contactId",auth,deleteContact);
 
 router.post("/createAgent",auth,createAgent);
 router.patch("/updateAgent/:id",auth,updateAgent);

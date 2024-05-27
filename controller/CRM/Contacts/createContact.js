@@ -3,13 +3,12 @@ import Contact from '../../../model/Contact';
 import Department from '../../../model/Department';
 import Company from '../../../model/Company';
 import Employee from '../../../model/Employees';
+import Agent from '../../../model/Agent'
 
 
 // Define createContact controller function
 const createContact = async (req, res) => {
   try {
-    // Extract data from request body
-    let employee = await Employee.findOne({ _id: req.payload.id });
 
     const {
       name,
@@ -18,10 +17,23 @@ const createContact = async (req, res) => {
       jobTitle,
       organization,
       buyingRole,
+      ownerId,
       tags,
       location,
       contacts,
     } = req.body;
+        // Extract data from request body
+        let employee = await Employee.findOne({ _id: req.payload.id });
+        let agent = await Agent.findOne({ _id: ownerId });
+    
+        if (!agent){
+          return res.status(400).json({
+              status: 400,
+              error: 'Agent does not exist'
+          })
+         
+      }
+    
 
     // Create new contact document
     const newContact = new Contact({
@@ -30,7 +42,8 @@ const createContact = async (req, res) => {
       name,
       email,
       taxId,
-      owner: req.payload.id,
+      ownerId,
+      ownerName: agent.fullName,
       jobTitle,
       organization,
       buyingRole,
