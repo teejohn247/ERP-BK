@@ -35,9 +35,10 @@ const createContact = async (req, res) => {
         let employee = await Employee.findOne({ _id: ownerId });
         let contact = await Contact.findOne({ email });
 
+
         let agent = await Agent.findOne({ _id: assignedAgentId });
 
-        if (!contact){
+        if (contact){
           return res.status(400).json({
               status: 400,
               error: 'contact already exist'
