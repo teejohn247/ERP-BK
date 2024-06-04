@@ -39,15 +39,10 @@ const employeeKPI = async (req, res) => {
 
         // let company = await Company.findOne({ _id: req.payload.id });
        
-
         let employee = await Employee.findOne({ _id: req.payload.id});
 
         let pperiod = await AppraisalPeriod.findOne({ _id: appraisalPeriodId});
         // let group = await AppraisalGroup.findOne({ _id: appraisalPeriodId});
-
-
-
-
 
         console.log({pperiod})
 

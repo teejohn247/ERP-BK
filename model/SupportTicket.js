@@ -1,28 +1,27 @@
 import mongoose from "mongoose";
 
-const LeadSchema = new mongoose.Schema(
+const SupportTicketSchema = new mongoose.Schema(
   {
     companyId: { type: String, required: true },
     companyName: { type: String, required: true },
-    firstName: { type: String },
-    LastName: { type: String },
-    leadType: { type: String },
-    industry: { type: String },
-    leadPriority: { type: String },
+    ticketNumber: { type: String },
+    title: { type: String },
     contactName: { type: String },
     contactId: { type: String },
-    leadPriority: { type: String },
-    leadScore: { type: String },
-    expectedRevenue: { type: String },
-    conversionProbability: { type: String },
-    leadOwner: { type: String },
-    leadOwnerId: { type: String },
-    assignedAgentId: { type: String },
-    assignedAgentName: { type: String },
+    ownerId: { type: String },
+    ownerName: { type: String },
+    stage: { type: String },
+    status: { type: String },
+    priority: { type: String },
+    closureTime: { type: String },
     source: { type: String },
-    description: { type: String },
     tags: [{ type: String }],
-    location: { type: String },
+    creationDate: {
+        type: Date,
+        default: new Date().toISOString(),
+    },
+    associatedTicket: { type: String },
+    note: { type: String },
     activities: [
       {
         activityType: { type: String },
@@ -47,4 +46,4 @@ const LeadSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Lead", LeadSchema);
+module.exports = mongoose.model("SupportTicket", SupportTicketSchema);

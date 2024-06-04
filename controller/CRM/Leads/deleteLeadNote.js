@@ -1,15 +1,15 @@
 import dotenv from 'dotenv';
-import Contact from '../../../model/Contact';
+import Contact from '../../../model/Lead';
 import Company from '../../../model/Company';
 
 dotenv.config();
 
-const deleteNote = async (req, res) => {
+const deleteLeadNote = async (req, res) => {
   try {
-  const { contactId, noteId } = req.params;
+  const { leadId, noteId } = req.params;
 
 
-     Contact.findOneAndUpdate({ _id:  contactId }, { 
+     Contact.findOneAndUpdate({ _id:  leadId }, { 
         $pull: { notes: { _id: noteId
         }},
    },{ upsert: true },
@@ -40,4 +40,4 @@ const deleteNote = async (req, res) => {
   }
 };
 
-export default deleteNote;
+export default deleteLeadNote;

@@ -7,48 +7,95 @@ const updateContact = async (req, res) => {
   try {
     const { contactId } = req.params;
     const {
-      name,
+      firstName,
+      lastName,
+      contactType,
+      onboardingDate,
+      industry,
+      assignedAgentId,
+      assignedAgentName,
       email,
       taxId,
+      ownerId,
+      ownerName,
       jobTitle,
       organization,
-      buyingRole,
-      ownerId,
+      jobRole,
       tags,
       location,
       contacts,
     } = req.body;
 
-    // Validate if the owner exists
-    let agent = await Agent.findOne({ _id: ownerId });
-    if (!agent) {
-      return res.status(400).json({
-        status: 400,
-        error: 'Agent does not exist'
-      });
-    }
+
+       // Extract data from request body
+       let employee = await Employee.findOne({ _id: ownerId });
+       let contact = await Contact.findOne({ email });
+
+       let agent = await Agent.findOne({ _id: assignedAgentId });
+
+       if (!contact){
+         return res.status(400).json({
+             status: 400,
+             error: 'contact already exist'
+         })
+     }
+   
+       if (!agent){
+         return res.status(400).json({
+             status: 400,
+             error: 'Agent does not exist'
+         })
+        
+     }
+
+     if (!employee){
+       return res.status(400).json({
+           status: 400,
+           error: 'Owner does not exist'
+       })
+   }
 
     // Find and update the contact
     const updatedContact = await Contact.findOneAndUpdate(
       { _id: contactId },
       {
-        name: name && name,
-        email: email && email,
-        taxId: taxId && taxId,
-        jobTitle: jobTitle && jobTitle,
-        organization: organization && organization,
-        buyingRole: buyingRole && buyingRole,
-        ownerId: ownerId && ownerId,
-        ownerName: agent && agent.fullName,
-        tags: tags && tags,
-        location: location && location,
-        contacts: contacts && contacts,
+        companyId: employee.companyId,
+      companyName: employee.companyName,
+      firstName,
+      lastName,
+      contactType,
+      onboardingDate,
+      industry,
+      assignedAgentId,
+      assignedAgentName: agent.fullName,
+      email,
+      taxId,
+      ownerId,
+      ownerName,
+      jobTitle,
+      organization,
+      jobRole,
+      tags,
+      location,
+      contacts,
       },
     );
 
     if (!updatedContact) {
       return res.status(404).json({ status:404, success: false, message: 'Contact not found' });
     }
+
+    const updatedContactAgent = {
+      'contacts.$.fullName': `${firstName} ${lastName}`,
+      'contacts.$.date': new Date().toISOString(),
+    };
+
+    // Find and update the agent's specific contact
+    await Agent.findOneAndUpdate(
+      { _id: assignedAgentId, 'contacts.contactId': contactId },
+      { $set: updatedContactAgent },
+      { new: true }
+    );
 
     res.status(200).json({ status:200, success: true, message: 'Contact updated successfully'});
   } catch (error) {

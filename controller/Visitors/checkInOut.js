@@ -65,12 +65,6 @@ const checkInOut = async (req, res) => {
     console.log(lastCheckInDate !== currentDate, lastCheckInDate,currentDate)
 
     if (!lastCheckInDate) {
-
-    
-
-        console.log('here')
-
-   
         Attendance.findOneAndUpdate({ employeeId: att.employeeId }, { checkIn: currentTime,
             attendanceStatus: true}, { new: true }, async function (err, result) {
             if (err) {
@@ -135,71 +129,6 @@ const checkInOut = async (req, res) => {
         }
     });
     }
-
-
-        
-
-    //     if (emp.attendanceStatus === true) {
-    //     Visitor.findOneAndUpdate({ _id: req.params.id}, { 
-    //         $set: { 
-    //             // checkIn: checkInTime && checkInTime,
-    //             // status: true
-    //             checkOut: new Date(),
-    //             attendanceStatus: false
-                
-    //         }
-    //    },
-    //         function (
-    //             err,
-    //             result
-    //         ) {
-    //             if (err) {
-    //                 res.status(401).json({
-    //                     status: 401,
-    //                     success: false,
-    //                     error: err
-    //                 })
-
-    //             } else {
-    //                 res.status(200).json({
-    //                     status: 200,
-    //                     success: true,
-    //                     data: "Update Successful"
-    //                 })
-
-    //             }
-    //         })
-    //     } else if(emp.attendanceStatus === false){
-    //         Visitor.findOneAndUpdate({ _id: req.params.id}, { 
-    //             $set: { 
-    //                 // checkIn: checkInTime && checkInTime,
-    //                 // status: true
-    //                 checkIn: new Date(),
-    //                 attendanceStatus: true
-                    
-    //             }
-    //        },
-    //             function (
-    //                 err,
-    //                 result
-    //             ) {
-    //                 if (err) {
-    //                     res.status(401).json({
-    //                         status: 401,
-    //                         success: false,
-    //                         error: err
-    //                     })
-    
-    //                 } else {
-    //                     res.status(200).json({
-    //                         status: 200,
-    //                         success: true,
-    //                         data: "Update Successful"
-    //                     })
-    
-    //                 }
-    //             })
-    //     }
     } catch (error) {
         res.status(500).json({
             status: 500,

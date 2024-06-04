@@ -10,21 +10,39 @@ import Agent from '../../../model/Agent'
 const createContact = async (req, res) => {
   try {
 
+    
+
     const {
-      name,
+      firstName,
+      LastName,
+      contactType,
+      onboardingDate,
+      industry,
+      assignedAgentId,
+      assignedAgentName,
       email,
       taxId,
+      ownerId,
+      ownerName,
       jobTitle,
       organization,
-      buyingRole,
-      ownerId,
+      jobRole,
       tags,
       location,
       contacts,
     } = req.body;
         // Extract data from request body
-        let employee = await Employee.findOne({ _id: req.payload.id });
-        let agent = await Agent.findOne({ _id: ownerId });
+        let employee = await Employee.findOne({ _id: ownerId });
+        let contact = await Contact.findOne({ email });
+
+        let agent = await Agent.findOne({ _id: assignedAgentId });
+
+        if (!contact){
+          return res.status(400).json({
+              status: 400,
+              error: 'contact already exist'
+          })
+      }
     
         if (!agent){
           return res.status(400).json({
@@ -33,20 +51,33 @@ const createContact = async (req, res) => {
           })
          
       }
+
+      if (!employee){
+        return res.status(400).json({
+            status: 400,
+            error: 'Owner does not exist'
+        })
+    }
     
 
     // Create new contact document
     const newContact = new Contact({
       companyId: employee.companyId,
       companyName: employee.companyName,
-      name,
+      firstName,
+      LastName,
+      contactType,
+      onboardingDate,
+      industry,
+      assignedAgentId,
+      assignedAgentName: agent.fullName,
       email,
       taxId,
       ownerId,
-      ownerName: agent.fullName,
+      ownerName: employee.fullName,
       jobTitle,
       organization,
-      buyingRole,
+      jobRole,
       tags,
       location,
       contacts,
@@ -54,6 +85,17 @@ const createContact = async (req, res) => {
 
     // Save the contact to the database
     await newContact.save();
+
+
+    await Agent.findOneAndUpdate(
+      { _id: assignedAgentId },
+      { $push: { contacts: {
+        contactId: newContact._id,
+        fullName: `${firstName} ${LastName}`,
+        date: new Date().toISOString(),
+      }} },
+      { new: true }
+    );
 
     // Return success response
     res.status(201).json({ success: true, message: 'Contact created successfully', data: newContact });

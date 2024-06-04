@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
-import Contact from '../../../model/Contact';
+import Contact from '../../../model/Lead';
 
 import Employee from '../../../model/Employees';
 
 
 // Controller to add activity
-const addActivity = async (req, res) => {
-  const { contactId } = req.params;
+const addLeadActivity = async (req, res) => {
+  const { leadId } = req.params;
   const { activityType, note, attachment } = req.body;
 
 
@@ -14,9 +14,9 @@ const addActivity = async (req, res) => {
 
     let employee = await Employee.findOne({ _id: req.payload.id });
 
-    const contact = await Contact.findOne({ _id: contactId})
+    const contact = await Contact.findOne({ _id: leadId})
     if (!contact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      return res.status(404).json({ message: 'Lead not found' });
     }
 
     const newActivity = {
@@ -28,7 +28,7 @@ const addActivity = async (req, res) => {
       console.log({newActivity})
   
       const updatedContact = await Contact.findOneAndUpdate(
-        { _id: contactId },
+        { _id: leadId },
         { $push: { activities: newActivity } },
         { new: true }
       );
@@ -36,14 +36,14 @@ const addActivity = async (req, res) => {
       console.log({updatedContact})
   
       if (!updatedContact) {
-        return res.status(404).json({ message: 'Contact not found' });
+        return res.status(404).json({ message: 'Lead not found' });
       }
   
-      res.status(200).json({status: 200, message: 'Activity added successfully', contact: updatedContact });
+      res.status(201).json({ message: 'Activity added successfully', contact: updatedContact });
   } catch (error) {
-    res.status(500).json({status:500, message: 'Server error', error });
+    res.status(500).json({ message: 'Server error', error });
   }
 };
 
 // Export the controller function
-export default addActivity;
+export default addLeadActivity;

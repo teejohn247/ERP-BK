@@ -198,6 +198,29 @@ import deleteAgent from '../controller/Employers/deleteAgent';
 import fetchAgents from '../controller/Employers/fetchAgents';
 import deleteContact from '../controller/CRM/Contacts/deleteContact';
 import updateContact from '../controller/CRM/Contacts/updateContact';
+import createLead from '../controller/CRM/Leads/createLead';
+import addLeadActivity from '../controller/CRM/Leads/addLeadActivity';
+import deleteLeadActivity from '../controller/CRM/Leads/deleteLeadActivity';
+import addLeadNotes from '../controller/CRM/Leads/addLeadNotes';
+import deleteLeadNote from '../controller/CRM/Leads/deleteLeadNote';
+import fetchLeads from '../controller/CRM/Leads/fetchLeads';
+import fetchSingleLead from '../controller/CRM/Leads/fetchSingleLead';
+import updateLead from '../controller/CRM/Leads/updateLead';
+import deleteLead from '../controller/CRM/Leads/deleteLead';
+import createTicket from '../controller/CRM/Support Ticket/createTicket';
+import addTicketActivity from '../controller/CRM/Support Ticket/addTicketActivity';
+import deleteTicketActivity from '../controller/CRM/Support Ticket/deleteTicketActivity';
+import addTicketNotes from '../controller/CRM/Support Ticket/addTicketNotes';
+import deleteTicketNote from '../controller/CRM/Support Ticket/deleteNote';
+import fetchTicket from '../controller/CRM/Support Ticket/fetchTicket';
+import fetchSingleTicket from '../controller/CRM/Support Ticket/fetchSingleTicket';
+import deleteTicket from '../controller/CRM/Support Ticket/deleteTicket';
+import updateTicket from '../controller/CRM/Support Ticket/updateTicket';
+import addAgentActivity from '../controller/Employers/addAgentActivity';
+import createQuotation from '../controller/CRM/Contacts/createQuotation';
+
+
+
 
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
@@ -225,6 +248,19 @@ const uploadgoogle = multer({
     { name: 'resumeCV', maxCount: 1 },
     { name: 'coverLetterFile', maxCount: 1 }
 ]);
+
+// // Middleware for file uploads
+// const uploadgooglesingle = multer({
+//   storage: multerConfig,
+//   fileFilter: (req, file, cb) => {
+//       // Check file types here if needed
+//       console.log(req.file)
+//       cb(null, true);
+//   }
+// }).fields([
+//   { name: 'attachment', maxCount: 1 },
+// ]);
+
 
 
 cloudinary.config({
@@ -494,23 +530,41 @@ router.get("/fetchAttendance", auth, mult.single("file"), createOfferLetter);
 
 
 router.post("/createContact",auth, createContact);
-router.post("/addContactActivity/:contactId",auth, mult.single("file"), addActivity);
+router.post("/addContactActivity/:contactId",auth, addActivity);
 router.delete("/deleteContactActivity/:contactId/:activityId",auth, deleteActivity);
-
 router.post("/addContactNote/:contactId",auth, mult.single("file"), addNotes);
 router.delete("/deleteContactNote/:contactId/:noteId",auth, deleteNote);
-
-
 router.get("/fetchContacts",auth, fetchContact);
 router.get("/fetchContact/:id",auth, fetchSingleContact);
 router.patch("/updateContact/:contactId",auth, updateContact);
 router.delete("/deleteContact/:contactId",auth,deleteContact);
 
+router.post("/createLead",auth, createLead);
+router.post("/addLeadActivity/:leadId",auth, addLeadActivity);
+router.delete("/deleteLeadActivity/:leadId/:activityId",auth, deleteLeadActivity);
+router.post("/addLeadNote/:leadId",auth, upload.single('attachment'), addLeadNotes);
+router.delete("/deleteLeadNote/:leadId/:noteId",auth, deleteLeadNote);
+router.get("/fetchLeads",auth, fetchLeads);
+router.get("/fetchLead/:id",auth, fetchSingleLead);
+router.patch("/updateLead/:leadId",auth, updateLead);
+router.delete("/deleteLead/:leadId",auth, deleteLead);
+
+router.post("/createTicket",auth, createTicket);
+router.post("/addTicketActivity/:ticketId",auth, addTicketActivity);
+router.delete("/deleteTicketActivity/:ticketId/:activityId",auth, deleteTicketActivity);
+router.post("/addTicketNote/:ticketId",auth, upload.single("file"), imageUploader, addTicketNotes);
+router.delete("/deleteTicketNote/:ticketId/:noteId",auth, deleteTicketNote);
+router.get("/fetchTickets",auth, fetchTicket);
+router.get("/fetchTicket/:id",auth, fetchSingleTicket);
+router.patch("/updateTicket/:ticketId",auth, updateTicket);
+router.delete("/deleteLead/:ticketId",auth, deleteTicket);
+
 router.post("/createAgent",auth,createAgent);
 router.patch("/updateAgent/:id",auth,updateAgent);
 router.delete("/deleteAgent/:id",auth,deleteAgent);
 router.get("/fetchAgents",auth,fetchAgents);
-
+router.patch("/fetchAgents",auth,addAgentActivity);
+router.post("/createQuotation", auth, createQuotation);
 
 
 

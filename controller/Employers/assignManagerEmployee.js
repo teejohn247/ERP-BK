@@ -118,45 +118,6 @@ const assignManagerEmployee = async (req, res) => {
             
                             } else {
             
-                                // await check.updateOne({
-                                //     paymentInformation: paymentInformation && paymentInformation, 
-                                // });
-                                // const checkUpdated = Employee.findOne({ _id: req.params.id })
-                                // AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
-                                //     { $push: { humanResources: { 
-                    
-                                //         userName: checkUpdated.firstName && checkUpdated.lastName,
-                                //         email: checkUpdated.email && checkUpdated.email,
-                                //         action: `Super admin updated ${checkUpdated.firstName} ${checkUpdated.lastName} records`,
-                                //         dateTime: new Date()
-            
-                                //      }}
-                                //    },
-                                //         function (
-                                //             err,
-                                //             result
-                                //         ) {
-                                //             if (err) {
-                                //                 res.status(401).json({
-                                //                     status: 401,
-                                //                     success: false,
-                                //                     error: err
-                            
-                                //                 })
-                                //                 return;
-                            
-                                //             } else {
-                            
-                            
-                                                // res.status(200).json({
-                                                //     status: 200,
-                                                //     success: true,
-                                                //     data: "Update Successful"
-                                                // })
-                                                // return;
-                            
-                                //             }
-                                //         })
             
                                 res.status(200).json({
                                     status: 200,
@@ -166,53 +127,6 @@ const assignManagerEmployee = async (req, res) => {
                                 return;
                             }
                         })
-
-                    // await check.updateOne({
-                    //     paymentInformation: paymentInformation && paymentInformation, 
-                    // });
-                    // const checkUpdated = Employee.findOne({ _id: req.params.id })
-                    // AuditTrail.findOneAndUpdate({ companyId: company[0]._id},
-                    //     { $push: { humanResources: { 
-        
-                    //         userName: checkUpdated.firstName && checkUpdated.lastName,
-                    //         email: checkUpdated.email && checkUpdated.email,
-                    //         action: `Super admin updated ${checkUpdated.firstName} ${checkUpdated.lastName} records`,
-                    //         dateTime: new Date()
-
-                    //      }}
-                    //    },
-                    //         function (
-                    //             err,
-                    //             result
-                    //         ) {
-                    //             if (err) {
-                    //                 res.status(401).json({
-                    //                     status: 401,
-                    //                     success: false,
-                    //                     error: err
-                
-                    //                 })
-                    //                 return;
-                
-                    //             } else {
-                
-                
-                                    // res.status(200).json({
-                                    //     status: 200,
-                                    //     success: true,
-                                    //     data: "Update Successful"
-                                    // })
-                                    // return;
-                
-                    //             }
-                    //         })
-
-                    // res.status(200).json({
-                    //     status: 200,
-                    //     success: true,
-                    //     data: "Update Successful"
-                    // })
-                    // return;
                 }
             })
 

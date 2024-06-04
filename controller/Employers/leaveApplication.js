@@ -101,6 +101,77 @@ const leaveApplication = async (req, res) => {
             return;
         }
 
+        let leaveAssignment;
+
+        const findEmployee = () => {
+          return new Promise((resolve, reject) => {
+            Employee.findOne(
+              { _id: leaveType.userId, 'leaveAssignment.leaveTypeId': leaveType.leaveTypeId },
+              { 'leaveAssignment.$': 1 },
+              (err, employee) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(employee);
+                }
+              }
+            );
+          });
+        };
+        
+        findEmployee()
+          .then(async (employee) => {
+            leaveAssignment = employee.leaveAssignment;
+            console.log('LeaveAssignment with leaveTypeId:', employee.leaveAssignment);
+            console.log({ leaveAssignment });
+        
+        
+        
+        
+        
+            const dateString = leaveType.leaveStartDate;
+            const [day, month, year] = dateString.split('-').map(Number);
+            
+            // Note: JavaScript months are 0-indexed, so we subtract 1 from the month
+            const jsDate = new Date(year, month - 1, day);
+        
+            const dateStrings =  leaveType.leaveEndDate;
+            const [days, months, years] = dateStrings.split('-').map(Number);
+            
+            // Note: JavaScript months are 0-indexed, so we subtract 1 from the month
+            const jsDates = new Date(years, months - 1, days);
+        
+            const startDate = jsDate;
+            const endDate = jsDates;
+        
+            console.log({startDate})
+            console.log({endDate})
+        
+        
+        
+        
+            const daysWithoutWeekends = await countWeekdays(startDate, endDate, holidays);
+        
+            console.log(leaveAssignment[0].noOfLeaveDays)
+        
+            if (daysWithoutWeekends > leaveAssignment[0].noOfLeaveDays) {
+                res.status(400).json({
+                    status: 400,
+                    error: "Cannot be approved because the number of days assigned has been exceeded"
+                });
+                return;
+            }
+        
+            if ((leaveType.daysUsed + daysWithoutWeekends) > leaveAssignment[0].noOfLeaveDays) {
+                res.status(400).json({
+                    status: 400,
+                    error: "Cannot be approved because the number of days assigned has been exceeded"
+                });
+                return;
+            }
+
+        })
+
         const approve = check.approvals.filter(obj => obj.approvalType === "leave");
 
         console.log({approve});

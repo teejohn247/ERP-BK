@@ -8,11 +8,22 @@ const deleteContact = async (req, res) => {
       const { contactId } = req.params;
   
       // Find and delete the contact
+
+      const contact = await Contact.findOne({ _id: contactId });
+
       const deletedContact = await Contact.findOneAndDelete({ _id: contactId });
   
       if (!deletedContact) {
         return res.status(404).json({ success: false, message: 'Contact not found' });
       }
+
+         // Find and update the agent, pulling the contact from the contacts array
+    await Agent.findOneAndUpdate(
+      { _id: contact.assignedAgentId },
+      { $pull: { contacts: { contactId } } },
+      { new: true }
+    );
+
   
       res.status(200).json({ status:200, success: true, message: 'Contact deleted successfully' });
     } catch (error) {

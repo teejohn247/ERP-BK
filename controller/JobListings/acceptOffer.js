@@ -22,17 +22,16 @@ const changeStage = async (req, res) => {
         console.log({company})
 
         const job = await JobPost.findOne({_id: req.params.id})
+        const jobForm = await JobPostForms.findOne({_id: req.params.jobListing})
+
         console.log({job})
 
-        const hr = await Employee.findOne({ _id: req.payload.id });
+        const hr = await Employee.findOne({ _id: jobForm?.hiringManagerID });
         const hrCompany = await Company.findOne({ _id: hr.companyId });
 
         console.log({hr})
 
-
         console.log({hrCompany})
-
-
 
         if (!company && !hrCompany) {
 
@@ -42,8 +41,6 @@ const changeStage = async (req, res) => {
             })
             return;
         }
-
-
 
         if (!job) {
 
@@ -55,6 +52,20 @@ const changeStage = async (req, res) => {
         }
 
         if(company){
+
+            let data = `${offerLetter}`
+
+            let resp = emailTemp(data, 'Offer Letter')
+
+
+            const receivers = [
+            {
+                email: hr?.email
+            }
+            ]
+
+            await sendEmail(req, res, 'teejohn247@gmail.com', receivers, 'Offer Letter', resp);
+
            JobPost.findOneAndUpdate({ _id: req.params.id}, { 
                 $set: { 
                     offerAccepted: accepted, 
@@ -74,89 +85,15 @@ const changeStage = async (req, res) => {
     
                     } else {
                         console.log({result})
-                        JobPostForms.updateOne(
-                            { "_id": job.jobTitleID, "applications.applicationId": req.params.id },
-                            { $set: { "applications.$.offerAccepted": accepted } },
-                            function (
-                                err,
-                                result
-                            ) {
-                                if (err) {
-                                    res.status(401).json({
-                                        status: 401,
-                                        success: false,
-                                        error: err
-                
-                                    })
-                
-                                } else {
-                                    res.status(200).json({
-                                        status: 200,
-                                        success: true,
-                                        data: "Application stage updated"
-                                    })
-                                }
-                            }
-                         )
-                     
-    
-                    }
-                })  
-        } else if(hrCompany){
-           JobPost.findOneAndUpdate({ _id: req.params.id}, { 
-                $set: { 
-                    offerAccepted: accepted,  
-                }
-            },
-                function (
-                    err,
-                    result
-                ) {
-                    if (err) {
-                        res.status(401).json({
-                            status: 401,
-                            success: false,
-                            error: err
-    
+                        res.status(200).json({
+                            status: 200,
+                            success: true,
+                            data: ""
                         })
-
-                        return
-    
-                    } else {
-                        console.log({result})
-                        JobPostForms.updateOne(
-                            { "_id": job.jobTitleID, "applications.applicationId": req.params.id },
-                            { $set: { "applications.$.offerAccepted": accepted } },
-                            function (
-                                err,
-                                result
-                            ) {
-                                if (err) {
-                                    res.status(401).json({
-                                        status: 401,
-                                        success: false,
-                                        error: err
-                
-                                    })
-                
-                                } else {
-                                    res.status(200).json({
-                                        status: 200,
-                                        success: true,
-                                        data: "Application stage updated"
-                                    })
-
-                                    return;
-                                }
-                            }
-                         )
-                     
     
                     }
                 })  
-
-        }
-       
+            }
 
         
     } catch (error) {

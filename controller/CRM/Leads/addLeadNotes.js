@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
-import Contact from '../../../model/Contact';
+import Contact from '../../../model/Lead';
 
 import Employee from '../../../model/Employees';
 
 
 // Controller to add activity
-const addNotes = async (req, res) => {
-  const { contactId } = req.params;
+const addLeadNotes = async (req, res) => {
+  const { leadId } = req.params;
   const { activityType, note, attachment } = req.body;
 
 
@@ -14,7 +14,7 @@ const addNotes = async (req, res) => {
 
     let employee = await Employee.findOne({ _id: req.payload.id });
 
-    const contact = await Contact.findOne({ _id: contactId})
+    const contact = await Contact.findOne({ _id: leadId})
     if (!contact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
@@ -28,7 +28,7 @@ const addNotes = async (req, res) => {
       console.log({newActivity})
   
       const updatedContact = await Contact.findOneAndUpdate(
-        { _id: contactId },
+        { _id: leadId },
         { $push: { notes: newActivity } },
         { new: true }
       );
@@ -46,4 +46,4 @@ const addNotes = async (req, res) => {
 };
 
 // Export the controller function
-export default addNotes;
+export default addLeadNotes;

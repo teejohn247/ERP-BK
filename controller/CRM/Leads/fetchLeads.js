@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
-import Contact from '../../../model/Contact';
+import Contact from '../../../model/Lead';
 import Company from '../../../model/Company';
 
 dotenv.config();
 
-const fetchContact = async (req, res) => {
+const fetchLeads = async (req, res) => {
   try {
     const { page, limit } = req.query;
     const company = await Company.findOne({ _id: req.payload.id });
@@ -42,4 +42,4 @@ const fetchContact = async (req, res) => {
   }
 };
 
-export default fetchContact;
+export default fetchLeads;

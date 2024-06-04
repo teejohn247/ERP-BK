@@ -1,15 +1,15 @@
 import dotenv from 'dotenv';
-import Contact from '../../../model/Contact';
+import Contact from '../../../model/SupportTicket';
 import Company from '../../../model/Company';
 
 dotenv.config();
 
-const deleteActivity = async (req, res) => {
+const deleteTicketActivity = async (req, res) => {
   try {
-  const { contactId, activityId } = req.params;
+  const { ticketId, activityId } = req.params;
 
 
-     Contact.findOneAndUpdate({ _id:  contactId }, { 
+     Contact.findOneAndUpdate({ _id:  ticketId }, { 
         $pull: { activities: { _id: activityId
         }},
    },{ upsert: true },
@@ -40,4 +40,4 @@ const deleteActivity = async (req, res) => {
   }
 };
 
-export default deleteActivity;
+export default deleteTicketActivity;
