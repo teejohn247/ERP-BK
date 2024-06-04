@@ -23,7 +23,12 @@ const updateContact = async (req, res) => {
       jobRole,
       tags,
       location,
-      contacts,
+      phone,
+      address,
+      city,
+      state,
+      postalCode,
+      country
     } = req.body;
 
 
@@ -36,7 +41,7 @@ const updateContact = async (req, res) => {
        if (!contact){
          return res.status(400).json({
              status: 400,
-             error: 'contact already exist'
+             error: 'contact does not exist'
          })
      }
    
@@ -59,7 +64,7 @@ const updateContact = async (req, res) => {
     const updatedContact = await Contact.findOneAndUpdate(
       { _id: contactId },
       {
-        companyId: employee.companyId,
+      companyId: employee.companyId,
       companyName: employee.companyName,
       firstName,
       lastName,
@@ -69,15 +74,19 @@ const updateContact = async (req, res) => {
       assignedAgentId,
       assignedAgentName: agent.fullName,
       email,
-      taxId,
       ownerId,
-      ownerName,
+      ownerName: employee.fullName,
       jobTitle,
       organization,
       jobRole,
       tags,
       location,
-      contacts,
+      phone,
+      address,
+      city,
+      state,
+      postalCode,
+      country
       },
     );
 

@@ -21,7 +21,6 @@ const createContact = async (req, res) => {
       assignedAgentId,
       assignedAgentName,
       email,
-      taxId,
       ownerId,
       ownerName,
       jobTitle,
@@ -29,7 +28,12 @@ const createContact = async (req, res) => {
       jobRole,
       tags,
       location,
-      contacts,
+      phone,
+      address,
+      city,
+      state,
+      postalCode,
+      country
     } = req.body;
         // Extract data from request body
         let employee = await Employee.findOne({ _id: ownerId });
@@ -73,7 +77,6 @@ const createContact = async (req, res) => {
       assignedAgentId,
       assignedAgentName: agent.fullName,
       email,
-      taxId,
       ownerId,
       ownerName: employee.fullName,
       jobTitle,
@@ -81,7 +84,12 @@ const createContact = async (req, res) => {
       jobRole,
       tags,
       location,
-      contacts,
+      phone,
+      address,
+      city,
+      state,
+      postalCode,
+      country
     });
 
     // Save the contact to the database

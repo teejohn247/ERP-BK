@@ -16,10 +16,11 @@ const createLead = async (req, res) => {
 
     const { 
       firstName,
-      LastName,
+      lastName,
       leadType,
       industry,
       leadPriority,
+      jobTitle,
       contactId,
       leadScore,
       expectedRevenue,
@@ -30,7 +31,6 @@ const createLead = async (req, res) => {
       assignedAgentName,
       source,
       description,
-      tags,
       location,
       } = req.body;
 
@@ -41,7 +41,7 @@ const createLead = async (req, res) => {
       if (!contact){
         return res.status(400).json({
             status: 400,
-            error: 'contact already exist'
+            error: 'contact does not exist'
         })
     }
   
@@ -64,9 +64,10 @@ const createLead = async (req, res) => {
         companyId: employee.companyId,
         companyName: employee.companyName,
         firstName,
-        LastName,
+        lastName,
         leadType,
         industry,
+        jobTitle,
         leadPriority,
         contactName: contact.fullName,
         contactId,
@@ -79,7 +80,6 @@ const createLead = async (req, res) => {
         assignedAgentName: agent.fullName,
         source,
         description,
-        tags,
         location
       });
 
@@ -90,7 +90,7 @@ const createLead = async (req, res) => {
       { _id: assignedAgentId },
       { $push: { leads: {
         leadId: savedLead._id,
-        fullName: `${firstName} ${LastName}`,
+        fullName: `${firstName} ${lastName}`,
         date: new Date().toISOString(),
       }} },
       { new: true }

@@ -218,6 +218,9 @@ import deleteTicket from '../controller/CRM/Support Ticket/deleteTicket';
 import updateTicket from '../controller/CRM/Support Ticket/updateTicket';
 import addAgentActivity from '../controller/Employers/addAgentActivity';
 import createQuotation from '../controller/CRM/Contacts/createQuotation';
+import contactPicture from '../controller/CRM/Contacts/contactPicture';
+import leadPicture from '../controller/CRM/Leads/leadPicture';
+import agentPicture from '../controller/Employers/agentPicture';
 
 
 
@@ -565,6 +568,11 @@ router.delete("/deleteAgent/:id",auth,deleteAgent);
 router.get("/fetchAgents",auth,fetchAgents);
 router.patch("/fetchAgents",auth,addAgentActivity);
 router.post("/createQuotation", auth, createQuotation);
+
+
+router.patch('/updateContactPicture/:contactId', auth, upload.single("profilePhoto"), imageUploader, contactPicture);
+router.patch('/updateLeadPicture/:leadId', auth, upload.single("profilePhoto"), imageUploader, leadPicture);
+router.patch('/updateAgentPicture/:agentId', auth, upload.single("profilePhoto"), imageUploader, agentPicture);
 
 
 

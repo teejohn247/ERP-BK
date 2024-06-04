@@ -9,6 +9,9 @@ import Employee from '../../../model/Employees';
 // Controller to add activity
 const updateLead = async (req, res) => {
   let employee = await Employee.findOne({ _id: req.payload.id });
+
+  const { leadId } = req.params;
+
 try{
   const { 
     firstName,
@@ -16,9 +19,9 @@ try{
     leadType,
     industry,
     leadPriority,
-    leadId,
     leadScore,
     expectedRevenue,
+    jobTitle,
     conversionProbability,
     leadOwner,
     leadOwnerId,
@@ -26,7 +29,6 @@ try{
     assignedAgentName,
     source,
     description,
-    tags,
     location,
     } = req.body;
 
@@ -37,9 +39,9 @@ try{
     if (!contact){
       return res.status(400).json({
           status: 400,
-          error: 'contact already exist'
+          error: 'lead does not exist'
       })
-  }
+    }
 
     if (!agent){
       return res.status(400).json({
@@ -56,43 +58,18 @@ try{
     })
 }
 
-    const lead = new Lead({
-      companyId: employee.companyId,
-      companyName: employee.companyName,
-      firstName,
-      LastName,
-      leadType,
-      industry,
-      leadPriority,
-      contactName: contact.fullName,
-      leadId,
-      leadScore,
-      expectedRevenue,
-      conversionProbability,
-      leadOwner: employee.fullName,
-      leadOwnerId,
-      assignedAgentId,
-      assignedAgentName,
-      source,
-      description,
-      tags,
-      location
-    });
-
 
     // Find and update the contact
     const updatedContact = await Contact.findOneAndUpdate(
       { _id: leadId },
       {
-        companyId: employee.companyId,
-        companyName: employee.companyName,
         firstName,
         LastName,
         leadType,
         industry,
         leadPriority,
+        jobTitle,
         contactName: contact.fullName,
-        leadId,
         leadScore,
         expectedRevenue,
         conversionProbability,
@@ -102,7 +79,6 @@ try{
         assignedAgentName,
         source,
         description,
-        tags,
         location
       },
     );
@@ -115,22 +91,16 @@ try{
   // Return success response
 
   const updatedContactAgent = {
-    'tickets.$.notes': updatedContact.notes,
-    'tickets.$.ticketNumber': updatedContact.ticketNumber,
-    'tickets.$.stage': updatedContact.stage,
-    'tickets.$.status': updatedContact.status,
-    'tickets.$.priority': updatedContact.priority,
-    'tickets.$.closureTime': updatedContact.closureTime
+    'leads.$.leadId': updatedContact._id,
+    'leads.$.fullName': updatedContact.fullName,
   };
 
-
-  // Find and update the agent's specific contact
   await Agent.findOneAndUpdate(
-    { _id: assignedAgentId ? assignedAgentId : contact.assignedAgentId, 'tickets.ticketId': ticketId },
+    { _id: assignedAgentId ? assignedAgentId : contact.assignedAgentId, 'leads.leadId': leadId },
     { $set: updatedContactAgent },
     { new: true }
   );
-  res.status(201).json({ success: true, message: 'Lead created successfully', data: savedLead });
+  res.status(201).json({ success: true, message: 'Lead created successfully', data: updatedContact});
 }catch (error) {
   // Return error response
   console.error('Error creating contact:', error);

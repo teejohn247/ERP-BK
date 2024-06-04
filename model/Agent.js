@@ -33,11 +33,11 @@ const AgentSchema = new mongoose.Schema({
     {
       leadId: { type: String },
       fullName: { type: String },
-      profilePic: {
-        type: String,
-        default:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKoUT6kaiW2c9qcsxtXXDLJWsHwDvTNgaIkSzH7d0mNg&s",
-      },
+      // profilePic: {
+      //   type: String,
+      //   default:
+      //     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKoUT6kaiW2c9qcsxtXXDLJWsHwDvTNgaIkSzH7d0mNg&s",
+      // },
       date: {
         type: Date,
       },
@@ -61,11 +61,11 @@ const AgentSchema = new mongoose.Schema({
     {
       contactId: { type: String },
       fullName: { type: String },
-      profilePic: {
-        type: String,
-        default:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKoUT6kaiW2c9qcsxtXXDLJWsHwDvTNgaIkSzH7d0mNg&s",
-      },
+      // profilePic: {
+      //   type: String,
+      //   default:
+      //     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKoUT6kaiW2c9qcsxtXXDLJWsHwDvTNgaIkSzH7d0mNg&s",
+      // },
       date: {
         type: Date,
         default: new Date().toISOString(),

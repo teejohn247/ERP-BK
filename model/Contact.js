@@ -12,30 +12,23 @@ const ContactSchema = new mongoose.Schema(
     assignedAgentId: { type: String },
     assignedAgentName: { type: String },
     email: { type: String },
-    taxId: { type: String },
     ownerId: { type: String },
     ownerName: { type: String },
     jobTitle: { type: String },
     organization: { type: String },
     jobRole: { type: String },
-    tags: [{ type: String }],
+    profilePic: {
+      type: String,
+      default:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKoUT6kaiW2c9qcsxtXXDLJWsHwDvTNgaIkSzH7d0mNg&s",
+    },
     location: { type: String },
-    contacts: [
-      {
-        contactType: { type: String },
         phone: { type: String },
-        email: { type: String },
         address: { type: String },
         city: { type: String },
         state: { type: String },
-        zip: { type: String },
+        postalCode: { type: String },
         country: { type: String },
-        dateAssigned: {
-          type: Date,
-          default: new Date().toISOString(),
-        }, 
-      },
-    ],
     quotations: [
       {
         contactId: { type: String },

@@ -8,6 +8,7 @@ const LeadSchema = new mongoose.Schema(
     LastName: { type: String },
     leadType: { type: String },
     industry: { type: String },
+    jobTitle: { type: String },
     leadPriority: { type: String },
     contactName: { type: String },
     contactId: { type: String },
@@ -21,8 +22,12 @@ const LeadSchema = new mongoose.Schema(
     assignedAgentName: { type: String },
     source: { type: String },
     description: { type: String },
-    tags: [{ type: String }],
     location: { type: String },
+    profilePic: {
+      type: String,
+      default:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKoUT6kaiW2c9qcsxtXXDLJWsHwDvTNgaIkSzH7d0mNg&s",
+    },
     activities: [
       {
         activityType: { type: String },
