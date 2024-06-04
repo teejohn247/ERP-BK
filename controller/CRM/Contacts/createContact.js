@@ -14,7 +14,7 @@ const createContact = async (req, res) => {
 
     const {
       firstName,
-      LastName,
+      lastName,
       contactType,
       onboardingDate,
       industry,
@@ -66,7 +66,7 @@ const createContact = async (req, res) => {
       companyId: employee.companyId,
       companyName: employee.companyName,
       firstName,
-      LastName,
+      lastName,
       contactType,
       onboardingDate,
       industry,
@@ -92,7 +92,7 @@ const createContact = async (req, res) => {
       { _id: assignedAgentId },
       { $push: { contacts: {
         contactId: newContact._id,
-        fullName: `${firstName} ${LastName}`,
+        fullName: `${firstName} ${lastName}`,
         date: new Date().toISOString(),
       }} },
       { new: true }
