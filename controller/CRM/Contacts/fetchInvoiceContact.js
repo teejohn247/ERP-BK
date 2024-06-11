@@ -1,21 +1,21 @@
 import dotenv from 'dotenv';
-import Contact from '../../../model/Contact';
+import Contact from '../../../model/Invoice';
 import Company from '../../../model/Company';
 
 dotenv.config();
 
-const fetchSingleContact = async (req, res) => {
+const fetchInvoiceContact = async (req, res) => {
   try {
     const { page, limit } = req.query;
     const company = await Company.findOne({ _id: req.payload.id });
 
     if (company) {
-      const contacts = await Contact.find({ contactId: req.params.id })
+      const contacts = await Contact.find({ companyId: req.payload.id })
         .sort({ _id: -1 })
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
-      const count = await Contact.find({ contactId: req.params.id }).countDocuments();
+      const count = await Contact.find({ companyId: req.payload.id }).countDocuments();
 
       res.status(200).json({
         status: 200,
@@ -24,9 +24,8 @@ const fetchSingleContact = async (req, res) => {
         totalPages: Math.ceil(count / limit),
         currentPage: page
       });
-
     } else {
-      const contacts = await Contact.find({ _id: req.params.id });
+      const contacts = await Contact.find({ owner: req.payload.id });
 
       res.status(200).json({
         status: 200,
@@ -42,5 +41,4 @@ const fetchSingleContact = async (req, res) => {
     });
   }
 };
-
-export default fetchSingleContact;
+export default fetchInvoiceContact;

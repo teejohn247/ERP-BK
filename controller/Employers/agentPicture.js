@@ -26,7 +26,7 @@ const agentPicture = async (req, res) => {
     );
 
     if (!updatedContact) {
-      return res.status(404).json({ status:404, success: false, message: 'agentnot found' });
+      return res.status(404).json({ status:404, success: false, message: 'agent not found' });
     }
 
     res.status(200).json({ status:200, success: true, message: 'Agent updated successfully'});

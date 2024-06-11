@@ -187,7 +187,7 @@ import fetchTodaysAttendance from '../controller/Visitors/fetchTodaysAttendance'
 import createOfferLetter from '../controller/JobListings/createOfferLetter';
 import createContact from '../controller/CRM/Contacts/createContact';
 import fetchContact from '../controller/CRM/Contacts/fetchContact';
-import fetchSingleContact from '../controller/CRM/Contacts/fetchSingleContact';
+import fetchSingleContact from '../controller/CRM/Contacts/fetchPurchaseOrder';
 import addActivity from '../controller/CRM/Contacts/addActivity';
 import deleteActivity from '../controller/CRM/Contacts/deleteActivity';
 import addNotes from '../controller/CRM/Contacts/addNotes';
@@ -221,6 +221,11 @@ import createQuotation from '../controller/CRM/Contacts/createQuotation';
 import contactPicture from '../controller/CRM/Contacts/contactPicture';
 import leadPicture from '../controller/CRM/Leads/leadPicture';
 import agentPicture from '../controller/Employers/agentPicture';
+import createPurchaseOrder from '../controller/CRM/Contacts/createPurchaseOrder';
+import createInvoice from '../controller/CRM/Contacts/createInvoice';
+import fetchInvoiceContact from '../controller/CRM/Contacts/fetchInvoiceContact';
+import fetchPurchaseOrder from '../controller/CRM/Contacts/fetchPurchaseOrder';
+import fetchQuotation from '../controller/CRM/Contacts/fetchQuotation';
 
 
 
@@ -568,6 +573,14 @@ router.delete("/deleteAgent/:id",auth,deleteAgent);
 router.get("/fetchAgents",auth,fetchAgents);
 router.patch("/fetchAgents",auth,addAgentActivity);
 router.post("/createQuotation", auth, createQuotation);
+router.post("/createPurchaseOrder", auth, createPurchaseOrder);
+router.post("/createInvoice", auth, createInvoice);
+
+router.get("/fetchContactInvoice/:id", auth, fetchInvoiceContact);
+router.get("/fetchContactPurchaseOrders/:id", auth, fetchPurchaseOrder);
+router.get("/fetchContactQuotations/:id", auth, fetchQuotation);
+
+
 
 
 router.patch('/updateContactPicture/:contactId', auth, upload.single("profilePhoto"), imageUploader, contactPicture);
