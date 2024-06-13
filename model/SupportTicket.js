@@ -9,6 +9,7 @@ const SupportTicketSchema = new mongoose.Schema(
     contactName: { type: String },
     contactId: { type: String },
     ownerId: { type: String },
+    associatedPO: {type: String},
     ownerName: { type: String },
     stage: { type: String },
     status: { type: String },

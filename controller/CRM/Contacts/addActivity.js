@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
 import Contact from '../../../model/Contact';
-
 import Employee from '../../../model/Employees';
 
 
 // Controller to add activity
 const addActivity = async (req, res) => {
   const { contactId } = req.params;
-  const { activityType, note, attachment } = req.body;
+  const { activityType, note, attachment, activityDateTime, priority } = req.body;
 
 
   try {
@@ -22,6 +21,8 @@ const addActivity = async (req, res) => {
     const newActivity = {
         activityType,
         note,
+        activityDateTime, 
+        priority,
         date: new Date(),
       };
 

@@ -7,6 +7,7 @@ const QuotationSchema = new mongoose.Schema(
         contactId: { type: String },
         contactName: { type: String },
         currency: { type: String },
+        referenceNumber: { type: String },
         paymentTerms: { type: String },
         expirationDate: { type: String },
         itemDetails: [

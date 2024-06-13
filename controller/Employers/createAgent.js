@@ -27,10 +27,27 @@ const createAgent = async (req, res) => {
 
     try {
 
-        const { firstName, lastName, email, phoneNumber, gender, address} = req.body;
+        // const { firstName, lastName, email, phoneNumber, gender, address} = req.body;
+
+        const { firstName, lastName, email, phoneNumber, role, dateOfBirth, address, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
+            employmentType, reportingTo} = req.body;
+    
 
         let company = await Company.find({ _id: req.payload.id });
         let checkUser = await Employee.findOne({companyId: req.payload.id, email: email });
+
+        console.log(checkUser);
+
+
+        // let checkRole = await Roles.findOne({_id: companyRoleId})
+        let checkDesignation = await Designation.findOne({_id: designationId})
+        console.log({checkDesignation});
+
+        let checkDept= await Department.findOne({_id: departmentId})
+        // let checkName= await Employee.findOne({_id: reportingTo })
+        console.log({checkDept});
+
+
 
         console.log(checkUser);
 
@@ -51,8 +68,18 @@ const createAgent = async (req, res) => {
            
         }
 
+        if (!checkDesignation){
+            return res.status(400).json({
+                status: 400,
+                error: `Designation does not exist`
+            })
+        }
 
-        console.log('hgh')
+
+        // const check = await Employee.findOne({ _id: managerId });
+        
+
+
         console.log(company)
 
 
@@ -101,13 +128,22 @@ const createAgent = async (req, res) => {
       new Employee({
             companyName: company[0].companyName,
             companyId: req.payload.id,
-                firstName,
-                lastName,
-                address,
-                gender,
-                phoneNumber,
-                fullName: `${firstName} ${lastName}`,
-                email
+            firstName,
+            lastName,
+            dateOfBirth,
+            gender,
+            phoneNumber,
+            fullName: `${firstName} ${lastName}`,
+            role,
+            designationName: checkDesignation.designationName,
+            designationId,
+            departmentId: departmentId,
+            department: checkDept.departmentName,
+            employmentType,
+            employmentStartDate,
+            managerId:  checkDept.managerId && checkDept.managerId,
+            managerName: checkDept.managerName && checkDept.managerName,
+            email,
         }).save().then(async(adm) => {
 
             console.log({adm})

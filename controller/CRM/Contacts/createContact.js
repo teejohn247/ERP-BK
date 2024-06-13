@@ -10,8 +10,6 @@ import Agent from '../../../model/Agent'
 const createContact = async (req, res) => {
   try {
 
-    
-
     const {
       firstName,
       lastName,
@@ -22,6 +20,7 @@ const createContact = async (req, res) => {
       assignedAgentName,
       email,
       ownerId,
+      personalEmail,
       ownerName,
       jobTitle,
       organization,
@@ -81,6 +80,7 @@ const createContact = async (req, res) => {
       ownerName: employee.fullName,
       jobTitle,
       organization,
+      personalEmail,
       jobRole,
       tags,
       location,

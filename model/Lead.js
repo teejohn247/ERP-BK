@@ -32,6 +32,12 @@ const LeadSchema = new mongoose.Schema(
       {
         activityType: { type: String },
         note: { type: String },
+        activityDateTime: {
+          type: Date,
+        },
+        priority: {
+          type: String,
+        },
         date: {
           type: Date,
           default: new Date().toISOString(),
@@ -42,6 +48,7 @@ const LeadSchema = new mongoose.Schema(
       {
         note: { type: String },
         attachment: { type: String },
+        priority: {type: String },
         date: {
           type: Date,
           default: new Date().toISOString(),

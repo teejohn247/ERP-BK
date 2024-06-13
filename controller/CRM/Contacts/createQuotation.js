@@ -10,6 +10,7 @@ export const createQuotation = async (req, res) => {
   const {
     contactId,
     contactName,
+    referenceNumber,
     currency,
     paymentTerms,
     expirationDate,
@@ -21,12 +22,12 @@ export const createQuotation = async (req, res) => {
   let employee = await Employee.findOne({ _id: req.payload.id });
 
 
-  if (!employee){
-    return res.status(400).json({
-        status: 400,
-        error: 'Company does not exist'
-    })
-}
+//   if (!employee){
+//     return res.status(400).json({
+//         status: 400,
+//         error: 'Company does not exist'
+//     })
+// }
 
 if(company){
   const newQuotation = new Quotation({
@@ -34,6 +35,7 @@ if(company){
     companyName: company.companyName,
     contactId,
     contactName,
+    referenceNumber,
     currency,
     paymentTerms,
     expirationDate,
@@ -64,6 +66,7 @@ const newQuotation = new Quotation({
   companyName: employee.companyName,
   contactId,
   contactName,
+  referenceNumber,
   currency,
   paymentTerms,
   expirationDate,

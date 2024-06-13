@@ -7,7 +7,8 @@ import Employee from '../../../model/Employees';
 // Controller to add activity
 const addLeadActivity = async (req, res) => {
   const { leadId } = req.params;
-  const { activityType, note, attachment } = req.body;
+  const { activityType, note, attachment,activityDateTime, 
+    priority} = req.body;
 
 
   try {
@@ -22,6 +23,8 @@ const addLeadActivity = async (req, res) => {
     const newActivity = {
         activityType,
         note,
+        activityDateTime, 
+        priority,
         date: new Date(),
       };
 

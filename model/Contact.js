@@ -12,6 +12,7 @@ const ContactSchema = new mongoose.Schema(
     assignedAgentId: { type: String },
     assignedAgentName: { type: String },
     email: { type: String },
+    personalEmail: { type: String },
     ownerId: { type: String },
     ownerName: { type: String },
     jobTitle: { type: String },
@@ -108,6 +109,12 @@ const ContactSchema = new mongoose.Schema(
       {
         activityType: { type: String },
         note: { type: String },
+        activityDateTime: {
+          type: Date,
+        },
+        priority: {
+          type: String,
+        },
         date: {
           type: Date,
           default: new Date().toISOString(),
@@ -117,6 +124,7 @@ const ContactSchema = new mongoose.Schema(
     notes: [
       {
         note: { type: String },
+        priority: {type: String },
         attachment: { type: String },
         date: {
           type: Date,
