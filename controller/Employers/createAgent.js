@@ -27,29 +27,32 @@ const createAgent = async (req, res) => {
 
     try {
 
-        // const { firstName, lastName, email, phoneNumber, gender, address} = req.body;
-
-        const { firstName, lastName, email, phoneNumber, role, dateOfBirth, address, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
-            employmentType, reportingTo} = req.body;
+        const { firstName, lastName, email, phoneNumber, personalEmail, role, dateOfBirth, address,  gender, departmentId, designationId,  employmentStartDate,
+            personalPhoneNumber, nationality,
+            employmentType } = req.body;
     
 
         let company = await Company.find({ _id: req.payload.id });
         let checkUser = await Employee.findOne({companyId: req.payload.id, email: email });
 
-        console.log(checkUser);
 
 
         // let checkRole = await Roles.findOne({_id: companyRoleId})
         let checkDesignation = await Designation.findOne({_id: designationId})
-        console.log({checkDesignation});
 
         let checkDept= await Department.findOne({_id: departmentId})
         // let checkName= await Employee.findOne({_id: reportingTo })
-        console.log({checkDept});
+
+        console.log({checkDept})
 
 
-
-        console.log(checkUser);
+        if (!checkDept){
+            return res.status(400).json({
+                status: 400,
+                error: 'Department does not exist'
+            })
+           
+        }
 
         // const check = await Employee.findOne({ _id: managerId });
 
@@ -112,17 +115,7 @@ const createAgent = async (req, res) => {
             })
         }
 
-        console.log('heer',{
-        // companyName: company[0].companyName,
-        // companyId: req.payload.id,
-            firstName,
-            // lastName,
-            // address,
-            // gender,
-            // phoneNumber,
-            // fullName: `${firstName} ${lastName}`,
-            email
-        })
+   
 
 
       new Employee({
@@ -130,8 +123,12 @@ const createAgent = async (req, res) => {
             companyId: req.payload.id,
             firstName,
             lastName,
+            address,
             dateOfBirth,
+            personalEmail,
+            personalPhoneNumber,
             gender,
+            nationality,
             phoneNumber,
             fullName: `${firstName} ${lastName}`,
             role,

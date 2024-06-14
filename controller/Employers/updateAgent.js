@@ -30,29 +30,52 @@ const updateAgent = async (req, res) => {
 
        
         
-        const { firstName, lastName, email, phoneNumber, gender, address } = req.body;
+        const { firstName, lastName, email, phoneNumber, personalEmail, role, dateOfBirth, address,  gender, departmentId, designationId,  employmentStartDate,
+            personalPhoneNumber, nationality,
+            employmentType } = req.body;
+    
 
 
         
-
-        const check = await Employee.findOne({ _id: req.params.id});
-        console.log({check})
-
-     
-        let company = await Company.find({ _id: check.companyId});
-        console.log({company})
-
-
-        if (!check) {
-            res.status(400).json({
-                status: 400,
-                error: "Employee doesn't exist"
-            });
-            return;
-        }
+            let company = await Company.find({ _id: req.payload.id });
+            let checkUser = await Employee.findOne({companyId: req.payload.id, email: email });
+    
+    
+    
+            // let checkRole = await Roles.findOne({_id: companyRoleId})
+            let checkDesignation = await Designation.findOne({_id: designationId})
+    
+            let checkDept= await Department.findOne({_id: departmentId})
+            // let checkName= await Employee.findOne({_id: reportingTo })
+    
+            console.log({checkDept})
+    
+    
+            if (!checkDept){
+                return res.status(400).json({
+                    status: 400,
+                    error: 'Department does not exist'
+                })
+               
+            }
+    
+            if (!company){
+                return res.status(400).json({
+                    status: 400,
+                    error: `Company does not exist`
+                })
+               
+            }
+    
+            if (!checkDesignation){
+                return res.status(400).json({
+                    status: 400,
+                    error: `Designation does not exist`
+                })
+            }
+    
         Employee.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
-
                     firstName: firstName && firstName,
                     lastName: lastName && lastName,
                     gender: gender && gender,  
@@ -60,8 +83,23 @@ const updateAgent = async (req, res) => {
                     email: email && email,
                     phoneNumber: phoneNumber && phoneNumber,
                     // profilePic: req.body.image && req.body.image,
-                    fullName: firstName && lastName && `${firstName} ${lastName}`,
-
+                    dateOfBirth: dateOfBirth && dateOfBirth,
+                    personalEmail: personalEmail && personalEmail,
+                    personalPhoneNumber: personalPhoneNumber && personalPhoneNumber,
+                    gender: gender && gender,
+                    nationality: nationality && nationality,
+                    phoneNumber: phoneNumber && phoneNumber,
+                    fullName: `${firstName} ${lastName}` && `${firstName} ${lastName}`,
+                    role: role && role,
+                    designationName: checkDesignation.designationName && checkDesignation.designationName,
+                    designationId: designationId && designationId,
+                    departmentId: departmentId && departmentId,
+                    department: checkDept.departmentName && checkDept.departmentName,
+                    employmentType: employmentType && employmentType,
+                    employmentStartDate: employmentStartDate && employmentStartDate,
+                    managerId: checkDept.managerId && checkDept.managerId,
+                    managerName: checkDept.managerName && checkDept.managerName,
+                    email: email && email
             }
        },
             async function (
