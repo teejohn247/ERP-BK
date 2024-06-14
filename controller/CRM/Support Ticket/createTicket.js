@@ -5,7 +5,7 @@ import SupportTicket from '../../../model/SupportTicket';
 import Department from '../../../model/Department';
 import Company from '../../../model/Company';
 import Employee from '../../../model/Employees';
-import Agent from '../../../model/Agent';
+import Agent from '../../../model/Employees';
 
 
 // Utility function to generate a unique ticket number
@@ -66,7 +66,6 @@ const createTicket = async (req, res) => {
       ownerId,
       ownerName: employee.fullName,
       stage,
-      associatedPO,
       status,
       priority,
       closureTime,

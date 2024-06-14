@@ -14,6 +14,134 @@ const AgentSchema = new mongoose.Schema({
   personalEmail: { type: String },
   maritalStatus: { type: String },
   phoneNumber: { type: String, trim: true },
+  approvals: [
+    {
+      approvalType: {
+        type: String,
+      },
+      approval: {
+        type: String,
+      },
+      approvalId: {
+        type: String,
+      },
+    },
+  ],
+  expenseDetails: {
+    expenseTypeId: {
+      type: String,
+    },
+    cardNo: {
+      type: String,
+    },
+    cardHolder: {
+      type: String,
+    },
+    dateIssued: {
+      type: String,
+    },
+    expiryDate: {
+      type: String,
+      default: "",
+    },
+    cardLimit: {
+      type: Number,
+      default: 0,
+    },
+    cardBalance: {
+      type: Number,
+      default: 0,
+    },
+    totalSpent: {
+      type: Number,
+      default: 0,
+    },
+    currentSpent: {
+      type: Number,
+      default: 0,
+    },
+    currentExpense: {
+      type: Number,
+      default: 0,
+    },
+
+    // kpiAppraisals: [
+    //   {
+    //     expenseTypeId: { type: String, required: true },
+    //     expenseTypeName: { type: String, required: true },
+    //     expenseDate: { type: String, required: true },
+    //     currency: { type: String },
+    //     amount: { type: String, required: true },
+    //     attachment: { type: String },
+    //     approver: { type: String },
+    //     approverId: { type: String },
+    //     dateRemitted: { type: String },
+    //     dateOfApproval: { type: String },
+    //     description: { type: String },
+    //     dateRequested: { type: Date, default: Date.now() },
+    //   },
+    // ],
+ 
+    expenseHistory: [
+      {
+        expenseTypeId: { type: String, required: true },
+        expenseTypeName: { type: String, required: true },
+        expenseDate: { type: String, required: true },
+        currency: { type: String },
+        amount: { type: String, required: true },
+        attachment: { type: String },
+        approver: { type: String },
+        approverId: { type: String },
+        dateRemitted: { type: String },
+        dateOfApproval: { type: String },
+        description: { type: String },
+        dateRequested: { type: Date, default: Date.now() },
+      },
+    ],
+  },
+  leaveAssignment: [
+    {
+      leaveTypeId: {
+        type: String,
+      },
+      leaveName: {
+        type: String,
+      },
+      noOfLeaveDays: {
+        type: Number,
+      },
+      description: {
+        type: String,
+      },
+      assignedNoOfDays: {
+        type: Number,
+      },
+      daysUsed: {
+        type: Number,
+        default: 0,
+      },
+      daysLeft: {
+        type: Number,
+        default: 0,
+      },
+      leaveStartDate: {
+        type: String,
+      },
+      leaveEndDate: {
+        type: String,
+      },
+      requestMessage: {
+        type: String,
+      },
+      decisionMessage: {
+        type: String,
+      },
+      leaveApproved: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
   profilePic: {
     type: String,
     default:

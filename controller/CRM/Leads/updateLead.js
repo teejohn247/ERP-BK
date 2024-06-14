@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Contact from '../../../model/Lead';
-import Agent from '../../../model/Agent';
+import Agent from '../../../model/Employees';
 
 
 import Employee from '../../../model/Employees';

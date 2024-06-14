@@ -104,8 +104,8 @@ const EmployeeSchema = new mongoose.Schema({
   email: { type: String, required: true, trim: true },
 
   nationality: { type: String, trim: true },
-    country: { type: String,  trim: true },
-    city: { type: String, trim: true },
+  country: { type: String,  trim: true },
+  city: { type: String, trim: true },
   departmentId: { type: String,  trim: true },
   department: { type: String, required: true, trim: true },
   employmentType: { type: String, required: true, trim: true },
@@ -129,6 +129,7 @@ const EmployeeSchema = new mongoose.Schema({
   appraisals: [{
     type: mongoose.Schema.Types.Mixed
 }],
+  agent: { type: String, trim: true, default: false },
   assignedAppraisals:[
     {
         appraisalId: { type: String, required: true },

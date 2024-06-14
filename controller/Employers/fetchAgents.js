@@ -1,6 +1,6 @@
 
 import dotenv from 'dotenv';
-import Employee from '../../model/Agent';
+import Employee from '../../model/Employees';
 import EmployeeTable from '../../model/EmployeeTable';
 
 import Roles from '../../model/Roles';

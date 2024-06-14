@@ -2,7 +2,7 @@
 import Contact from '../../../model/Contact';
 import SupportTicket from '../../../model/SupportTicket';
 import Employee from '../../../model/Employees';
-import Agent from '../../../model/Agent';
+import Agent from '../../../model/Employees';
 
 // Update contact controller function
 const updateTicket = async (req, res) => {

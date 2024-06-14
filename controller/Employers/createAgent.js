@@ -1,6 +1,6 @@
 
 import dotenv from 'dotenv';
-import Employee from '../../model/Agent';
+import Employee from '../../model/Employees';
 import Roles from '../../model/Role';
 import Company from '../../model/Company';
 import Department from '../../model/Department';
@@ -83,7 +83,7 @@ const createAgent = async (req, res) => {
         
 
 
-        console.log(company)
+        console.log({checkDesignation})
 
 
             let checkCompany = await Employee.find(
@@ -108,12 +108,66 @@ const createAgent = async (req, res) => {
             })
         }
 
+        const approver = [{
+            approvalType: 'leave',
+            approval: checkDept.managerName,
+            approvalId: checkDept.managerId
+        },
+        {
+            approvalType: 'expense',
+            approval: checkDept.managerName,
+            approvalId: checkDept.managerId
+        },
+        {
+            approvalType: 'appraisal',
+            approval: checkDept.managerName,
+            approvalId: checkDept.managerId
+        },
+    ]
+
+    console.log({approver})
+
         if(comp == true){
             return res.status(400).json({
                 status: 400,
                 error: `An agent already exist with email: ${email}`
             })
         }
+
+        console.log({ companyName: company[0].companyName,
+            companyId: req.payload.id,
+            firstName,
+            lastName,
+            address,
+            dateOfBirth,
+            personalEmail,
+            personalPhoneNumber,
+            gender,
+            nationality,
+            phoneNumber,
+            fullName: `${firstName} ${lastName}`,
+            role,
+            designationName: checkDesignation.designationName,
+            designationId,
+            departmentId: departmentId,
+            department: checkDept.departmentName,
+            employmentType,
+            employmentStartDate,
+            managerId:  checkDept.managerId && checkDept.managerId,
+            managerName: checkDept.managerName && checkDept.managerName,
+            email,
+            leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
+            approvals: approver,
+            expenseDetails: {
+                cardNo: Date.now(),
+                cardHolder: `${firstName} ${lastName}`,
+                dateIssued:  new Date().toISOString(),
+                cardBalance: checkDesignation?.expenseCard[0]?.cardLimit ? checkDesignation.expenseCard[0].cardLimit : 0,
+                cardLimit: checkDesignation?.expenseCard[0]?.cardLimit ? checkDesignation.expenseCard[0].cardLimit : 0,
+                cardCurrency: checkDesignation?.expenseCard[0]?.cardCurrency ? checkDesignation.expenseCard[0].cardCurrency : "",
+                cardLExpiryDate: checkDesignation?.expenseCard[0]?.cardExpiryDate ? checkDesignation.expenseCard[0].cardExpiryDate : "",
+                expenseTypeId: checkDesignation?.expenseCard[0]?.expenseTypeId ? checkDesignation.expenseCard[0].expenseTypeId : "",
+            }})
 
    
 
@@ -141,11 +195,92 @@ const createAgent = async (req, res) => {
             managerId:  checkDept.managerId && checkDept.managerId,
             managerName: checkDept.managerName && checkDept.managerName,
             email,
+            leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
+            approvals: approver,
+            expenseDetails: {
+                cardNo: Date.now(),
+                cardHolder: `${firstName} ${lastName}`,
+                dateIssued:  new Date().toISOString(),
+                cardBalance: checkDesignation?.expenseCard[0]?.cardLimit ? checkDesignation.expenseCard[0].cardLimit : 0,
+                cardLimit: checkDesignation?.expenseCard[0]?.cardLimit ? checkDesignation.expenseCard[0].cardLimit : 0,
+                cardCurrency: checkDesignation?.expenseCard[0]?.cardCurrency ? checkDesignation.expenseCard[0].cardCurrency : "",
+                cardLExpiryDate: checkDesignation?.expenseCard[0]?.cardExpiryDate ? checkDesignation.expenseCard[0].cardExpiryDate : "",
+                expenseTypeId: checkDesignation?.expenseCard[0]?.expenseTypeId ? checkDesignation.expenseCard[0].expenseTypeId : "",
+            }
         }).save().then(async(adm) => {
 
             console.log({adm})
 
 
+
+
+            const token = utils.encodeToken(adm._id, false, adm.email);
+
+    
+            let data = `<div>
+            <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
+            Hi ${firstName},
+            </p> 
+    
+            <p style="font-size: 16px; text-align: left !important; font-weight: 300;">
+    
+            You have been invited to join <a href="https://xped8-ca9291a9a7e0.herokuapp.com/set-password/${token}">silo ERP Platform</a> as an employee 
+    
+            <br><br>
+            </p>
+            
+            <div>`
+    
+           let resp = emailTemp(data, 'Employee Invitation')
+
+           const receivers = [
+            {
+              email: email
+            }
+          ]
+    
+            await sendEmail(req, res, email, receivers, 'Employee Invitation', resp);
+    
+            console.log('{employee}2')
+
+console.log('checkDept.assignedAppraisals',checkDept.assignedAppraisals)
+let approverGrp = []
+
+            for (const group of checkDept.assignedAppraisals) {
+
+                approverGrp.push({
+                    appraisalId: group.appraisalId,
+                    appraisalName: group.appraisalName})
+            }
+
+
+            Employee.findOneAndUpdate({ _id: adm._id}, { 
+                $push: {assignedAppraisals: approverGrp},
+           },{ upsert: true },
+                async function (
+                    err,
+                    result
+                ) {
+                    if (err) {
+                        res.status(401).json({
+                            status: 401,
+                            success: false,
+                            error: err
+                        })
+    
+                    } else {
+                        console.log('gous',{result})
+    
+                        // const manager = await AppraisalGroup.findOne({_id: groupId});
+    
+                        // res.status(200).json({
+                        //     status: 200,
+                        //     success: true,
+                        //     data: "Successfully assigned"
+                        // })
+    
+                    }
+                })
             AuditTrail.findOneAndUpdate({ companyId: company[0]._id}, 
                 { $push: { humanResources: { 
 
@@ -181,7 +316,6 @@ const createAgent = async (req, res) => {
                                 })
                         }
                     })
-       
         }).catch((err) => {
                 console.error(err)
                return res.status(400).json({

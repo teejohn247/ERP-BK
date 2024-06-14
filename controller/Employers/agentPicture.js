@@ -1,4 +1,4 @@
-import Contact from '../../model/Agent';
+import Contact from '../../model/Employees';
 
 
 // Update contact controller function

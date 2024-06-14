@@ -29,7 +29,7 @@ const inviteEmployee = async (req, res) => {
 
         console.log(new Date().toISOString())
         const { firstName, lastName, email, phoneNumber, dateOfBirth, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
-        employmentType, reportingTo} = req.body;
+        employmentType, reportingTo, agent} = req.body;
 
 
         let total = await Employee.find();
@@ -185,8 +185,6 @@ const inviteEmployee = async (req, res) => {
     //         }
     //     }]
     // }],console.lo
-
-    console.log(checkDesignation, 'it')
        let employee = new Employee({
             companyName: company[0].companyName,
             companyId: req.payload.id,
@@ -201,7 +199,6 @@ const inviteEmployee = async (req, res) => {
                 companyRole: companyRole,
                 // roleName: checkRole.roleName,
                 designationName: checkDesignation.designationName,
-                // designation: checkDesignation,
                 designationId,
                 departmentId: departmentId,
                 department: checkDept.departmentName,
@@ -212,6 +209,7 @@ const inviteEmployee = async (req, res) => {
                 email,
                 leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
                 approvals: approver,
+                agent: agent == true ? true : false,
                 expenseDetails: {
                     cardNo: Date.now(),
                     cardHolder: `${firstName} ${lastName}`,
@@ -232,9 +230,6 @@ const inviteEmployee = async (req, res) => {
 
             const token = utils.encodeToken(adm._id, false, adm.email);
 
-            console.log({token})
-    
-            console.log('{employee}')
     
             let data = `<div>
             <p style="padding: 32px 0; text-align: left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
@@ -262,8 +257,8 @@ const inviteEmployee = async (req, res) => {
     
             console.log('{employee}2')
 
-console.log('checkDept.assignedAppraisals',checkDept.assignedAppraisals)
-let approverGrp = []
+            console.log('checkDept.assignedAppraisals',checkDept.assignedAppraisals)
+            let approverGrp = []
 
             for (const group of checkDept.assignedAppraisals) {
 

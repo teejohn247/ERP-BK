@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Contact from '../../model/Agent';
+import Contact from '../../model/Employees';
 
 import Employee from '../../model/Employees';
 

@@ -1,6 +1,6 @@
 import Contact from '../../../model/Contact';
 import Employee from '../../../model/Employees';
-import Agent from '../../../model/Agent';
+import Agent from '../../../model/Employees';
 
 // Update contact controller function
 const updateContact = async (req, res) => {

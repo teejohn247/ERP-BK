@@ -1,6 +1,6 @@
 import Contact from '../../../model/Lead';
 import Employee from '../../../model/Employees';
-import Agent from '../../../model/Agent';
+import Agent from '../../../model/Employees';
 
 /// Delete contact controller function
 const deleteLead = async (req, res) => {

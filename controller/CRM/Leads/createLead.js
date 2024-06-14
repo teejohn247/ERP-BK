@@ -3,7 +3,7 @@ import Contact from '../../../model/Contact';
 import Department from '../../../model/Department';
 import Company from '../../../model/Company';
 import Employee from '../../../model/Employees';
-import Agent from '../../../model/Agent';
+import Agent from '../../../model/Employees';
 import Lead from '../../../model/Lead';
 
 
