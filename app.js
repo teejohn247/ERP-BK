@@ -90,9 +90,11 @@ connectDb()
 let hostname = '0.0.0.0'
 
 cron.schedule("* * * * *", async function () {
-  console.log("---------------------");
+  console.log("---------------------p");
+  
+
  const ans = await daysUsed()
- console.log(ans)
+ console.log({ans})
  console.log("running a task every 60 seconds");
 
  return ans;
@@ -106,7 +108,7 @@ cron.schedule('0 0 * * *', async function () {
       console.log('Running a task every day at 12:00 AM local time');
 
       // Your code to execute at 12:00 AM
-      const ans = await dailyAttendance;
+      const ans = await dailyAttendance();
       console.log(ans);
       
   } catch (error) {
