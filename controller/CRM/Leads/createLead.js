@@ -12,8 +12,7 @@ import Lead from '../../../model/Lead';
 const createLead = async (req, res) => {
   try {
     // Extract data from request body
-    let employee = await Employee.findOne({ _id: req.payload.id });
-
+  
     const { 
       firstName,
       lastName,
@@ -34,8 +33,11 @@ const createLead = async (req, res) => {
       location,
       } = req.body;
 
-      let contact = await Contact.findOne({ _id: contactId });
+      let employee = await Employee.findOne({ _id: leadOwnerId });
 
+      console.log({employee})
+
+      let contact = await Contact.findOne({ _id: contactId });
       let agent = await Agent.findOne({ _id: assignedAgentId });
 
       if (!contact){

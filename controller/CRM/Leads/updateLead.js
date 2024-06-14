@@ -8,7 +8,6 @@ import Employee from '../../../model/Employees';
 
 // Controller to add activity
 const updateLead = async (req, res) => {
-  let employee = await Employee.findOne({ _id: req.payload.id });
 
   const { leadId } = req.params;
 
@@ -31,6 +30,9 @@ try{
     description,
     location,
     } = req.body;
+
+  let employee = await Employee.findOne({ _id:leadOwnerId});
+
 
     let contact = await Contact.findOne({ _id: leadId });
 
