@@ -430,6 +430,60 @@ const EmployeeSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  activities: [
+    {
+      activityType: { type: String },
+      note: { type: String },
+      date: {
+        type: Date,
+        default: new Date().toISOString(),
+      },
+    },
+  ],
+ leads: [
+    {
+      leadId: { type: String },
+      fullName: { type: String },
+      // profilePic: {
+      //   type: String,
+      //   default:
+      //     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKoUT6kaiW2c9qcsxtXXDLJWsHwDvTNgaIkSzH7d0mNg&s",
+      // },
+      date: {
+        type: Date,
+      },
+    },
+  ],
+  tickets: [
+    {
+      ticketId: { type: String },
+      notes: { type: String },
+      ticketNumber: { type: String },
+      stage: { type: String },
+      status: { type: String },
+      priority: { type: String },
+      closureTime: { type: String },
+      date: {
+        type: Date,
+      },
+    },
+  ],
+  contacts: [
+    {
+      contactId: { type: String },
+      fullName: { type: String },
+      // profilePic: {
+      //   type: String,
+      //   default:
+      //     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKoUT6kaiW2c9qcsxtXXDLJWsHwDvTNgaIkSzH7d0mNg&s",
+      // },
+      date: {
+        type: Date,
+        default: new Date().toISOString(),
+      },
+    },
+  ],
+  
 });
 
 module.exports = mongoose.model("Employee", EmployeeSchema);
