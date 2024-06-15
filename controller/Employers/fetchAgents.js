@@ -28,14 +28,14 @@ const fetchAgents = async (req, res) => {
 
         const { page, limit } = req.query;
 
-        const employee = await Employee.find({companyId: req.payload.id}).sort({_id: -1})
+        const employee = await Employee.find({companyId: req.payload.id, agent: true}).sort({_id: -1})
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
 
         
 
-        const count = await Employee.find().countDocuments()
+        const count = await Employee.find({companyId: req.payload.id, agent: true}).countDocuments()
 
         if(!employee){
             res.status(404).json({
