@@ -30,12 +30,14 @@ const updateEmployeeAdmin = async (req, res) => {
         // const { firstName, lastName, dateOfBirth, departmentId , companyRole, designationId, phoneNumber, gender,
         // employmentType} = req.body;
 
-        const { firstName, lastName, email, phoneNumber, dateOfBirth, maritalStatus, nationality, nextOfKinAddress, nextOfKinFullName, nextOfKinGender, nextOfKinRelationship, nextOfKinPhoneNumber, city, country, address, personalEmail, companyRole, gender, departmentId, companyRoleId, designationId,  employmentStartDate,
+        const { firstName, lastName, email, phoneNumber, dateOfBirth, maritalStatus, salaryScaleId, nationality, nextOfKinAddress, nextOfKinFullName, nextOfKinGender, nextOfKinRelationship, nextOfKinPhoneNumber, city, country, address, personalEmail, companyRole, gender, departmentId, companyRoleId, designationId,  employmentStartDate,
             employmentType } = req.body;
 
         let company = await Company.find({ _id: req.payload.id });
 
-        console.log({company})
+
+
+
 
         if (!req.params.id) {
             res.status(400).json({
@@ -45,8 +47,8 @@ const updateEmployeeAdmin = async (req, res) => {
             return;
         }
 
-        const check = await Employee.findOne({ _id: req.params.id });
 
+        const check = await Employee.findOne({ _id: req.params.id });
         // let checkRole = await Roles.findOne({_id: companyRoleId});
         if(designationId){
             var checkDesignation = await Designation.findOne({_id: designationId});
@@ -82,8 +84,7 @@ const updateEmployeeAdmin = async (req, res) => {
             return;
         }
 
-       
-      await Employee.findOneAndUpdate({ _id: new ObjectId(req.params.id)}, { 
+        Employee.findOneAndUpdate({ _id: req.params.id}, { 
             $set: { 
                     firstName: firstName && firstName,
                     lastName: lastName && lastName,
@@ -104,6 +105,7 @@ const updateEmployeeAdmin = async (req, res) => {
                     departmentId: departmentId && departmentId,
                     employmentType: employmentType && employmentType,
                     fullName: firstName && lastName && `${firstName} ${lastName}`,
+                   
                     managerId: checkDept && checkDept.managerId,
                     managerName: checkDept && checkDept.managerName,
                     profilePic: req.body.image && req.body.image,
@@ -130,9 +132,12 @@ const updateEmployeeAdmin = async (req, res) => {
 
                 } else {
 
-                     console.log({result})
+        console.log({checkDept}, 'done')
 
-                    if(checkDept){
+
+                    if(checkDept.managerId !== ""){
+                     console.log({result}, 'done2')
+
                        const check = await Employee.findOne({ _id: checkDept.managerId });
 
 
@@ -152,7 +157,7 @@ const updateEmployeeAdmin = async (req, res) => {
                         approvalId: checkDept.managerId
                     }]
 
-                       Employee.findOneAndUpdate({ _id: new ObjectId(req.params.id)}, { 
+                       Employee.findOneAndUpdate({ _id: req.params.id}, { 
                         $set: { 
                             approvals: approval
                         }
@@ -201,6 +206,8 @@ const updateEmployeeAdmin = async (req, res) => {
                                                 return;
                             
                                             } else {
+        console.log({result}, 'done3')
+
                               
                                                 const updated = await Employee.findOne({ _id: req.params.id})
                             
