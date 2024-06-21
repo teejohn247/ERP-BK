@@ -45,8 +45,8 @@ const updateEmployeeAdmin = async (req, res) => {
             return;
         }
 
-
         const check = await Employee.findOne({ _id: req.params.id });
+
         // let checkRole = await Roles.findOne({_id: companyRoleId});
         if(designationId){
             var checkDesignation = await Designation.findOne({_id: designationId});
@@ -82,8 +82,8 @@ const updateEmployeeAdmin = async (req, res) => {
             return;
         }
 
-        console.log({checkDept})
-        Employee.findOneAndUpdate({ _id: req.params.id}, { 
+       
+      await Employee.findOneAndUpdate({ _id: new ObjectId(req.params.id)}, { 
             $set: { 
                     firstName: firstName && firstName,
                     lastName: lastName && lastName,
@@ -130,6 +130,8 @@ const updateEmployeeAdmin = async (req, res) => {
 
                 } else {
 
+                     console.log({result})
+
                     if(checkDept){
                        const check = await Employee.findOne({ _id: checkDept.managerId });
 
@@ -150,7 +152,7 @@ const updateEmployeeAdmin = async (req, res) => {
                         approvalId: checkDept.managerId
                     }]
 
-                       Employee.findOneAndUpdate({ _id: req.params.id}, { 
+                       Employee.findOneAndUpdate({ _id: new ObjectId(req.params.id)}, { 
                         $set: { 
                             approvals: approval
                         }

@@ -46,6 +46,8 @@ const signUp = async (req, res) => {
             email: email
         }]
 
+        console.log(`https://xped8-ca9291a9a7e0.herokuapp.com/dashboard/${token}`)
+
         let data = `<div>
         <p style="padding: 32px 0; text-align:left !important; font-weight: 700; font-size: 20px;font-family: 'DM Sans';">
         Hi,
