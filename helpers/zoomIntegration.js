@@ -40,9 +40,7 @@ const zoomIntegration = async (time, duration, topic) => {
     let zoom;
     const base64Credentials = Buffer.from(`${username}:${password}`).toString('base64');
 
-    console.log(base64Credentials)
 
-    console.log(`${auth_token_url}?grant_type=account_credentials&account_id=${process.env.ZOOM_ACCOUNT_ID}`)
 
 
     const authResponse = await axios.post(`${auth_token_url}?grant_type=account_credentials&account_id=${process.env.ZOOM_ACCOUNT_ID}`,
@@ -59,11 +57,8 @@ const zoomIntegration = async (time, duration, topic) => {
   })
   .then(async response => {
     // Handle the response
-    console.log(response.data);
-
     const access_token = response.data.access_token;
 
-    console.log({access_token});
   
     const headers = {
         'Authorization': `Bearer ${access_token}`,
@@ -79,7 +74,6 @@ const zoomIntegration = async (time, duration, topic) => {
   
   const meetingResponse = await axios.post(`${api_base_url}/users/me/meetings`, payload, { headers });
 
-  console.log({meetingResponse})
   
   if (meetingResponse.status !== 201) {
       console.log('Unable to generate meeting link');
@@ -94,7 +88,6 @@ const zoomIntegration = async (time, duration, topic) => {
   const response_data = meetingResponse.data;
   
 
-  console.log(response_data)
 
   zoom =meetingResponse.data;
 
