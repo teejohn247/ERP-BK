@@ -52,7 +52,12 @@ const meetings = await Meeting.aggregate([
                 $push: {
                     dateTime: '$meetingDateTime',
                     invitedGuests: '$invitedGuests',
-                    location: '$location'
+                    meetingTitle: '$meetingTitle',
+                    meetingDescription: '$meetingDescription',
+                    location: '$location',
+                    zoomLink: '$zoomLink',
+                    meetingStartTime: '$meetingStartTime',
+                    meetingEndTime: '$meetingEndTime'
                 }
             }
         }
@@ -142,7 +147,12 @@ const meetings = await Meeting.aggregate([
                 $push: {
                     dateTime: '$meetingDateTime',
                     invitedGuests: '$invitedGuests',
-                    location: '$location'
+                    meetingTitle: '$meetingTitle',
+                    meetingDescription: '$meetingDescription',
+                    location: '$location',
+                    zoomLink: '$zoomLink',
+                    meetingStartTime: '$meetingStartTime',
+                    meetingEndTime: '$meetingEndTime'
                 }
             }
         }

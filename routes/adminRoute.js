@@ -384,6 +384,7 @@ router.post('/updatePayment', auth, updatePayment);
 router.get('/fetchEmployees',auth,  fetchEmployees);
 router.get('/fetchEmployee/:id', auth, fetchSpecificEmployees);
 router.patch('/adminUpdateEmployee/:id', auth, upload.single("profilePhoto"), imageUploader,  updateEmployeeAdmin);
+
 router.patch('/updateEmployee', auth, upload.single("profilePhoto"), imageUploader,  updateEmployee);
 router.delete('/deleteEmployee/:id', auth, deleteEmployee);
 router.get('/fetchDesignations', auth, fetchDesignation);
