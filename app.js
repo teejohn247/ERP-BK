@@ -103,9 +103,9 @@ cron.schedule("* * * * *", async function () {
 });
 
 
-cron.schedule('0 0 * * *', async function () {
+cron.schedule('0 1 * * *', async function () {
   try {
-      console.log('Running a task every day at 12:00 AM local time');
+      console.log('Running a task every day at 01:00 AM local time');
 
       // Your code to execute at 12:00 AM
       const ans = await dailyAttendance();

@@ -29,6 +29,7 @@ const fetchVisits = async (req, res) => {
         if(comp){
             const role = await Role.find({companyId: req.payload.id})
             .limit(limit * 1)
+            .sort({_id: -1})
             .skip((page - 1) * limit)
             .exec();
     
@@ -59,6 +60,7 @@ const fetchVisits = async (req, res) => {
 
             const role = await Role.find({companyId: emp.companyId})
             .limit(limit * 1)
+            .sort({_id: -1})
             .skip((page - 1) * limit)
             .exec();
     

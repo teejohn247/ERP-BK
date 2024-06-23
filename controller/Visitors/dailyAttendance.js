@@ -20,15 +20,22 @@ const dailyAttendance = async (req, res) => {
     try {
         // Get the current date
         const currentDate = new Date();
+        const currentDateOnly = new Date(currentDate.toISOString().split('T')[0]); // Extract date part only
 
         // Find all companies
         const companies = await Company.find({});
 
-        // Array to hold saved employees across all companies
-        let savedEmployees = [];
-
         // Iterate over each company
         for (const company of companies) {
+            // Delete existing attendance entries for the current date and company
+            await StaffAttendance.deleteMany({
+                companyId: company._id,
+                date: {
+                    $gte: currentDateOnly, // Greater than or equal to current date
+                    $lt: new Date(currentDateOnly.getTime() + 24 * 60 * 60 * 1000) // Less than next day
+                }
+            });
+
             // Find employees of the current company
             const employees = await Employee.find({ companyId: company._id })
                 .sort({ _id: -1 })
@@ -42,14 +49,6 @@ const dailyAttendance = async (req, res) => {
 
             // Create StaffAttendance entries for each employee
             const employeeTablePromises = employees.map(async (emp) => {
-                // Check if attendance already exists for the given date, employee, and company
-                const existingAttendance = await StaffAttendance.findOne({ companyId: company._id, employeeId: emp._id, date: currentDate });
-
-                if (existingAttendance) {
-                    console.log(`Attendance already exists for employee ${emp._id} in company ${company._id} for the given date`);
-                    return; // Skip processing for this employee
-                }
-
                 const group = new StaffAttendance({
                     companyId: emp.companyId,
                     companyName: emp.companyName,
@@ -58,17 +57,14 @@ const dailyAttendance = async (req, res) => {
                     employeeName: emp.fullName,
                     department: emp.department,
                     departmentId: emp.departmentId,
-                    date: currentDate,
-                    // checkIn: emp.checkIn,
+                    date: currentDateOnly,
                     phoneNumber: emp.phoneNumber,
-                    // checkOut: emp.checkOut,
                 });
 
                 try {
                     const savedEmployee = await group.save();
                     console.log(savedEmployee);
-                    savedEmployees.push(savedEmployee);
-               
+                    // savedEmployees.push(savedEmployee); // You may not need to push each saved entry into an array
                 } catch (err) {
                     console.error(err);
                     throw err;
@@ -77,19 +73,21 @@ const dailyAttendance = async (req, res) => {
 
             // Wait for all StaffAttendance entries to be saved for this company
             await Promise.all(employeeTablePromises);
-            
         }
 
         console.log("Daily attendance operation completed");
-        // return savedEmployees;
         res.status(200).json({
             status: 200,
             success: true,
             data: "New Attendance Sheet Created"
-        })
+        });
     } catch (error) {
         console.error(error);
-        throw error;
+        res.status(500).json({
+            status: 500,
+            success: false,
+            error: "Failed to create attendance sheet"
+        });
     }
 };
 
