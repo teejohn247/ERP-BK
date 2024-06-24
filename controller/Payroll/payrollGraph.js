@@ -33,21 +33,25 @@ const payrollGraph = async (req, res) => {
 
       
         let company = await Company.findOne({ _id: req.payload.id });
+        let emp = await Employee.findOne({ _id: req.payload.id });
+
 
         // let appraisal = await PayrollPeriod.findOne({ companyId:company._id,  _id : payrollPeriodId  });
 
         // console.log({appraisal})
 
         console.log({company})
+        console.log({emp},  emp.companyId)
 
 
-        if (!company.companyName) {
-            res.status(400).json({
-                status: 400,
-                error: 'No company has been created for this account'
-            })
-            return;
-        }
+
+        // if (!company.companyName) {
+        //     res.status(400).json({
+        //         status: 400,
+        //         error: 'No company has been created for this account'
+        //     })
+        //     return;
+        // }
 
 
         // if (!appraisal) {
@@ -58,12 +62,15 @@ const payrollGraph = async (req, res) => {
         //     return;
         // }
 
+       
+
 
         const monthlynetEarnings = await PeriodPayData.aggregate([
             {
               $match: {
                 // payrollPeriodId: mongoose.Types.ObjectId(payrollPeriodId),
-                endDate: {
+                companyId: company ? req.payload.id : emp.companyId,
+                createdAt: {
                   $gte: new Date(`${year}-01-01`),
                   $lt: new Date(`${year + 1}-01-01`),
                 },
@@ -71,7 +78,7 @@ const payrollGraph = async (req, res) => {
             },
             {
               $group: {
-                _id: { $month: '$endDate' },
+                _id: { $month: '$createdAt' },
                 totalEarnings: { $sum: '$totalEarnings' },
               },
             },
