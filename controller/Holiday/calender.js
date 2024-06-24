@@ -99,7 +99,7 @@ console.log(emp.companyId, '997')
     holidays = await Holiday.aggregate([
         {
             $match: {
-                companyId: emp.companyId
+                companyId: emp.companyId,
             }
         }
     ]);
@@ -108,8 +108,8 @@ console.log({holidays})
     leaveRecords = await Leave.aggregate([
         {
             $match: {
-                userId: req.payload.id
-
+                userId: req.payload.id,
+                approved: true
             }
         }
     ]);
@@ -137,7 +137,9 @@ res.status(200).json({
 const meetings = await Meeting.aggregate([
     {
         $match: {
-            companyId: req.payload.id
+            companyId: req.payload.id,
+            approved: true
+
         }
     },
     {

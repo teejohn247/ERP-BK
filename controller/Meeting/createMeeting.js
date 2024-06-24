@@ -90,7 +90,7 @@ const createMeeting = async (req, res) => {
             console.log("Duration in hours:", durationInHours );
             console.log("Duration in days:", durationInDays);
     
-            if(location == "online"){
+            if(location == "online" || location == "Online"){
                 var zoomLink = await zoomIntegration(meetingStartTime, durationInHours ? Number(durationInHours) : 1, meetingTitle)
             }
     
@@ -191,7 +191,7 @@ const createMeeting = async (req, res) => {
             // If you need the duration in days
             const durationInDays = durationInHours / 24;
     
-            if(location == "online"){
+            if(location == "online" || location == "Online"){
                 var zoomLink = await zoomIntegration(meetingStartTime, durationInHours ? Number(durationInHours) : 1, meetingTitle)
             }
     
