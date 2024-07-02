@@ -67,7 +67,7 @@ const fetchEmployees = async (req, res) => {
             }
         } else if(company)
             {
-                const emp = await Employee.find().sort({_id: -1})
+                const emp = await Employee.find({companyId: req.payload.id}).sort({_id: -1})
             .limit(limit * 1)
             .skip((page - 1) * limit)
             .exec();
@@ -75,7 +75,7 @@ const fetchEmployees = async (req, res) => {
             console.log({emp})
                 const employeeTable = await EmployeeTable.find()
 
-                const count = await Employee.find().countDocuments()
+                const count = await Employee.find({companyId: req.payload.id}).countDocuments()
         
                 if(!emp){
                     res.status(404).json({
