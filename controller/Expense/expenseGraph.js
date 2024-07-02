@@ -35,25 +35,28 @@ const expenseGraph = async (req, res) => {
       
         let company = await Company.findOne({ _id: req.payload.id });
 
+        let emp = await Employee.findOne({ _id: req.payload.id });
         
 
 
-        if (!company.companyName) {
-            res.status(400).json({
-                status: 400,
-                error: 'No company has been created for this account'
-            })
-            return;
-        }
-
+        // if (!company.companyName) {
+        //     res.status(400).json({
+        //         status: 400,
+        //         error: 'No company has been created for this account'
+        //     })
+        //     return;
+        // }
+        
+        console.log(emp.companyId)
 
 
         const monthlynetEarnings = await PeriodPayData.aggregate([
             {
               $match: {
                 // payrollPeriodId: mongoose.Types.ObjectId(payrollPeriodId),
+                companyId: company ? req.payload.id : emp.companyId,
                 approved: true,
-                endDate: {
+                dateRequested: {
                   $gte: new Date(`${year}-01-01`),
                   $lt: new Date(`${year + 1}-01-01`),
                 },

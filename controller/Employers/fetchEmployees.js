@@ -48,7 +48,7 @@ const fetchEmployees = async (req, res) => {
 
             const count = await Employee.find({companyId: employee.companyId}).countDocuments()
     
-            if(!employee){
+            if(!emp){
                 res.status(404).json({
                     status:404,
                     success: false,
@@ -71,11 +71,13 @@ const fetchEmployees = async (req, res) => {
             .limit(limit * 1)
             .skip((page - 1) * limit)
             .exec();
+
+            console.log({emp})
                 const employeeTable = await EmployeeTable.find()
 
                 const count = await Employee.find().countDocuments()
         
-                if(!employee){
+                if(!emp){
                     res.status(404).json({
                         status:404,
                         success: false,
@@ -87,34 +89,12 @@ const fetchEmployees = async (req, res) => {
                         status: 200,
                         success: true,
                         employeeTable,
-                        data: employee,
+                        data: emp,
                         totalPages: Math.ceil(count / limit),
                         currentPage: page
                     })
                 }
-            } else {
-                const employeeTable = await EmployeeTable.find()
-
-                const count = await Employee.find().countDocuments()
-        
-                if(!employee){
-                    res.status(404).json({
-                        status:404,
-                        success: false,
-                        error:'No employee Found'
-                    })
-                    return
-                }else{
-                    res.status(200).json({
-                        status: 200,
-                        success: true,
-                        employeeTable,
-                        data: employee,
-                        totalPages: Math.ceil(count / limit),
-                        currentPage: page
-                    })
-                }
-            }
+            } 
 
         
       
