@@ -95,10 +95,7 @@ const fetchEmployees = async (req, res) => {
                     })
                 }
             } 
-
-        
-      
-
+k
     } catch (error) {
         res.status(500).json({
             status: 500,

@@ -209,7 +209,7 @@ const inviteEmployee = async (req, res) => {
                 email,
                 leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
                 approvals: approver,
-                agent: agent == true ? true : false,
+                agent: agent && agent == true || "true" ? true : false,
                 expenseDetails: {
                     cardNo: Date.now(),
                     cardHolder: `${firstName} ${lastName}`,
