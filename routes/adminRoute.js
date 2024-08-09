@@ -360,7 +360,7 @@ router.post("/jobApplication", auth, uploadgoogle,  async (req, res, next) => {
       res.status(500).send("Error uploading files.");
   }
 }, apply);
-router.post('/addEmployee', auth, inviteEmployee);
+router.post('/addEmployee', auth, upload.single("profilePhoto"), imageUploader, inviteEmployee);
 router.patch('/addLeaveType/:roleId', auth, addLeave);
 // router.patch('/addHmo/:id', auth, addHmo);
 router.patch('/addLeave/:id', auth, addDesignationLeave);

@@ -27,29 +27,25 @@ const inviteEmployee = async (req, res) => {
 
     try {
 
-        console.log(new Date().toISOString())
         const { firstName, lastName, email, phoneNumber, dateOfBirth, companyRole,  gender, departmentId, companyRoleId, designationId,  employmentStartDate,
         employmentType, reportingTo, agent} = req.body;
 
 
         let total = await Employee.find();
 
-        console.log(req.body)
+        console.log({req})
 
 
         // let checkRole = await Roles.findOne({_id: companyRoleId})
         let checkDesignation = await Designation.findOne({_id: designationId})
-        console.log({checkDesignation});
 
         let checkDept= await Department.findOne({_id: departmentId})
         // let checkName= await Employee.findOne({_id: reportingTo })
-        console.log({checkDept});
 
         let company = await Company.find({ _id: req.payload.id });
         let checkUser = await Employee.findOne({companyId: req.payload.id, email: email });
 
 
-        console.log(checkUser);
 
         // const check = await Employee.findOne({ _id: managerId });
 
@@ -76,8 +72,6 @@ const inviteEmployee = async (req, res) => {
         }
 
 
-        console.log('hgh')
-        console.log(company)
 
 
             let checkCompany = await Employee.find(
@@ -90,7 +84,6 @@ const inviteEmployee = async (req, res) => {
 
         if (checkCompany.length > 0){
             checkCompany.some((chk, i) => {
-                console.log({chk})
                 // if(chk.officialInformation.length > 0){
                     comp = true
                 // }
@@ -108,9 +101,6 @@ const inviteEmployee = async (req, res) => {
         let year = d.getFullYear();
         // var timeNow = (new Date()).getTime().toString();
      
-        console.log('hgh')
-        console.log(lastName)
-        console.log(firstName)
 
         let letter = firstName.charAt(0);
         let last = lastName.charAt(0);
@@ -145,7 +135,6 @@ const inviteEmployee = async (req, res) => {
         },
     ]
 
-    console.log({approver})
 
     // expenseDetails: 
     // [{
@@ -185,6 +174,7 @@ const inviteEmployee = async (req, res) => {
     //         }
     //     }]
     // }],console.lo
+    const agents = agent === true || agent === "true" ? true : false;
        let employee = new Employee({
             companyName: company[0].companyName,
             companyId: req.payload.id,
@@ -194,6 +184,7 @@ const inviteEmployee = async (req, res) => {
                 gender,
                 phoneNumber,
                 fullName: `${firstName} ${lastName}`,
+                profilePic:req.body.image && req.body.image,
                 employeeCode: `EMP-${year}-${letter}${last}${total.length + 1}`,
                 // role: companyRoleId,
                 companyRole: companyRole,
@@ -209,7 +200,7 @@ const inviteEmployee = async (req, res) => {
                 email,
                 leaveAssignment: checkDesignation.leaveTypes && checkDesignation.leaveTypes,
                 approvals: approver,
-                agent: agent && agent == true || "true" ? true : false,
+                agent: agents,
                 expenseDetails: {
                     cardNo: Date.now(),
                     cardHolder: `${firstName} ${lastName}`,
@@ -255,9 +246,7 @@ const inviteEmployee = async (req, res) => {
     
             await sendEmail(req, res, email, receivers, 'Employee Invitation', resp);
     
-            console.log('{employee}2')
 
-            console.log('checkDept.assignedAppraisals',checkDept.assignedAppraisals)
             let approverGrp = []
 
             for (const group of checkDept.assignedAppraisals) {
@@ -283,7 +272,6 @@ const inviteEmployee = async (req, res) => {
                         })
     
                     } else {
-                        console.log('gous',{result})
     
                         // const manager = await AppraisalGroup.findOne({_id: groupId});
     
@@ -347,7 +335,6 @@ const inviteEmployee = async (req, res) => {
         
                         } else {
 
-                            console.log({result})
 
                        let checkUsers = await Employee.findOne({companyId: req.payload.id, email });
 
