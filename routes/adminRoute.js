@@ -548,7 +548,7 @@ router.get("/fetchContact/:id",auth, fetchSingleContact);
 router.patch("/updateContact/:contactId",auth, updateContact);
 router.delete("/deleteContact/:contactId",auth,deleteContact);
 
-router.post("/createLead",auth, createLead);
+router.post("/createLead",auth, upload.single("profilePhoto"), createLead);
 router.post("/addLeadActivity/:leadId",auth, addLeadActivity);
 router.delete("/deleteLeadActivity/:leadId/:activityId",auth, deleteLeadActivity);
 router.post("/addLeadNote/:leadId",auth, upload.single('attachment'), addLeadNotes);
@@ -558,7 +558,7 @@ router.get("/fetchLead/:id",auth, fetchSingleLead);
 router.patch("/updateLead/:leadId",auth, updateLead);
 router.delete("/deleteLead/:leadId",auth, deleteLead);
 
-router.post("/createTicket",auth, createTicket);
+router.post("/createTicket",auth, upload.single("attachment"), createTicket);
 router.post("/addTicketActivity/:ticketId",auth, addTicketActivity);
 router.delete("/deleteTicketActivity/:ticketId/:activityId",auth, deleteTicketActivity);
 router.post("/addTicketNote/:ticketId",auth, upload.single("file"), imageUploader, addTicketNotes);

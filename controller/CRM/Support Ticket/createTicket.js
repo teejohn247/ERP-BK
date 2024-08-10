@@ -54,7 +54,7 @@ const createTicket = async (req, res) => {
       }
 
       const ticketNumber = generateTicketNumber();
-    
+    console.log(req.body.image)
 
     // Create new contact document
     const newSupportTicket = new SupportTicket({
@@ -71,6 +71,7 @@ const createTicket = async (req, res) => {
       status,
       priority,
       closureTime,
+      attachment: req.body.image,
       source,
       tags,
       creationDate: creationDate || new Date().toISOString(),

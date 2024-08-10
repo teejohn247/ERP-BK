@@ -12,12 +12,34 @@ const LeadSchema = new mongoose.Schema(
     leadPriority: { type: String },
     contactName: { type: String },
     contactId: { type: String },
+    contactType: { type: String },
+    onboardingDate: { type: String },
+    jobRole: { type: String },
+    email: { type: String },
+    phoneNumber: { type: String },
+    address: { type: String },
+    city: { type: String },
+    state: { type: String },
+    country: { type: String },
+    postCode: { type: String },
+    officeLocation: { type: String },
+
+
+
+
+
+
+
+
+
     leadPriority: { type: String },
     leadScore: { type: String },
     expectedRevenue: { type: String },
     conversionProbability: { type: String },
     leadOwner: { type: String },
     leadOwnerId: { type: String },
+    contactOwner: { type: String },
+    contactOwnerId: { type: String },
     assignedAgentId: { type: String },
     assignedAgentName: { type: String },
     source: { type: String },

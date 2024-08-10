@@ -16,6 +16,7 @@ const SupportTicketSchema = new mongoose.Schema(
     status: { type: String },
     priority: { type: String },
     closureTime: { type: String },
+    attachment: { type: String },
     source: { type: String },
     tags: [{ type: String }],
     creationDate: {
