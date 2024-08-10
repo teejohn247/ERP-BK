@@ -89,32 +89,32 @@ connectDb()
 
 let hostname = '0.0.0.0'
 
-cron.schedule("* * * * *", async function () {
-  console.log("---------------------p");
+// cron.schedule("* * * * *", async function () {
+//   console.log("---------------------p");
   
 
- const ans = await daysUsed()
- console.log({ans})
- console.log("running a task every 60 seconds");
+//  const ans = await daysUsed()
+//  console.log({ans})
+//  console.log("running a task every 60 seconds");
 
- return ans;
+//  return ans;
   
 
-});
+// });
 
 
-cron.schedule('0 1 * * *', async function () {
-  try {
-      console.log('Running a task every day at 01:00 AM local time');
+// cron.schedule('0 1 * * *', async function () {
+//   try {
+//       console.log('Running a task every day at 01:00 AM local time');
 
-      // Your code to execute at 12:00 AM
-      const ans = await dailyAttendance();
-      console.log(ans);
+//       // Your code to execute at 12:00 AM
+//       const ans = await dailyAttendance();
+//       console.log(ans);
       
-  } catch (error) {
-      console.error('An error occurred:', error);
-  }
-});
+//   } catch (error) {
+//       console.error('An error occurred:', error);
+//   }
+// });
 app.get('/test', async (req, res) => {
 
   let data = `<div>
