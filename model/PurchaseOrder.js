@@ -9,6 +9,7 @@ const PurchaseOrderSchema = new mongoose.Schema(
     currency: { type: String },
     paymentTerms: { type: String },
     issuedDate: { type: String },
+    dateRequested:{ type: String },
     deliveryDate: { type: Date },
     associatedQuotation: { type: Date,
     },

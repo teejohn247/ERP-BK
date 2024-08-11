@@ -10,6 +10,7 @@ const InvoiceSchema = new mongoose.Schema(
     paymentTerms: { type: String },
     issuedDate: { type: String },
     associatedPO: { type: String },
+    dateCreated:{ type: String },
     deliveryDate: { type: Date },
     itemDetails: [
       {

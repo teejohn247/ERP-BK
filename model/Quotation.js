@@ -10,6 +10,8 @@ const QuotationSchema = new mongoose.Schema(
         referenceNumber: { type: String },
         paymentTerms: { type: String },
         expirationDate: { type: String },
+        dateCreated: { type: String },
+
         itemDetails: [
           {
             item: { type: String },
