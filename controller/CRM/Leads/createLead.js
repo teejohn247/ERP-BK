@@ -128,7 +128,7 @@ const createLead = async (req, res) => {
       }} },
       { new: true }
     );
-    res.status(201).json({ status:201, success: true, message: 'Lead created successfully', data: savedLead });
+    res.status(200).json({ success: true, message: 'Lead created successfully', data: savedLead });
   } catch (error) {
     // Return error response
     console.error('Error creating contact:', error);
