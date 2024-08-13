@@ -107,11 +107,11 @@ const createContact = async (req, res) => {
     );
 
     // Return success response
-    res.status(201).json({ success: true, message: 'Contact created successfully', data: newContact });
+    res.status(201).json({status:201, success: true, message: 'Contact created successfully', data: newContact });
   } catch (error) {
     // Return error response
     console.error('Error creating contact:', error);
-    res.status(500).json({ success: false, message: 'Failed to create contact', error: error.message });
+    res.status(500).json({ status:500, success: false, message: 'Failed to create contact', error: error.message });
   }
 };
 

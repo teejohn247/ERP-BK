@@ -39,7 +39,6 @@ const LeadSchema = new mongoose.Schema(
     leadOwner: { type: String },
     leadOwnerId: { type: String },
     contactOwner: { type: String },
-    contactOwnerId: { type: String },
     assignedAgentId: { type: String },
     assignedAgentName: { type: String },
     source: { type: String },

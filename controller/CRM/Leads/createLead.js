@@ -25,7 +25,7 @@ const createLead = async (req, res) => {
       expectedRevenue,
       conversionProbability,
       leadOwner,
-      contactOwnerId,
+      leadOwnerId,
       assignedAgentId,
       onboardingDate,
       jobRole,
@@ -34,8 +34,8 @@ const createLead = async (req, res) => {
       state,
       country,
       postCode,
-     email,
-     phoneNumber,
+      email,
+      phoneNumber,
       officeLocation,
       assignedAgentName,
       source,
@@ -51,7 +51,7 @@ const createLead = async (req, res) => {
       // officeLocation: { type: String },
   
 
-      let employee = await Employee.findOne({ _id: contactOwnerId});
+      let employee = await Employee.findOne({ _id: leadOwnerId});
 
       console.log({employee})
 
@@ -107,7 +107,8 @@ const createLead = async (req, res) => {
         expectedRevenue,
         conversionProbability,
         contactOwner: employee.fullName,
-        contactOwnerId:contactOwnerId,
+        leadOwner: employee.fullName,
+        leadOwnerId,
         assignedAgentId,
         assignedAgentName: agent.fullName,
         source,
