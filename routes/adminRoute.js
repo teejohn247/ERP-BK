@@ -538,7 +538,7 @@ router.get("/fetchAttendance", auth, fetchTodaysAttendance);
 router.get("/fetchAttendance", auth, mult.single("file"), createOfferLetter);
 
 
-router.post("/createContact",auth, createContact);
+router.post("/createContact",upload.single("profilePhoto"), createContact);
 router.post("/addContactActivity/:contactId",auth, addActivity);
 router.delete("/deleteContactActivity/:contactId/:activityId",auth, deleteActivity);
 router.post("/addContactNote/:contactId",auth, mult.single("file"), addNotes);

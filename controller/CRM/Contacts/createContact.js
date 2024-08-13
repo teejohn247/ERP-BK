@@ -19,7 +19,7 @@ const createContact = async (req, res) => {
       assignedAgentId,
       assignedAgentName,
       email,
-      ownerId,
+      contactOwnerId,
       personalEmail,
       ownerName,
       jobTitle,
@@ -27,7 +27,7 @@ const createContact = async (req, res) => {
       jobRole,
       tags,
       location,
-      phone,
+      phoneNumber,
       address,
       city,
       state,
@@ -35,7 +35,7 @@ const createContact = async (req, res) => {
       country
     } = req.body;
         // Extract data from request body
-        let employee = await Employee.findOne({ _id: ownerId });
+        let employee = await Employee.findOne({ _id: contactOwnerId});
         let contact = await Contact.findOne({ email });
 
 
@@ -76,7 +76,7 @@ const createContact = async (req, res) => {
       assignedAgentId,
       assignedAgentName: agent.fullName,
       email,
-      ownerId,
+      contactOwnerId,
       ownerName: employee.fullName,
       jobTitle,
       organization,
@@ -84,7 +84,7 @@ const createContact = async (req, res) => {
       jobRole,
       tags,
       location,
-      phone,
+      phoneNumber,
       address,
       city,
       state,

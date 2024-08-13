@@ -20,8 +20,7 @@ const createLead = async (req, res) => {
       industry,
       leadPriority,
       jobTitle,
-      contactId,
-      contactType,
+     
       leadScore,
       expectedRevenue,
       conversionProbability,
@@ -56,15 +55,15 @@ const createLead = async (req, res) => {
 
       console.log({employee})
 
-      let contact = await Contact.findOne({ _id: contactId });
+      // let contact = await Contact.findOne({ _id: contactId });
       let agent = await Agent.findOne({ _id: assignedAgentId });
 
-      if (!contact){
-        return res.status(400).json({
-            status: 400,
-            error: 'contact does not exist'
-        })
-    }
+    //   if (!contact){
+    //     return res.status(400).json({
+    //         status: 400,
+    //         error: 'contact does not exist'
+    //     })
+    // }
   
       if (!agent){
         return res.status(400).json({
@@ -100,10 +99,10 @@ const createLead = async (req, res) => {
         leadPriority,
         onboardingDate,
         officeLocation,
-        contactType,
-        contactName: contact.fullName,
+        // contactType,
+        // contactName: contact.fullName,
         profilePic: req.body.image,
-        contactId,
+        // contactId,
         leadScore,
         expectedRevenue,
         conversionProbability,
