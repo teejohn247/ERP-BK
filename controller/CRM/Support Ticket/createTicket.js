@@ -44,14 +44,14 @@ const createTicket = async (req, res) => {
       //     })
       // }
 
-      let contact = await Contact.findOne({ _id: contactId });
+      // let contact = await Contact.findOne({ _id: contactId });
     
-      if (!contact){
-        return res.status(400).json({
-            status: 400,
-            error: 'contact does not exist'
-        })
-      }
+      // if (!contact){
+      //   return res.status(400).json({
+      //       status: 400,
+      //       error: 'contact does not exist'
+      //   })
+      // }
 
       const ticketNumber = generateTicketNumber();
     console.log(req.body.image)
@@ -63,8 +63,8 @@ const createTicket = async (req, res) => {
       ticketNumber,
       title,
       description,
-      contactName: contact.companyName,
-      contactId,
+      // contactName: contact.companyName,
+      // contactId,
       ownerId,
       ownerName: employee.fullName,
       stage,
