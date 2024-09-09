@@ -226,6 +226,7 @@ import createInvoice from '../controller/CRM/Contacts/createInvoice';
 import fetchInvoiceContact from '../controller/CRM/Contacts/fetchInvoiceContact';
 import fetchPurchaseOrder from '../controller/CRM/Contacts/fetchPurchaseOrder';
 import fetchQuotation from '../controller/CRM/Contacts/fetchQuotation';
+import payrollYears from '../controller/Payroll/payrollYears';
 
 
 
@@ -580,6 +581,8 @@ router.post("/createInvoice", auth, createInvoice);
 router.get("/fetchContactInvoice/:id", auth, fetchInvoiceContact);
 router.get("/fetchContactPurchaseOrders/:id", auth, fetchPurchaseOrder);
 router.get("/fetchContactQuotations/:id", auth, fetchQuotation);
+router.get("/payrollYears", auth, payrollYears);
+
 
 
 
