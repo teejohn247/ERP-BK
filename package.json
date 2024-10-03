@@ -2,6 +2,7 @@
   "name": "smsapp",
   "version": "1.0.0",
   "description": "SMS",
+  "type": "module",  // Add this line to enable ES module support
   "main": "app.js",
   "scripts": {
     "build": "babel app.js --out-dir build",
