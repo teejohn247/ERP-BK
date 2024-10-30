@@ -38,17 +38,17 @@ const fetchEmployees = async (req, res) => {
 
 
         if(employee){
-            const emp = await Employee.find({companyId: employee.companyId}).sort({_id: -1})
+            const employeeData = await Employee.find({companyId: employee.companyId}).sort({_id: -1})
             .limit(limit * 1)
             .skip((page - 1) * limit)
             .exec();
             const employeeTable = await EmployeeTable.find()
 
-            console.log({emp})
+            console.log({employeeData})
 
             const count = await Employee.find({companyId: employee.companyId}).countDocuments()
     
-            if(!emp){
+            if(!employeeData){
                 res.status(404).json({
                     status:404,
                     success: false,
@@ -57,27 +57,28 @@ const fetchEmployees = async (req, res) => {
                 return
             }else{
                 res.status(200).json({
-                    status: 200,
+                    status: 200,    
                     success: true,
                     employeeTable,
-                    data: emp,
+                    data: employeeData,
                     totalPages: Math.ceil(count / limit),
                     currentPage: page
                 })
             }
         } else if(company)
             {
-                const emp = await Employee.find({companyId: req.payload.id}).sort({_id: -1})
+            const employeeData = await Employee.find({companyId: req.payload.id}).sort({_id: -1})
             .limit(limit * 1)
             .skip((page - 1) * limit)
             .exec();
 
-            console.log({emp})
+            console.log({employeeData})
                 const employeeTable = await EmployeeTable.find()
 
                 const count = await Employee.find({companyId: req.payload.id}).countDocuments()
+                console.log({count})
         
-                if(!emp){
+                if(!employeeData){
                     res.status(404).json({
                         status:404,
                         success: false,
@@ -89,13 +90,12 @@ const fetchEmployees = async (req, res) => {
                         status: 200,
                         success: true,
                         employeeTable,
-                        data: emp,
+                        data: employeeData,
                         totalPages: Math.ceil(count / limit),
                         currentPage: page
                     })
                 }
             } 
-k
     } catch (error) {
         res.status(500).json({
             status: 500,
