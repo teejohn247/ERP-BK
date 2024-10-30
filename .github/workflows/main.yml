@@ -1,23 +1,28 @@
-name: Access server
-on: push
+name: Deploy to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  access_server:
-    name: Deploy to server
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: multiple command
-      uses: appleboy/ssh-action@v0.1.8
+    - uses: actions/checkout@v2
+
+    - name: Generate deployment package
+      run: zip -r deploy.zip . -x '*.git*'
+
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v20
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        script: |
-          whoami
-          cd nigenius-sms
-          ls -l
-          git pull
-          export NVM_DIR=~/.nvm
-          source ~/.nvm/nvm.sh 
-          npm install
-          npm run build
-          pm2 restart all
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: silomoty
+        environment_name: Silo-env-1
+        version_label: ${{ github.sha }}
+        region: eu-west-1
+        deployment_package: deploy.zip
+        use_existing_version_if_available: true
