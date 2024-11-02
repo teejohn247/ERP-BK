@@ -2,9 +2,12 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import Admin from '../../model/Company';
 import Employee from '../../model/Employees';
+import AceERP from '../../model/AceERP';
 
 import utils from '../../config/utils';
 import Company from '../../model/Company';
+import path from 'path';
+import { selectFields } from 'express-validator/src/select-fields';
 
 const sgMail = require('@sendgrid/mail')
 
@@ -19,14 +22,6 @@ const signin = async (req, res) => {
 
     try {
         const { email, password } = req.body;
-
-
-        // let useragent = req.useragent;
-        // let detectResult = req.device;
-
-        // let admin = await Admin.findOne({ email: email });
-
-        // console.log(admin)
 
         if (!email) {
             res.status(400).json({
@@ -46,57 +41,51 @@ const signin = async (req, res) => {
             return;
         }
 
+        if (email === 'siloerp@silo-inc.com') {
+            let superAdmin = await AceERP.findOne({ email: email });
+            
+            if (!superAdmin) {
+                res.status(404).json({
+                    status: 404,
+                    success: false,
+                    error: 'Super admin not found'
+                });
+                return;
+            }
+
+            const isMatch = await bcrypt.compare(password, superAdmin.password);
+            if (!isMatch) {
+                res.status(404).json({
+                    status: 404,
+                    success: false,
+                    error: 'Invalid login credentials'
+                });
+                return;
+            }
+
+            const token = utils.encodeToken(superAdmin._id, true, superAdmin.email, "");
+
+            res.status(200).json({
+                status: 200,
+                data: superAdmin,
+                token: token,
+            });
+            return;
+        }
+
         let admin = await Admin.findOne({ email: email });
         let employee = await Employee.findOne({ email: email });
-        console.log({employee})
-        console.log(admin)
 
-
+        console.log({admin, employee})
 
         if(admin && employee){
-            // console.log('ii')
-            // const isMatch = await bcrypt.compare(password, employee.password);
-
                 res.status(400).json({
                     status: 400,
                     success: false,
                     error: 'This email already exist either as a company email or employee email'
                 })
                 return;
-            // console.log(employee.firstTimeLogin)
-
-
-            // if (employee.firstTimeLogin == undefined) {
-            // console.log("here")
-            //     await employee.updateOne({
-            //         firstTimeLogin: true, 
-            //     });
-            // }else if (employee.firstTimeLogin == true){
-            //     await employee.updateOne({
-            //         firstTimeLogin: false, 
-            //     });
-
-            // }
-            // else if (employee.firstTimeLogin == false){
-            //     await employee.updateOne({
-            //         firstTimeLogin: false, 
-            //     });
-            // }
-
-            // let company = await Employee.findOne({ email: email });
-
-            // console.log('po')
-
-            // const token = utils.encodeToken(employee._id, false, email);
-
-            // res.status(200).json({
-            //     status: 200,
-            //     data: company,
-            //     token: token,
-            // })
-
-            // return
-
+            
          } 
 
         if (admin){
@@ -113,8 +102,6 @@ const signin = async (req, res) => {
 
 
             if (admin.firstTimeLogin == undefined) {
-            console.log("here")
-                
                 await admin.updateOne({
 
                     firstTimeLogin: true, 
@@ -136,7 +123,16 @@ const signin = async (req, res) => {
 
             console.log({admin})
 
-            const token = utils.encodeToken(admin._id, admin.isSuperAdmin, admin.email);
+            const token = utils.encodeToken(admin._id, admin.isSuperAdmin, admin.email, "");
+
+            // const companyDomain = `https://${company.subDomain}`;
+
+            // if (companyDomain !== req.headers.origin) {
+            //     return res.status(400).json({
+            //         status: 400,
+            //         error: `Invalid subdomain. Please login with the correct subdomain https://${company.subDomain}`
+            //     })
+            // }
 
             res.status(200).json({
                 status: 200,
@@ -146,7 +142,14 @@ const signin = async (req, res) => {
 
             return;
         } else if(employee){
-            console.log('ii')
+            if(!employee.password){
+                res.status(400).json({
+                    status: 400,
+                    success: false,
+                    error: 'Password not set'
+                })
+                return;
+            }
             const isMatch = await bcrypt.compare(password, employee.password);
 
             console.log({isMatch})
@@ -162,7 +165,7 @@ const signin = async (req, res) => {
 
 
             if (employee.firstTimeLogin == undefined) {
-            console.log("here")
+        
                 await employee.updateOne({
                     firstTimeLogin: true, 
                 });
@@ -178,11 +181,25 @@ const signin = async (req, res) => {
                 });
             }
 
-            let company = await Employee.findOne({ email: email });
+            let company = await Employee.findOne({ email: email }).populate({
+                path: 'companyId',
+                select: 'subDomain'
+            });
 
-            console.log('po')
+            const token = utils.encodeToken(employee._id, false, email, employee.companyId);
 
-            const token = utils.encodeToken(employee._id, false, email);
+            //compare the company subdomain url with the url is the same
+            // if not the same, return error
+
+            
+            // const companyDomain = `https://${company.companyId.subDomain}`;
+
+            // if (companyDomain !== req.headers.origin) {
+            //     return res.status(400).json({
+            //         status: 400,
+            //         error: `Invalid subdomain. Please login with the correct subdomain https://${company.companyId.subDomain}`
+            //     })
+            // }
 
             res.status(200).json({
                 status: 200,
@@ -202,6 +219,7 @@ const signin = async (req, res) => {
          }
       
         } catch (error) {
+            console.error(error)
         res.status(500).json({
             status: 500,
             success: false,

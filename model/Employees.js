@@ -155,8 +155,575 @@ const EmployeeSchema = new mongoose.Schema({
       },
     },
   ],
+  permissions: {
+    employeeManagement: {
+      addEmployee: { type: Boolean, default: false },
+      bulkImportEmployees: { type: Boolean, default: false },
+      bulkExportEmployees: { type: Boolean, default: false },
+      uploadPhoto: { type: Boolean, default: false },
+      editEmployee: { type: Boolean, default: false },
+      deleteEmployee: { type: Boolean, default: false },
+    },
+    payrollManagement: {
+      setPayrollPeriod: { type: Boolean, default: false },
+      adjustPayrollDebits: { type: Boolean, default: false },
+      adjustPayrollCredits: { type: Boolean, default: false },
+      viewPayslip: { type: Boolean, default: false },
+      downloadPayslip: { type: Boolean, default: false },
+    },
+    leaveManagement: {
+      requestLeave: { type: Boolean, default: false },
+      approveLeave: { type: Boolean, default: false },
+      denyLeave: { type: Boolean, default: false },
+      editLeaveRequest: { type: Boolean, default: false },
+      deleteLeaveRequest: { type: Boolean, default: false },
+    },
+    expenseManagement: {
+      requestExpense: { type: Boolean, default: false },
+      approveExpense: { type: Boolean, default: false },
+      denyExpense: { type: Boolean, default: false },
+      editExpenseRequest: { type: Boolean, default: false },
+      deleteExpenseRequest: { type: Boolean, default: false },
+    },
+    appraisalManagement: {
+      createAppraisalPeriod: { type: Boolean, default: false },
+      createKPIGroup: { type: Boolean, default: false },
+      assignKPIToDepartment: { type: Boolean, default: false },
+      createKPI: { type: Boolean, default: false },
+      editKPI: { type: Boolean, default: false },
+      deleteKPI: { type: Boolean, default: false },
+      submitAppraisal: { type: Boolean, default: false },
+    },
+    calendar: {
+      bookMeeting: { type: Boolean, default: false },
+      addUpcomingEvent: { type: Boolean, default: false },
+      filterEvents: { type: Boolean, default: false },
+    },
+    companySettings: {
+      createDepartment: { type: Boolean, default: false },
+      editDepartment: { type: Boolean, default: false },
+      deleteDepartment: { type: Boolean, default: false },
+      createDesignation: { type: Boolean, default: false },
+      editDesignation: { type: Boolean, default: false },
+      deleteDesignation: { type: Boolean, default: false },
+      createPublicHoliday: { type: Boolean, default: false },
+      editPublicHoliday: { type: Boolean, default: false },
+      deletePublicHoliday: { type: Boolean, default: false },
+      createLeaveType: { type: Boolean, default: false },
+      editLeaveType: { type: Boolean, default: false },
+      deleteLeaveType: { type: Boolean, default: false },
+      createExpenseType: { type: Boolean, default: false },
+      editExpenseType: { type: Boolean, default: false },
+      deleteExpenseType: { type: Boolean, default: false },
+      createPayrollCredit: { type: Boolean, default: false },
+      editPayrollCredit: { type: Boolean, default: false },
+      deletePayrollCredit: { type: Boolean, default: false },
+      createPayrollDebit: { type: Boolean, default: false },
+      editPayrollDebit: { type: Boolean, default: false },
+      deletePayrollDebit: { type: Boolean, default: false },
+    },
+  },
+  
+hasCustomPermissions: {
+  type: Boolean,
+  default: false
+},
+  expenseDetails: {
+    expenseTypeId: {
+      type: String,
+    },
+    cardNo: {
+      type: String,
+    },
+    cardHolder: {
+      type: String,
+    },
+    dateIssued: {
+      type: String,
+    },
+    expiryDate: {
+      type: String,
+      default: "",
+    },
+    cardLimit: {
+      type: Number,
+      default: 0,
+    },
+    cardBalance: {
+      type: Number,
+      default: 0,
+    },
+    totalSpent: {
+      type: Number,
+      default: 0,
+    },
+    currentSpent: {
+      type: Number,
+      default: 0,
+    },
+    currentExpense: {
+      type: Number,
+      default: 0,
+    },
 
-  permissions: { type: mongoose.Schema.Types.Mixed, ref: "Permissions" },
+    // kpiAppraisals: [
+    //   {
+    //     expenseTypeId: { type: String, required: true },
+    //     expenseTypeName: { type: String, required: true },
+    //     expenseDate: { type: String, required: true },
+    //     currency: { type: String },
+    //     amount: { type: String, required: true },
+    //     attachment: { type: String },
+    //     approver: { type: String },
+    //     approverId: { type: String },
+    //     dateRemitted: { type: String },
+    //     dateOfApproval: { type: String },
+    //     description: { type: String },
+    //     dateRequested: { type: Date, default: Date.now() },
+    //   },
+    // ],
+ 
+    expenseHistory: [
+      {
+        expenseTypeId: { type: String},
+        expenseTypeName: { type: String},
+        expenseDate: { type: String},
+        currency: { type: String },
+        amount: { type: String},
+        attachment: { type: String },
+        approver: { type: String },
+        approverId: { type: String },
+        dateRemitted: { type: String },
+        dateOfApproval: { type: String },
+        description: { type: String },
+        dateRequested: { type: Date, default: Date.now() },
+      },
+    ],
+  },
+  leaveAssignment: [
+    {
+      leaveTypeId: {
+        type: String,
+      },
+      leaveName: {
+        type: String,
+      },
+      noOfLeaveDays: {
+        type: Number,
+      },
+      description: {
+        type: String,
+      },
+      assignedNoOfDays: {
+        type: Number,
+      },
+      daysUsed: {
+        type: Number,
+        default: 0,
+      },
+      daysLeft: {
+        type: Number,
+        default: 0,
+      },
+      leaveStartDate: {
+        type: String,
+      },
+      leaveEndDate: {
+        type: String,
+      },
+      requestMessage: {
+        type: String,
+      },
+      decisionMessage: {
+        type: String,
+      },
+      leaveApproved: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
+  officialInformation: [
+    {
+      // leave: [{
+      //     leaveName: {
+      //         type: String,
+      //     },
+      //     noOfDays: {
+      //         type: String,
+      //     },
+      //     paid: {
+      //         type:Boolean,
+      //     },
+      //     leaveType: {
+      //         type: String,
+      //     },
+      //     leaveStart: {
+      //         type: String,
+      //     },
+      //     leaveEndDate: {
+      //         type: String,
+      //     },
+      //     daysUsed: {
+      //         type: String,
+      //     },
+      //     leaveApproved: {
+      //         type: Boolean,
+      //     }
+      // }],
+      // leave:
+      // [{
+      //     leaveTypeId: {
+      //         type: String,
+      //     },
+      // leaveType: {
+      //     type: String,
+      // },
+      // leaveStart: {
+      //     type: String,
+      // },
+      // leaveEndDate: {
+      //     type: String,
+      // },
+      // daysUsed: {
+      //     type: String,
+      // },
+      // leaveApproved: {
+      //     type: Boolean,
+      //     default: false
+      // },
+      // leaveAttendedTo: {
+      //     type: Boolean,
+      //     default: false
+      // }
+      // }],
+      hmo: [
+        {
+          hmoName: {
+            type: String,
+          },
+          features: {
+            type: Array,
+          },
+          description: {
+            type: String,
+          },
+        },
+      ],
+    },
+  ],
+
+  paymentInformation: {
+    type: [
+      {
+        bankName: {
+          type: String,
+          default: ""
+        },
+        bankAddress: {
+          type: String,
+          default: ""
+        },
+        accountNumber: {
+          type: Number,
+          default: 0
+        },
+        accountName: {
+          type: String,
+          default: ""
+        },
+        sortCode: {
+          type: String,
+          default: ""
+        },
+        taxIdentificationNumber: {
+          type: String,
+          default: ""
+        },
+      },
+    ],
+    default: [{}] // Initialize with an empty object as default
+  },
+
+  permissions: {
+    employeeManagement: 
+    {
+      views: {
+        view_employee: {
+          type: Boolean,
+          default: false,
+        },
+        view_employee_details: {
+          type: Boolean,
+          default: false,
+        },
+      },
+
+      actions: {
+        add_employee: {
+          type: Boolean,
+          default: false,
+        },
+        edit_employee: {
+          type: Boolean,
+          default: false,
+        },
+        delete_employee: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    },
+  leaveManagement: 
+    {
+      views: {
+        view_leave_types: {
+          type: Boolean,
+          default: false,
+        },
+        view_leaves_types_details: {
+          type: Boolean,
+          default: false,
+        },
+        view_leaves: {
+          type: Boolean,
+          default: false,
+        },
+        view_leave_details: {
+          type: Boolean,
+          default: false,
+        },
+        view_leave_applications: {
+          type: Boolean,
+          default: false,
+        },
+      },
+
+      actions: {
+        create_leave_types: {
+          type: Boolean,
+          default: false,
+        },
+        create_leaves: {
+          type: Boolean,
+          default: false,
+        },
+        edit_leave_types: {
+          type: Boolean,
+          default: false,
+        },
+        edit_leave_applications: {
+          type: Boolean,
+          default: false,
+        },
+        delete_leave_applications: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    },
+  designationManagement: 
+    {
+      views: {
+        view_designations: {
+          type: Boolean,
+          default: false,
+        },
+        view_designations_details: {
+          type: Boolean,
+          default: false,
+        },
+      },
+
+      actions: {
+        create_designations: {
+          type: Boolean,
+          default: false,
+        },
+        assign_designations: {
+          type: Boolean,
+          default: false,
+        },
+        edit_designations: {
+          type: Boolean,
+          default: false,
+        },
+        delete_designations: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    },
+  departmentManagement: 
+    {
+      views: {
+        view_departments: {
+          type: Boolean,
+          default: false,
+        },
+        view_department_details: {
+          type: Boolean,
+          default: false,
+        },
+      },
+
+      actions: {
+        create_departments: {
+          type: Boolean,
+          default: false,
+        },
+        assign_departments: {
+          type: Boolean,
+          default: false,
+        },
+        edit_departments: {
+          type: Boolean,
+          default: false,
+        },
+        delete_departments: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    },
+  appraisalManagement: 
+    {
+      views: {
+        view_appraisal_groups: {
+          type: Boolean,
+          default: false,
+        },
+        view_KPIs: {
+          type: Boolean,
+          default: false,
+        },
+        view_appraisal_period: {
+          type: Boolean,
+          default: false,
+        },
+        view_appraisal_ratings: {
+          type: Boolean,
+          default: false,
+        },
+        view_appraisals: {
+          type: Boolean,
+          default: false,
+        },
+      },
+
+      actions: {
+        create_appraisal_groups: {
+          type: Boolean,
+          default: false,
+        },
+        edit_appraisal_groups: {
+          type: Boolean,
+          default: false,
+        },
+        delete_appraisal_groups: {
+          type: Boolean,
+          default: false,
+        },
+        create_appraisal_periods: {
+          type: Boolean,
+          default: false,
+        },
+        edit_appraisal_periods: {
+          type: Boolean,
+          default: false,
+        },
+        delete_appraisal_periods: {
+          type: Boolean,
+          default: false,
+        },
+        create_appraisal_ratings: {
+            type: Boolean,
+            default: false,
+          },
+          edit_appraisal_ratings: {
+            type: Boolean,
+            default: false,
+          },
+          delete_appraisal_ratings: {
+            type: Boolean,
+            default: false,
+          },
+          create_appraisals: {
+            type: Boolean,
+            default: false,
+          },
+          edit_appraisals: {
+            type: Boolean,
+            default: false,
+          },
+          delete_appraisals: {
+            type: Boolean,
+            default: false,
+          },
+        create_KPIs: {
+          type: Boolean,
+          default: false,
+        },
+        edit_KPIs: {
+          type: Boolean,
+          default: false,
+        },
+        delete_KPIs: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    },
+  expenseManagement: 
+    {
+      views: {
+        view_expense_types: {
+          type: Boolean,
+          default: false,
+        },
+        view_expense_requests: {
+          type: Boolean,
+          default: false,
+        },
+        view_expense_details: {
+          type: Boolean,
+          default: false,
+        },
+        view_expense_requests: {
+          type: Boolean,
+          default: false,
+        },
+        view_expense_types: {
+          type: Boolean,
+          default: false,
+        },
+      },
+
+      actions: {
+        create_expense_types: {
+          type: Boolean,
+          default: false,
+        },
+        create_expense_request: {
+          type: Boolean,
+          default: false,
+        },
+        edit_expense_types: {
+          type: Boolean,
+          default: false,
+        },
+        edit_expenses: {
+          type: Boolean,
+          default: false,
+        },
+        delete_expense_types: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    },
+  },
+  // permissions: { type: mongoose.Schema.Types.Mixed, ref: "Permissions" },
   expenseDetails: {
     expenseTypeId: {
       type: String,

@@ -5,7 +5,7 @@ const CompanySchema = new mongoose.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true  },
     companyAddress: { type: String},
-    owner: { type: String},
+    companyLogo: { type: String, default: ''},
     generalSettings: {
         type: Map,
         of: mongoose.Schema.Types.Mixed,
@@ -14,6 +14,7 @@ const CompanySchema = new mongoose.Schema({
     activeStatus: { type: Boolean, default: false },
     status: { type: Boolean, default: false },
     isSuperAdmin: { type: Boolean },
+    parollPeriodFrequency: { type: String },
     systemRoles:{
         employeeManagement: [
             {
@@ -55,7 +56,82 @@ const CompanySchema = new mongoose.Schema({
                 dateTime: { type: String },
             }
         ],
-    }
+    },
+    subDomain: { 
+        type: String,
+        unique: true,
+    },
+    companyFeatures: {
+            subscriptionStatus: {
+                isActive: { type: Boolean, default: false },
+                plan: { type: String, default: '' },
+                startDate: { type: Date },
+                endDate: { type: Date }
+            },
+            paymentInfo: {
+                paymentMethod: { type: String, default: '' },
+                cardLastFour: { type: String, default: '' },
+                expirationDate: { type: String, default: '' },
+                billingAddress: { type: String, default: '' },
+            },
+            modules: {
+                hr: {
+                    type: Boolean,
+                    default: false,
+                    features: {
+                        employeeManagement: { type: Boolean, default: false },
+                        leaveManagement: { type: Boolean, default: false },
+                        designationManagement: { type: Boolean, default: false },
+                        departmentManagement: { type: Boolean, default: false },
+                        appraisalManagement: { type: Boolean, default: false },
+                        expenseManagement: { type: Boolean, default: false }
+                    }
+                },
+                orderManagement: {
+                    type: Boolean,
+                    default: false,
+                    features: {
+                        orderProcessing: { type: Boolean, default: false },
+                        inventoryManagement: { type: Boolean, default: false },
+                        invoicing: { type: Boolean, default: false },
+                        shipping: { type: Boolean, default: false }
+                    }
+                }
+            },
+        default: [{
+            subscriptionStatus: {
+                isActive: false,
+                plan: '',
+                autoRenew: false,
+            },
+            paymentInfo: {
+                paymentMethod: '',
+                cardLastFour: '',
+                expirationDate: '',
+                billingAddress: '',
+            },
+            modules: {
+                hr: {
+                    features: {
+                        employeeManagement: false,
+                        leaveManagement: false,
+                        designationManagement: false,
+                        departmentManagement: false,
+                        appraisalManagement: false,
+                        expenseManagement: false
+                    }
+                },
+                orderManagement: {
+                    features: {
+                        orderProcessing: false,
+                        inventoryManagement: false,
+                        invoicing: false,
+                        shipping: false
+                    }
+                }
+            }
+        }]
+    },
 })
 
 module.exports = mongoose.model("Company", CompanySchema);

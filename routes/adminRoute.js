@@ -229,6 +229,10 @@ import fetchQuotation from '../controller/CRM/Contacts/fetchQuotation';
 import payrollYears from '../controller/Payroll/payrollYears';
 import fetchEmails from '../controller/CRM/Email/fetchEmails';
 import getEmailsByAddress from '../controller/CRM/Email/GetEmailsbyAddress';
+import generatePasswordForAceERP from '../controller/AceHr/Auth/createAdmin';
+import fetchAllCompanies from '../controller/AceHr/Auth/fetchAllCompanies';
+import companyId from '../controller/AceHr/Auth/companyId';
+import subscribe from '../controller/AceHr/Auth/subscribe';
 
 
 
@@ -600,7 +604,12 @@ router.patch('/updateAgentPicture/:agentId', auth, upload.single("profilePhoto")
 
 
 
-
+router.post('/createAdminAceERP', generatePasswordForAceERP);
+router.get('/fetchAllCompanies', auth, fetchAllCompanies);
+// router.put('/update-permissions', auth, updateEmployeePermission); 
+// router.put('/updateRole', auth, updateRoleAndPermissions);
+router.post('/subscribe', auth, subscribe);
+router.get('/companyId/:companyId', auth, companyId);
 
 
 export default router;
