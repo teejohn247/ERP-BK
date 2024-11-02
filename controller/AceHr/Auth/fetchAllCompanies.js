@@ -21,10 +21,10 @@ const fetchAllCompanies = async (req, res) => {
         // Check if request is from AceERP admin
         const requestingUser = await Admin.findOne({ _id: req.payload.id });
         console.log({requestingUser})
-        if (requestingUser.email !== 'aceerp@aceall.io') {
+        if (requestingUser.email !== 'siloerp@silo-inc.com') {
             return res.status(403).json({
                 status: 403,
-                error: 'Unauthorized access. Only AceERP admin can fetch all companies.'
+                error: 'Unauthorized access. Only SILO admin can fetch all companies.'
             });
         }
 
