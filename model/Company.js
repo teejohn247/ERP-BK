@@ -15,6 +15,8 @@ const CompanySchema = new mongoose.Schema({
     status: { type: Boolean, default: false },
     isSuperAdmin: { type: Boolean },
     parollPeriodFrequency: { type: String },
+    dateCreated: { type: Date, default: Date.now },
+    industry: { type: String },
     systemRoles:{
         employeeManagement: [
             {
@@ -65,6 +67,7 @@ const CompanySchema = new mongoose.Schema({
             subscriptionStatus: {
                 isActive: { type: Boolean, default: false },
                 plan: { type: String, default: '' },
+                currentCycle: { type: String },
                 startDate: { type: Date },
                 endDate: { type: Date }
             },
@@ -75,62 +78,87 @@ const CompanySchema = new mongoose.Schema({
                 billingAddress: { type: String, default: '' },
             },
             modules: {
-                hr: {
-                    type: Boolean,
-                    default: false,
-                    features: {
-                        employeeManagement: { type: Boolean, default: false },
-                        leaveManagement: { type: Boolean, default: false },
-                        designationManagement: { type: Boolean, default: false },
-                        departmentManagement: { type: Boolean, default: false },
-                        appraisalManagement: { type: Boolean, default: false },
-                        expenseManagement: { type: Boolean, default: false }
+
+                
+                HumanResources: {
+                 id: {type: Number},
+                 active: {type: Boolean, default: false},
+                  employeeManagement: {
+                    id: {type: Number},
+                    permissions: {
+                        type: Object,
+                        default: {}
                     }
+                  },
+                  leaveManagement: {
+                    id: {type: Number},
+                    permissions: {
+                        type: Object,
+                        default: {}
+                    }
+                  },
+                  appraisalManagement: {
+                    id: {type: Number},
+                    permissions: {
+                        type: Object,
+                        default: {}
+                    }
+                  },
+                  expenseManagement: {
+                    id: {type: Number},
+                    permissions: {
+                        type: Object,
+                        default: {}
+                    }
+                  },
+                  payrollManagement: {
+                    id: {type: Number},
+                    permissions: {
+                        type: Object,
+                        default: {}
+                    }
+                  },
+                  settingsManagement: {
+                    id: {type: Number},
+                    permissions: {
+                        type: Object,
+                        default: {}
+                    }
+                  },
+                  calenderManagement: {
+                    id: {type: Number},
+                    permissions: {
+                        type: Object,
+                        default: {}
+                    }
+                  }
                 },
-                orderManagement: {
-                    type: Boolean,
-                    default: false,
-                    features: {
-                        orderProcessing: { type: Boolean, default: false },
-                        inventoryManagement: { type: Boolean, default: false },
-                        invoicing: { type: Boolean, default: false },
-                        shipping: { type: Boolean, default: false }
+                OrderManagement: {
+                 id: {type: Number},
+                 active: {type: Boolean, default: false},
+                  orderProcessing: {
+                    id: {type: Number},     
+                    permissions: {
+                        type: Object,
+                        default: {}
                     }
+                  },
+                  invoicing: {
+                    id: {type: Number},
+                    permissions:{
+                        type: Object,
+                        default: {}
+                    }
+                  },
+                  shipping: {
+                    id: {type: Number},
+                    permissions: {
+                        type: Object,
+                        default: {}
+                    }
+                  }
                 }
-            },
-        default: [{
-            subscriptionStatus: {
-                isActive: false,
-                plan: '',
-                autoRenew: false,
-            },
-            paymentInfo: {
-                paymentMethod: '',
-                cardLastFour: '',
-                expirationDate: '',
-                billingAddress: '',
-            },
-            modules: {
-                hr: {
-                    features: {
-                        employeeManagement: false,
-                        leaveManagement: false,
-                        designationManagement: false,
-                        departmentManagement: false,
-                        appraisalManagement: false,
-                        expenseManagement: false
-                    }
-                },
-                orderManagement: {
-                    features: {
-                        orderProcessing: false,
-                        inventoryManagement: false,
-                        invoicing: false,
-                        shipping: false
-                    }
-                }
-            }
-        }]
+              }
     },
 })
 

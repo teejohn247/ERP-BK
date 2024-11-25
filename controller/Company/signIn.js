@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import Admin from '../../model/Company';
 import Employee from '../../model/Employees';
-import AceERP from '../../model/AceERP';
+import AceERP from '../../model/Silo';
 
 import utils from '../../config/utils';
 import Company from '../../model/Company';

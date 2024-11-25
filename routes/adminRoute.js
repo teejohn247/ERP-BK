@@ -233,6 +233,8 @@ import generatePasswordForAceERP from '../controller/AceHr/Auth/createAdmin';
 import fetchAllCompanies from '../controller/AceHr/Auth/fetchAllCompanies';
 import companyId from '../controller/AceHr/Auth/companyId';
 import subscribe from '../controller/AceHr/Auth/subscribe';
+import createPost from '../controller/CRM/Social Media/facebookController';
+import { createLinkedInPost, getLinkedInAccessToken, getLinkedInAuthUrl } from '../controller/linkedin/linkedinController';
 
 
 
@@ -373,7 +375,7 @@ router.patch('/addLeaveType/:roleId', auth, addLeave);
 router.patch('/addLeave/:id', auth, addDesignationLeave);
 router.patch('/addHmo/:id', auth, addDesignationHmo);
 router.post('/addCompany', addCompany);
-router.post('/signIn', signin);
+router.post('/signin', signin);
 router.post('/addRole', auth, addRole);
 router.post('/updateRole/:id', updateRole);
 router.get('/fetchCompanyRoles', auth, fetchRole);
@@ -592,17 +594,9 @@ router.get("/payrollYears", auth, payrollYears);
 router.get("/fetchEmails", fetchEmails);
 router.get("/fetchEmailsByAddress/:email", getEmailsByAddress);
 
-
-
-
-
-
-
 router.patch('/updateContactPicture/:contactId', auth, upload.single("profilePhoto"), imageUploader, contactPicture);
 router.patch('/updateLeadPicture/:leadId', auth, upload.single("profilePhoto"), imageUploader, leadPicture);
 router.patch('/updateAgentPicture/:agentId', auth, upload.single("profilePhoto"), imageUploader, agentPicture);
-
-
 
 router.post('/createAdminAceERP', generatePasswordForAceERP);
 router.get('/fetchAllCompanies', auth, fetchAllCompanies);
@@ -610,6 +604,9 @@ router.get('/fetchAllCompanies', auth, fetchAllCompanies);
 // router.put('/updateRole', auth, updateRoleAndPermissions);
 router.post('/subscribe', auth, subscribe);
 router.get('/companyId/:companyId', auth, companyId);
-
+router.post('/createPost', createPost);
+router.post('/linkedin/callback', getLinkedInAccessToken);
+router.post('/createLinkedInPost', createLinkedInPost);
+router.get('/linkedin/auth-url', getLinkedInAuthUrl);
 
 export default router;

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import Company from '../../../model/Company';
-import Admin from '../../../model/AceERP';
+import Admin from '../../../model/Silo';
 
 import bcrypt from 'bcrypt';
 

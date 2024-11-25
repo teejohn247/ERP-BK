@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import Company from '../../../model/AceERP';
+import Company from '../../../model/Silo';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import {emailTemp }from '../../../emailTemplate';
