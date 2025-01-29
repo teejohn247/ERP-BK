@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-import Admin from '../../../model/Silo';
+import Admin from '../../../model/AceErps';
 import utils from '../../../config/utils';
 import { selectFields } from 'express-validator/src/select-fields';
 

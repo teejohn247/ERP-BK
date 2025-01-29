@@ -8,13 +8,16 @@ async function handleUpload(file) {
 }
 const imageUploader = async (req, res, next) => {
   try {
-
     console.log(req.file)
     if(req.file){
-      const b64 = Buffer.from(req.file.buffer).toString("base64");
+      const fs = require('fs');
+      const fileData = fs.readFileSync(req.file.path);
+      const b64 = fileData.toString("base64");
       let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
       const cldRes = await handleUpload(dataURI);
-      console.log({cldRes})
+      
+      fs.unlinkSync(req.file.path);
+      
       req.body.image = cldRes.secure_url;
     }
 

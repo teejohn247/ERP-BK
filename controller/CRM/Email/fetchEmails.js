@@ -20,73 +20,128 @@ const fetchEmails = async (req, res) => {
               }
         });
 
-        imap.once('ready', () => {
-            imap.openBox('INBOX', false, (err, box) => {
-                if (err) throw err;
+        console.log(imap);
 
-                const fetchOptions = {
-                    bodies: ['HEADER', 'TEXT'],
-                    markSeen: false
-                };
+        const openInbox = (cb) => {
+            imap.openBox('INBOX', false, cb);
+        };
 
-                imap.search(['UNSEEN'], (err, results) => {
-                    if (err) throw err;
+        let email_array = [];
 
-                    const fetch = imap.fetch(results, fetchOptions);
+        return new Promise((resolve, reject) => {
+            imap.once('ready', function() {
+                console.log("start open inbox");
+                try {
+                    openInbox(function (err, box) {
+                        imap.search(['UNSEEN', ['SINCE', new Date()]], function(err, results) {
+                            if (!results || !results.length) {
+                                console.log("The server didn't find any emails matching the specified criteria");
+                                imap.end();
+                                return;
+                            }
 
-                    fetch.on('message', (msg) => {
-                        msg.on('body', (stream, info) => {
-                            simpleParser(stream, async (err, parsed) => {
-                                if (err) throw err;
+                            var f = imap.fetch(results, {
+                                bodies: '',
+                                struct: true
+                            });
 
-                                const { from, subject, text, html, date } = parsed;
+                            f.on('message', function(msg, seqno) {
+                                msg.on('body', (stream, info) => {
+                                    simpleParser(stream, async (err, parsed) => {
+                                        if (err) throw err;
 
-                                // Check if the recipient email is registered in our CRM
-                                const customer = await Customer.findOne({ email: 'teejohn247@gmail.com'});
+                                        const { from, subject, text, html, date } = parsed;
 
-                                if (customer) {
-                                    // Save the email in our database
-                                    const newEmail = new Email({
-                                        userId: customer._id,
-                                        // from: from,
-                                        subject,
-                                        body: text || html,
-                                        receivedDate: Date.now()
+                                        // Extract the email address from the 'from' object
+                                        const fromEmail = from.value[0].address;
+
+                                        // Check if the recipient email is registered in our CRM
+                                        const customer = await Customer.findOne({ email: 'teejohn247@gmail.com'});
+
+                                        if (customer) {
+                                            // Save the email in our database
+                                            const newEmail = new Email({
+                                                userId: customer._id,
+                                                from: fromEmail, // Use the extracted email address
+                                                subject,
+                                                body: text || html,
+                                                receivedDate: date
+                                            });
+
+
+                                            await newEmail.save();
+
+                                            // Add the email to the array
+                                            await email_array.push(newEmail);
+
+                                            console.log({email_array});
+                                        }
                                     });
+                                });
+                            });
 
-                                    await newEmail.save();
-                                }
+                            f.once('error', function(err) {
+                                console.log('Fetch error: ' + err);
+                            });
+
+                            f.once('end', function() {
+                                console.log('Done fetching all messages!');
+                                imap.end();
+                               return res.status(HTTP_STATUS.OK).json({
+                                    status: HTTP_STATUS.OK,
+                                    success: true,
+                                    message: 'Email fetching process completed',
+                                    data: email_array
+                                });
+
+                                // Resolve the promise with the email array once all messages are fetched
+                                // resolve(email_array);
                             });
                         });
                     });
-
-                    fetch.once('error', (err) => {
-                        console.error('Fetch error:', err);
-                    });
-
-                    fetch.once('end', () => {
-                        console.log('Fetching completed');
-                        imap.end();
-                    });
-                });
+                } catch (err) {
+                    console.log("Error when request open inbox mail", err);
+                    reject(err); // Reject the promise if there's an error
+                }
             });
+
+            imap.once('error', (err) => {
+                console.error('IMAP connection error:', err);
+            });
+
+            imap.once('end', () => {
+                console.log('IMAP connection ended');
+            });
+
+            imap.connect();
+
+            console.log({email_array});
+              // Process the fetched emails
+        // for (const email of email_array) {
+        //     const { from, subject, content, attachment, date } = email;
+
+        //     // Check if the recipient email is registered in our CRM
+        //     const customer = await Customer.findOne({ email: 'teejohn247@gmail.com' });
+
+        //     if (customer) {
+        //         // Save the email in our database
+        //         const newEmail = new Email({
+        //             userId: customer._id,
+        //             from,
+        //             subject,
+        //             body: content,
+        //             attachment,
+        //             receivedDate: date
+        //         });
+
+        //         await newEmail.save();
+        //     }
+        // }
+
+ 
         });
 
-        imap.once('error', (err) => {
-            console.error('IMAP connection error:', err);
-        });
-
-        imap.once('end', () => {
-            console.log('IMAP connection ended');
-        });
-
-        imap.connect();
-
-        res.status(HTTP_STATUS.OK).json({
-            status: HTTP_STATUS.OK,
-            success: true,
-            message: 'Email fetching process initiated'
-        });
+      
 
     } catch (error) {
         console.error('Error in fetchEmails:', error);

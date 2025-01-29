@@ -30,7 +30,7 @@ import uploadFiles from '../middleware/uploadGC';
 
 // import upload from '../middleware/uploadFile';
 import addImage from '../controller/addImage';
-import { cloudinaryConfig }  from '../config/cloudinary';
+import { cloudinaryConfig } from '../config/cloudinary';
 import listAudits from '../controller/AuditTrail.js/listAudits';
 import addDesignationLeave from '../controller/createDesignation/addDesignationLeave';
 import addDesignationHmo from '../controller/createDesignation/addDesignationHmo';
@@ -229,16 +229,30 @@ import fetchQuotation from '../controller/CRM/Contacts/fetchQuotation';
 import payrollYears from '../controller/Payroll/payrollYears';
 import fetchEmails from '../controller/CRM/Email/fetchEmails';
 import getEmailsByAddress from '../controller/CRM/Email/GetEmailsbyAddress';
-import generatePasswordForAceERP from '../controller/AceHr/Auth/createAdmin';
-import fetchAllCompanies from '../controller/AceHr/Auth/fetchAllCompanies';
-import companyId from '../controller/AceHr/Auth/companyId';
-import subscribe from '../controller/AceHr/Auth/subscribe';
+import fetchAllCompanies from '../controller/AceERP/Auth/fetchAllCompanies';
+import companyId from '../controller/AceERP/Auth/companyId';
+// import subscribe from '../controller/AceHr/Auth/subscribe';
 import createPost from '../controller/CRM/Social Media/facebookController';
 import { createLinkedInPost, getLinkedInAccessToken, getLinkedInAuthUrl } from '../controller/linkedin/linkedinController';
-
-
-
-
+import editCompany from '../controller/AceERP/Auth/editCompany';
+import addPermission from '../controller/AceERP/Auth/modules';
+import fetchModules from '../controller/AceERP/Auth/fetchModules';
+import role from '../controller/AceERP/Auth/roles';
+import toggleModule from '../controller/AceERP/Auth/toggleModule';
+import createSubPlan from '../controller/AceERP/Auth/createSubPlan';
+import fetchPlans from '../controller/AceERP/Auth/fetchPlans';
+import fetchSubscriptions from '../controller/AceERP/Auth/fetchSubscriptions';
+import fetchSubscriptionByCompany from '../controller/AceERP/Auth/fetchSubscriptionByCompany';
+import subscribe from '../controller/AceERP/Auth/subscribe';
+import updateEmployeePermission from '../controller/RolesandPermissions/updateEmployeePermission';
+import updateRoleAndPermissions from '../controller/RolesandPermissions/updateRoleandPermissions';
+import fetchAdminRoles from '../controller/AceERP/Auth/fetchRoles';
+import generatePasswordForAceERP from '../controller/AceERP/Auth/createAdmin';
+import sendEmail from '../controller/CRM/Email/sendEmail';
+// const { sendOTP, verifyOTP, generateOTP } = require('./passwordless');
+// import {sendOTP, verifyOTP, generateOTP} from './passwordless';
+import { sendOTP } from './sendOTP';
+import verifyOTP from './verifyOTP';
 
 const { userValidationRules, validate } = require('../middleware/signUpValidation')
 const multer = require("multer");
@@ -248,8 +262,6 @@ const Multer = require("multer");
 const csv = require('csvtojson');
 
 // Initialize Google Cloud Storage
-
-
 // Multer configuration for file uploads
 const multerConfig = multer.memoryStorage();
 
@@ -348,6 +360,16 @@ router.post("/upload-cv", upload.single("payroll"), (req, res) => {
 });
 });
 
+// router.use('/passwordless', );
+// // req.isAuthenticated is provided from the auth router
+// router.get('/', (req, res) => {
+//   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+// });
+
+router.use('/socialMedia', require('./postRoutes'));
+
+router.post('/singleSignOn', sendOTP);
+router.post('/verifyOTP', verifyOTP);
 router.get('/forgotPassword', forgotPassword);
 router.patch('/changePassword', auth, changePassword);
 router.patch('/verifyPassword', verifyToken);
@@ -593,6 +615,7 @@ router.get("/payrollYears", auth, payrollYears);
 
 router.get("/fetchEmails", fetchEmails);
 router.get("/fetchEmailsByAddress/:email", getEmailsByAddress);
+router.post("/sendEmail", sendEmail);
 
 router.patch('/updateContactPicture/:contactId', auth, upload.single("profilePhoto"), imageUploader, contactPicture);
 router.patch('/updateLeadPicture/:leadId', auth, upload.single("profilePhoto"), imageUploader, leadPicture);
@@ -600,13 +623,33 @@ router.patch('/updateAgentPicture/:agentId', auth, upload.single("profilePhoto")
 
 router.post('/createAdminAceERP', generatePasswordForAceERP);
 router.get('/fetchAllCompanies', auth, fetchAllCompanies);
-// router.put('/update-permissions', auth, updateEmployeePermission); 
-// router.put('/updateRole', auth, updateRoleAndPermissions);
-router.post('/subscribe', auth, subscribe);
+router.put('/update-permissions', auth, updateEmployeePermission); 
+router.put('/updateRole', auth, updateRoleAndPermissions);
+// router.post('/subscribe', auth, subscribe);
 router.get('/companyId/:companyId', auth, companyId);
 router.post('/createPost', createPost);
 router.post('/linkedin/callback', getLinkedInAccessToken);
 router.post('/createLinkedInPost', createLinkedInPost);
 router.get('/linkedin/auth-url', getLinkedInAuthUrl);
+
+
+
+
+router.patch('/editCompany/:id', auth, editCompany);
+router.post('/createPermission', auth, addPermission);
+router.get('/fetchModules', auth, fetchModules);
+// router.get('/fetchModule/:id', auth, moduleController.fetchModule);
+router.post('/createRole', auth, role);
+// router.get('/roles', auth, fetch);
+router.patch('/updatePermissions', auth, toggleModule);
+router.post('/createSubPlan', createSubPlan);
+router.get('/subscriptionPlans', fetchPlans);
+router.post('/subscribe', subscribe);
+router.get('/subscriptions', fetchSubscriptions);
+router.get('/subscriptions/company/:companyId', fetchSubscriptionByCompany);
+
+
+
+
 
 export default router;

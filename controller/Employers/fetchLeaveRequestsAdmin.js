@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 import Role from '../../model/ExpenseRequests';
 import Employee from '../../model/Employees';
@@ -24,7 +23,7 @@ const fetchExpenseReqsAdmin = async (req, res) => {
 
     try {
 
-        const { page, limit } = req.query;
+        const { page, limit, status, startDate, endDate, expenseTypeId } = req.query;
 
         const user =  await Employee.findOne({_id: req.payload.id, isManager: true})
         const company=  await Company.findOne({_id: req.payload.id})
@@ -40,15 +39,41 @@ const fetchExpenseReqsAdmin = async (req, res) => {
             return;
         }
 
+        // Build filter object
+        const buildFilter = (baseFilter) => {
+            let filter = { ...baseFilter };
+            
+            if (status) {
+                filter.status = status;
+            }
+            if (startDate && endDate) {
+                filter.dateRequested = {
+                    $gte: new Date(startDate),
+                    $lte: new Date(endDate)
+                };
+            }
+            if (expenseTypeId) {
+                filter.expenseTypeId = expenseTypeId;
+            }
+            return filter;
+        };
+
         if(user){
 
 
-            const role = await Role.find({approverId: req.payload.id, companyId: user.companyId ? user.companyId :company._id }).sort({ "dateRequested": -1 })
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
-            .exec();
+            const baseFilter = {
+                approverId: req.payload.id,
+                companyId: user.companyId ? user.companyId :company._id
+            };
+            const filter = buildFilter(baseFilter);
+
+            const role = await Role.find(filter)
+                .sort({ "dateRequested": -1 })
+                .limit(limit * 1)
+                .skip((page - 1) * limit)
+                .exec();
     
-            const count = await Role.find({approverId: req.payload.id, companyId: user.companyId ? user.companyId :company._id}).countDocuments()
+            const count = await Role.find(filter).countDocuments()
     
             console.log(role)
     
@@ -67,12 +92,18 @@ const fetchExpenseReqsAdmin = async (req, res) => {
         else if(company){
 
 
-            const role = await Role.find({companyId: company._id }).sort({ "dateRequested": -1 })
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
-            .exec();
+            const baseFilter = {
+                companyId: company._id
+            };
+            const filter = buildFilter(baseFilter);
+
+            const role = await Role.find(filter)
+                .sort({ "dateRequested": -1 })
+                .limit(limit * 1)
+                .skip((page - 1) * limit)
+                .exec();
     
-            const count = await Role.find({ companyId: company._id}).countDocuments()
+            const count = await Role.find(filter).countDocuments()
     
             console.log(role)
     

@@ -5,20 +5,20 @@ const fetchModules = async (req, res) => {
         const moduleDoc = await Modules.findOne();
         if (!moduleDoc) {
             return res.status(404).json({
-                success: false,
+                status: 404,
                 message: 'No modules configuration found'
             });
         }
 
         res.status(200).json({
-            success: true,
+            status: 200,
             data: moduleDoc.modules
         });
 
     } catch (error) {
         console.error('Error in fetchModules:', error);
         res.status(500).json({
-            success: false,
+            status: 500,
             message: 'Error fetching modules',
             error: error.message
         });

@@ -4,40 +4,97 @@ const subscriptionSchema = new mongoose.Schema({
   companyName: { type: String },
   email: { type: String, required: true },
   companyId: { type: String, required: true },
-  status: {
+  subscriptionPlan: {
     type: String,
-    enum: ['free', 'paid'],
     required: true,
-    default: 'free'
   },
   price: {
     type: Number,
-    required: function() {
-      return this.status === 'paid';
+    default: function() {
+      // Get max users from userRange
+      const maxUsers = this.userRange ? parseInt(this.userRange.split('-').pop().replace('+', '')) : 0;
+      
+      // Get cycle multiplier
+      let cycleMultiplier = 1;
+      switch (this.subscriptionCycle) {
+        case 'biweekly': cycleMultiplier = 0.5; break;  // Half of monthly price
+        case 'monthly': cycleMultiplier = 1; break;     // Base monthly price
+        case 'annually': cycleMultiplier = 12; break;   // 12 times monthly price
+      }
+      
+      return this.unitPrice * maxUsers * cycleMultiplier;
     }
   },
   subscriptionCycle: {
     type: String,
-    enum: ['monthly', 'annually'],
-    required: function() {
-      return this.status === 'paid';
-    }
+    enum: ['biweekly', 'monthly', 'annually'],
+  },
+  unitPrice: {
+    type: Number,
+    required: true,
   },
   startDate: {
     type: Date,
     required: true,
-    default: Date.now
   },
   endDate: {
     type: Date,
-    required: function() {
-      return this.status === 'paid';
-    }
+  },
+  status: {
+    type: String,
+    enum: ['active', 'pending', 'expired'],
+    default: 'pending',
+  },
+  userRange: {
+    type: String,
+    required: true,
   },
   modules: [{
-    type: String,
-    required: true
-  }],
+    moduleId: {
+        type: Number,
+        required: true
+    },
+    key: {
+        type: String,
+        required: true
+    },
+    moduleName: {
+        type: String,
+        required: true
+    },
+    value: {
+        type: String,
+        required: true
+    },
+    moduleFeatures: [{
+        featureId: {
+            type: Number,
+            required: true
+        },
+        featureKey: {
+            type: String,
+            required: true
+        },
+        featureName: {
+            type: String,
+            required: true
+        },
+        featurePermissions: [{
+            key: {
+                type: String,
+                required: true
+            },
+            permissionType: {
+                type: String,
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            }
+        }]
+    }]
+}],
 }, {
   timestamps: true
 });
