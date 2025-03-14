@@ -1,130 +1,201 @@
 import Role from '../../../model/Roles';
 import Company from '../../../model/Company';
 import Employee from '../../../model/Employees';
+import mongoose from 'mongoose';
 
 const toggleModule = async (req, res) => {
     try {
-        const { companyId, roleIds, modules } = req.body;
+        const { companyId, modules } = req.body;
+        console.log('Request received for companyId:', companyId);
 
-        if (!companyId || !Array.isArray(modules)) {
-            return res.status(400).json({
-                success: false,
-                message: 'CompanyId and modules array are required'
-            });
-        }
-
-        // First update company features
-        const company = await Company.findById(companyId);
-        if (!company) {
+        // Fetch current company data first for comparison
+        const currentCompany = await Company.findById(companyId);
+        if (!currentCompany) {
             return res.status(404).json({
                 success: false,
                 message: 'Company not found'
             });
         }
 
-        // Group permissions by moduleId and featureId for easier processing
-        const groupedPermissions = modules.reduce((acc, permission) => {
-            const { moduleId, featureId, permissionId, permissionValue } = permission;
-            
-            if (!acc[moduleId]) acc[moduleId] = {};
-            if (!acc[moduleId][featureId]) acc[moduleId][featureId] = {};
-            
-            acc[moduleId][featureId][permissionId] = permissionValue;
-            return acc;
-        }, {});
+        // Process each module (hr, om, settings)
+        const moduleKeys = Object.keys(modules);
+        
+        for (const moduleKey of moduleKeys) {
+            const moduleData = modules[moduleKey];
+            if (!moduleData) {
+                console.log(`No data for module: ${moduleKey}`);
+                continue;
+            }
+            console.log(`Processing module: ${moduleKey}`);
 
-        // Update company features
-        for (const [moduleId, features] of Object.entries(groupedPermissions)) {
-            if (company.companyFeatures.modules[moduleId]) {
-                for (const [featureId, permissions] of Object.entries(features)) {
-                    if (company.companyFeatures.modules[moduleId][featureId]) {
-                        // Find the permission in the array and update its value
-                        const permissionArray = company.companyFeatures.modules[moduleId][featureId].permissions;
-                        for (const permissionId in permissions) {
-                            const permissionIndex = permissionArray.findIndex(p => p._id.toString() === permissionId);
-                            if (permissionIndex !== -1) {
-                                permissionArray[permissionIndex].value = permissions[permissionId];
-                            }
+            // Collect all updates for batch processing
+            const updates = [];
+
+            for (const roleData of moduleData) {
+                const { roleId, rolePermissions } = roleData;
+                console.log(`Processing roleId: ${roleId}`);
+                
+                for (const permission of rolePermissions) {
+                    const { featureId, ...permissionUpdates } = permission;
+                    console.log(`Processing featureId: ${featureId}`, permissionUpdates);
+                    // Find current company feature permissions
+                    const currentModule = currentCompany.companyFeatures.modules
+                        .find(m => m.key === moduleKey);
+                    const currentFeature = currentModule?.moduleFeatures
+                        .find(f => f.featureId === featureId);
+
+                    // Find current role permissions - Fixed nested path
+                    const currentRole = currentCompany.systemRoles
+                        .find(r => r._id.toString() === roleId);
+                    
+                    
+                    const currentRoleModules = currentRole?.rolePermissions || [];
+                    const currentRoleModule = currentRoleModules
+                        .find(m => m.key === moduleKey);
+                    
+                    // console.log('Role module structure:', JSON.stringify(currentRoleModule, null, 2));
+                    
+                    const currentRoleFeatures = currentRoleModule?.moduleFeatures || [];
+                    // console.log('Role features array:', JSON.stringify(currentRoleFeatures, null, 2));
+                    
+                    const currentRoleFeature = currentRoleFeatures
+                        .find(f => f.featureId === String(featureId));
+                    
+
+                    for (const [key, value] of Object.entries(permissionUpdates)) {
+                        // Compare with current company feature permissions
+                        const currentCompanyPermValue = currentFeature?.featurePermissions
+                            ?.find(p => p.key === key)?.value;
+
+                        
+                        // Compare with current role permissions - Fixed path
+                        const currentRolePermValue = currentRoleFeature?.featurePermissions
+                            ?.find(p => p.key === key)?.value;
+
+
+                        // Add debug logging
+                        console.log(`Comparing values for ${key}:`, {
+                            newValue: value,
+                            companyValue: currentCompanyPermValue,
+                            roleValue: currentRolePermValue,
+                            roleId,
+                            moduleKey,
+                            featureId
+                        });
+
+                        console.log(String(currentCompanyPermValue) !== String(value))
+                        console.log(String(currentRolePermValue) !== String(value))
+
+                        // Strict comparison might fail due to type differences
+                        if (String(currentCompanyPermValue) !== String(value)) {
+                            console.log(`Updating company permission for ${key}`);
+                            await Company.updateOne(
+                                { 
+                                    _id: companyId,
+                                    'companyFeatures.modules.key': moduleKey,
+                                    'companyFeatures.modules.moduleFeatures.featureId': featureId,
+                                    'companyFeatures.modules.moduleFeatures.featurePermissions.key': key
+                                },
+                                {
+                                    $set: {
+                                        'companyFeatures.modules.$[module].moduleFeatures.$[feature].featurePermissions.$[permission].value': value
+                                    }
+                                },
+                                {
+                                    arrayFilters: [
+                                        { 'module.key': moduleKey },
+                                        { 'feature.featureId': featureId },
+                                        { 'permission.key': key }
+                                    ]
+                                }
+                            )}
+                        //     updates.push({
+                        //         updateOne: {
+                        //             filter: { 
+                        //                 _id: companyId,
+                        //                 'companyFeatures.modules.key': moduleKey,
+                        //                 'companyFeatures.modules.moduleFeatures.featureId': featureId,
+                        //                 'companyFeatures.modules.moduleFeatures.featurePermissions.key': key
+                        //             },
+                        //             update: {
+                        //                 $set: {
+                        //                     'companyFeatures.modules.$[module].moduleFeatures.$[feature].featurePermissions.$[permission].value': value
+                        //                 }
+                        //             },
+                        //             arrayFilters: [
+                        //                 { 'module.key': moduleKey },
+                        //                 { 'feature.featureId': featureId },
+                        //                 { 'permission.key': key }
+                        //             ]
+                        //         }
+                        //     });
+                        // }
+
+                        if (String(currentRolePermValue) !== String(value)) {
+                            console.log(`Updating role permission for ${key}`);
+                            await Company.updateOne(
+                                {
+                                    _id: companyId,
+                                    'systemRoles._id': roleId,
+                                    'systemRoles.rolePermissions.key': moduleKey,
+                                    'systemRoles.rolePermissions.moduleFeatures.featureId': featureId,
+                                    'systemRoles.rolePermissions.moduleFeatures.featurePermissions.key': key
+                                },
+                                {
+                                    $set: {
+                                        'systemRoles.$[role].rolePermissions.$[module].moduleFeatures.$[feature].featurePermissions.$[permission].value': value
+                                    }
+                                },
+                                {
+                                    arrayFilters: [
+                                        { 'role._id': roleId },
+                                        { 'module.key': moduleKey },
+                                        { 'feature.featureId': featureId },
+                                        { 'permission.key': key }
+                                    ]
+                                }
+                            );
+                            // updates.push({
+                            //     updateOne: {
+                            //         filter: {
+                            //             _id: companyId,
+                            //             'systemRoles._id': roleId,
+                            //             'systemRoles.rolePermissions.key': moduleKey,
+                            //             'systemRoles.rolePermissions.moduleFeatures.featureId': featureId,
+                            //             'systemRoles.rolePermissions.moduleFeatures.featurePermissions.key': key
+                            //         },
+                            //         update: {
+                            //             $set: {
+                            //                 'systemRoles.$[role].rolePermissions.$[module].moduleFeatures.$[feature].featurePermissions.$[permission].value': value
+                            //             }
+                            //         },
+                            //         arrayFilters: [
+                            //             { 'role._id': roleId },
+                            //             { 'module.key': moduleKey },
+                            //             { 'feature.featureId': featureId },
+                            //             { 'permission.key': key
+                            //             }
+                            //         ]
+                            //     }
+                            // });
                         }
                     }
                 }
             }
-        }
-        await company.save();
 
-        // Update systemRoles in Company
-        if (roleIds?.length > 0) {
-            const company = await Company.findById(companyId);
-            if (!company) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Company not found'
-                });
-            }
-
-            for (const role of company.systemRoles) {
-                if (roleIds.includes(role._id.toString())) {
-                    for (const permission of role.rolePermissions) {
-                        // Only match moduleId and featureId since we want to update the permission
-                        // regardless of the existing permissionId
-                        const moduleUpdate = modules.find(mod => 
-                            mod.moduleId === permission.moduleId &&
-                            mod.featureId === permission.featureId
-                        );
-
-                        if (moduleUpdate) {
-                            permission.permissionValue = moduleUpdate.permissionValue;
-                        }
-                    }
-                }
-            }
-
-            await company.save();
+            // Perform batch update if there are any updates
+            // if (updates.length > 0) {
+            //     await Company.bulkWrite(updates);
+            // }
         }
 
-        // Update systemRoles in Employee documents - Modified to match by roleId
-        if (roleIds?.length > 0) {
-            await Employee.updateMany(
-                { 
-                    companyId,
-                    'systemRoles._id': { $in: roleIds }
-                },
-                {
-                    $set: {
-                        'systemRoles.$[role].rolePermissions': modules
-                    }
-                },
-                {
-                    arrayFilters: [{ 'role._id': { $in: roleIds } }]
-                }
-            );
-        }
-
-        // Update specific roles if roleIds provided, otherwise update all company roles
-        const roleQuery = roleIds?.length > 0 
-            ? { companyId, _id: { $in: roleIds } }
-            : { companyId };
-
-        // Prepare update query for roles using the grouped permissions
-        const updateQuery = {};
-        for (const [moduleId, features] of Object.entries(groupedPermissions)) {
-            for (const [featureId, permissions] of Object.entries(features)) {
-                updateQuery[`modules.${moduleId}.${featureId}.permissions`] = permissions;
-            }
-        }
-
-        const updatedRoles = await Role.updateMany(
-            roleQuery,
-            { $set: updateQuery }
-        );
+        const updatedCompany = await Company.findById(companyId);
+        console.log('Company updated successfully');
 
         return res.status(200).json({
             success: true,
-            message: 'Modules and permissions have been updated successfully',
-            data: {
-                companyFeatures: company.companyFeatures,
-                rolesUpdated: updatedRoles.modifiedCount
-            }
+            message: 'Modules and permissions updated successfully',
+            data: updatedCompany
         });
 
     } catch (error) {

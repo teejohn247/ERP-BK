@@ -1,6 +1,7 @@
 import Modules from '../../../model/Modules';
 import Company from '../../../model/Company';
 import { erpModules } from '../../../constants/modules';
+import mongoose from 'mongoose';
 
 const addPermission = async (req, res) => {
     try {
@@ -108,7 +109,8 @@ const addPermission = async (req, res) => {
                             featureId: featureTemplate.featureId,
                             featureKey: featureTemplate.featureKey,
                             featureName: featureTemplate.featureName,
-                            featurePermissions: featurePermissions
+                            featurePermissions: featurePermissions,
+                            _id: new mongoose.Types.ObjectId()
                         };
                     });
 
@@ -119,6 +121,36 @@ const addPermission = async (req, res) => {
                         value: existingModule ? existingModule.value : moduleTemplate.value,
                         moduleFeatures: moduleFeatures
                     };
+                });
+            }
+
+            // Add systemRoles update logic
+            if (company.systemRoles && Array.isArray(company.systemRoles)) {
+                company.systemRoles.forEach(role => {
+                    // Find the module in rolePermissions
+                    const moduleInRole = role.rolePermissions.find(m => m.key === moduleToUpdate.key);
+
+                    if (moduleInRole && moduleInRole.moduleFeatures) {
+                        // Find the feature in moduleFeatures
+                        const featureInModule = moduleInRole.moduleFeatures.find(f => f.featureId === featureToUpdate.featureId.toString());
+                        console.log({featureInModule}, featureToUpdate.featureId);
+                      
+                        if (featureInModule) {
+                            // Append new permissions that don't exist yet
+                            featureToUpdate.featurePermissions.forEach(newPermission => {
+                                console.log({newPermission});
+                                if (!featureInModule.featurePermissions.some(p => p.key === newPermission.key)) {
+                                    featureInModule.featurePermissions.push({
+                                        key: newPermission.key,
+                                        name: newPermission.name,
+                                        permissionType: newPermission.permissionType,
+                                        value: false,
+                                        _id: new mongoose.Types.ObjectId()
+                                    });
+                                }
+                            });
+                        }
+                    }
                 });
             }
 

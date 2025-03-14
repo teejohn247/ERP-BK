@@ -251,6 +251,53 @@ import generatePasswordForAceERP from '../controller/AceERP/Auth/createAdmin';
 import sendEmail from '../controller/CRM/Email/sendEmail';
 // const { sendOTP, verifyOTP, generateOTP } = require('./passwordless');
 // import {sendOTP, verifyOTP, generateOTP} from './passwordless';
+
+
+
+
+
+
+
+
+import updateCompanyByCompany from '../controller/AceERP/Auth/updateCompanyByCompany';
+import assignSalaryScale from '../controller/salaryScale/assignSalaryScale';
+import deleteRolePermissions from '../controller/AceERP/Auth/deleteRolePermission';
+import syncCompanyFeaturesToRoles from '../controller/AceERP/Auth/syncCompanyFeaturesToRoles';
+import deletePayrollPeriod from '../controller/Payroll/deletePeriod';
+import createSubPlan from '../controller/AceERP/Auth/createSubPlan';
+import fetchPlans from '../controller/AceERP/Auth/fetchPlans';
+import fetchSubscriptions from '../controller/AceERP/Auth/fetchSubscriptions';
+import fetchSubscriptionByCompany from '../controller/AceERP/Auth/fetchSubscriptionByCompany';
+import editCompany from '../controller/AceERP/Auth/editCompany';
+import modules from '../controller/AceERP/Auth/modules';
+import moduleController from '../controller/AceERP/Auth/modules';
+import addPermission from '../controller/AceERP/Auth/modules';
+import role from '../controller/AceERP/Auth/roles';
+import fetchAdminRoles from '../controller/AceERP/Auth/fetchRoles';
+import toggleModule from '../controller/AceERP/Auth/toggleModule';
+import fetchModules from '../controller/AceERP/Auth/fetchModules';
+import signInAceERP from '../controller/AceERP/Auth/signInAceErp';
+import generatePasswordForAceERP from '../controller/AceERP/Auth/createAdmin';
+import fetchAllCompanies from '../controller/AceERP/Auth/fetchAllCompanies';
+import updateEmployeePermission from '../controller/RolesandPermissions/updateEmployeePermission';
+import updateRoleAndPermissions from '../controller/RolesandPermissions/updateRoleandPermissions';
+import subscribe from '../controller/AceERP/Auth/subscribe';
+import companyId from '../controller/AceERP/Auth/companyId';
+
+
+
+
+
+import createSalaryScale from '../controller/salaryScale/createSalaryScale';
+import fetchSalaryScale from '../controller/salaryScale/fetchSalaryScale';
+import deleteSalaryscale from '../controller/salaryScale/deleteSalaryscale';
+import updateSalaryScale from '../controller/salaryScale/updateSalaryScale';
+
+
+
+
+
+
 import { sendOTP } from './sendOTP';
 import verifyOTP from './verifyOTP';
 
@@ -373,7 +420,7 @@ router.post('/verifyOTP', verifyOTP);
 router.get('/forgotPassword', forgotPassword);
 router.patch('/changePassword', auth, changePassword);
 router.patch('/verifyPassword', verifyToken);
-router.post("/addImage", auth, upload.single("my_file"), imageUploader, addImage);
+router.post("/addImage", auth, upload.single("my_file"),  addImage);
 // router.post("/jobApplication", auth, upload.single("resumeCV"), imageUploader, apply);
 router.post("/jobApplication", auth, uploadgoogle,  async (req, res, next) => {
   try {
@@ -408,7 +455,7 @@ router.post('/createDesignation', auth,  createDesignation);
 router.post('/addDepartment', auth, addDepartment);
 router.get('/fetchDepartments', auth, fetchDepartment);
 router.patch('/updateDepartment/:id',auth, updateDepartment);
-router.delete('/deleteDepartment/:id',auth, deleteDepartment);
+// router.delete('/deleteDepartment/:id',auth, deleteDepartmimageUploader,ent);
 router.post('/addTable', addTable);
 router.patch('/addPayment',auth, addPayment);
 router.post('/updatePayment', auth, updatePayment);
@@ -621,7 +668,22 @@ router.patch('/updateContactPicture/:contactId', auth, upload.single("profilePho
 router.patch('/updateLeadPicture/:leadId', auth, upload.single("profilePhoto"), imageUploader, leadPicture);
 router.patch('/updateAgentPicture/:agentId', auth, upload.single("profilePhoto"), imageUploader, agentPicture);
 
-router.post('/createAdminAceERP', generatePasswordForAceERP);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 router.get('/fetchAllCompanies', auth, fetchAllCompanies);
 router.put('/update-permissions', auth, updateEmployeePermission); 
 router.put('/updateRole', auth, updateRoleAndPermissions);
@@ -650,6 +712,28 @@ router.get('/subscriptions/company/:companyId', fetchSubscriptionByCompany);
 
 
 
+
+
+
+
+
+router.post('/createAdminAceERP', generatePasswordForAceERP);
+router.delete('/deleteRolePermissions/:companyId', auth, deleteRolePermissions);
+router.patch('/updateCompany/:id', auth, updateCompanyByCompany);
+router.post('/sync-company-features', syncCompanyFeaturesToRoles);
+router.post('/createSubPlan', createSubPlan);
+router.patch('/assignSalaryScale', auth, assignSalaryScale);
+router.post('/signInAceERP', signInAceERP);
+
+
+
+router.delete("/deletePayrollPeriod/:id", auth, deletePayrollPeriod);
+
+
+router.post('/createSalaryScale', auth,  createSalaryScale);
+router.get('/fetchSalaryScale', auth,  fetchSalaryScale);
+router.delete('/deleteSalaryScale/:id', auth, deleteSalaryscale);
+router.patch('/updateSalaryScale/:id', auth, updateSalaryScale);
 
 
 export default router;

@@ -7,9 +7,10 @@ const fetchSubscriptionByCompany = async (req, res) => {
         const subscriptions = await Subscription.find({ companyId })
 
         if (!subscriptions || subscriptions.length === 0) {
-            return res.status(404).json({
-                status: 404,
-                message: 'No subscriptions found for this company'
+            return res.status(200).json({
+                success: false,
+                status: 200,
+                data: []
             });
         }
 

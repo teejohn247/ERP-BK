@@ -1,6 +1,7 @@
 import Modules from '../../../model/Modules.js';
 import Company from '../../../model/Company.js';
 import Role from '../../../model/Roles.js';
+import companyId from './companyId.js';
 
 // Helper function for default permissions
 async function getDefaultPermissions(roleName) {
@@ -28,6 +29,35 @@ async function getDefaultPermissions(roleName) {
     return rolePermissions;
 }
 
+
+// Helper function for default permissions
+async function getDefaultPermission(companyId) {
+    const companyDoc = await Company.findById(companyId);; // Fetch the company document
+    if (!companyDoc) return []; // Return empty if no company document found
+
+    const rolePermissions = [];
+    
+    // Process all modules for default roles from companyFeatures
+    for (const moduleData of companyDoc.companyFeatures.modules) {
+        console.log({moduleData})
+        rolePermissions.push(moduleData);
+        // for (const feature of moduleData.moduleFeatures) {
+        //     if (feature.featurePermissions && feature.featurePermissions.length > 0) {
+        //         for (const permission of feature.featurePermissions) {
+        //             rolePermissions.push({
+        //                 moduleId: moduleData._id,
+        //                 featureId: feature._id,
+        //                 permissionKey: permission.key,
+        //                 permissionValue: roleName === 'Super Admin' // Only Super Admin gets all permissions by default
+        //             });
+        //         }
+        //     }
+        // }
+    }
+    
+    return rolePermissions;
+}
+
 // Helper function to process module permissions for custom roles
 async function processModulePermissions(modules) {
     const rolePermissions = [];
@@ -46,19 +76,20 @@ async function processModulePermissions(modules) {
             throw new Error(`Invalid module ID: ${moduleId}`);
         }
 
-        for (const feature of moduleData.moduleFeatures) {
-            if (feature.featurePermissions && feature.featurePermissions.length > 0) {
-                for (const permission of feature.featurePermissions) {
-                    rolePermissions.push({
-                        moduleId: moduleId,
-                        featureId: feature._id,
-                        permissionType: permission.permissionType,
-                        permissionKey: permission.key,
-                        permissionValue: false
-                    });
-                }
-            }
-        }
+        rolePermissions.push(modules)
+        // for (const feature of moduleData.moduleFeatures) {
+        //     if (feature.featurePermissions && feature.featurePermissions.length > 0) {
+        //         for (const permission of feature.featurePermissions) {
+        //             rolePermissions.push({
+        //                 moduleId: moduleId,
+        //                 featureId: feature._id,
+        //                 permissionType: permission.permissionType,
+        //                 permissionKey: permission.key,
+        //                 permissionValue: false
+        //             });
+        //         }
+        //     }
+        // }
     }
 
     return rolePermissions;
@@ -69,99 +100,96 @@ const role = async (req, res) => {
         // First create default roles if they don't exist
         const defaultRoles = ['Super Admin', 'Manager', 'Staff', 'External'];
         
-        // Create default roles for each company one at a time
-        for (const defaultRole of defaultRoles) {
-            const companies = await Company.find({
-                'systemRoles.roleName': { $ne: defaultRole }
-            });
+        // // Create default roles for each company one at a time
+        // for (const defaultRole of defaultRoles) {
+        //     const companies = await Company.find({
+        //         'systemRoles.roleName': { $ne: defaultRole }
+        //     });
 
-            for (const company of companies) {
-                const defaultRolePermissions = await getDefaultPermissions(defaultRole);
-                const newDefaultRole = new Role({
-                    roleName: defaultRole,
-                    description: `Default ${defaultRole} role`,
-                    rolePermissions: defaultRolePermissions,
-                    companyId: company._id
-                });
+        //     for (const company of companies) {
+        //         const defaultRolePermissions = await getDefaultPermissions(defaultRole);
+        //         const newDefaultRole = new Role({
+        //             roleName: defaultRole,
+        //             description: `Default ${defaultRole} role`,
+        //             rolePermissions: defaultRolePermissions,
+        //             companyId: company._id
+        //         });
                 
-                const savedDefaultRole = await newDefaultRole.save();
+        //         const savedDefaultRole = await newDefaultRole.save();
                 
-                await Company.findByIdAndUpdate(
-                    company._id,
-                    {
-                        $push: {
-                            systemRoles: {
-                                _id: savedDefaultRole._id,
-                                roleName: savedDefaultRole.roleName,
-                                description: savedDefaultRole.description,
-                                rolePermissions: savedDefaultRole.rolePermissions
-                            }
-                        }
-                    }
-                );
-            }
-        }
+        //         await Company.findByIdAndUpdate(
+        //             company._id,
+        //             {
+        //                 $push: {
+        //                     systemRoles: {
+        //                         _id: savedDefaultRole._id,
+        //                         roleName: savedDefaultRole.roleName,
+        //                         description: savedDefaultRole.description,
+        //                         rolePermissions: savedDefaultRole.rolePermissions
+        //                     }
+        //                 }
+        //             }
+        //         );
+        //     }
+        // }
 
         // Now handle the new role creation
-        const { roleName, modules, description } = req.body;
+        const { roleName, modules, description, companyId } = req.body;
 
         // Validate required fields
-        if (!roleName || !Array.isArray(modules)) {
+        if (!roleName || !Array.isArray(modules) || !companyId) {
             return res.status(400).json({
                 status: 400,
-                error: 'Please provide roleName and modules array'
+                error: 'Please provide roleName, modules array, and companyId'
             });
         }
 
-        // Check if role name already exists in ANY company's systemRoles
-        const roleExistsInAnyCompany = await Company.findOne({
+        // Check if role name already exists in the specified company's systemRoles
+        const roleExistsInCompany = await Company.findOne({
+            _id: companyId,
             'systemRoles.roleName': roleName
         });
 
-        if (roleExistsInAnyCompany) {
+        if (roleExistsInCompany) {
             return res.status(400).json({
                 status: 400,
-                error: 'Role name already exists'
+                error: 'Role name already exists in the specified company'
             });
         }
 
-        // Get all companies after default roles are created
-        const updatedCompanies = await Company.find({});
-        const savedRoles = [];
+        // Create the new role for the specified company
+        // const rolePermissions = await processModulePermissions(modules);
+        const rolePermissions = await getDefaultPermission(companyId);
 
-        // Create the new role for each company
-        for (const company of updatedCompanies) {
-            const rolePermissions = await processModulePermissions(modules);
-            
-            const newRole = new Role({
-                roleName,
-                description: description || '',
-                rolePermissions,
-                companyId: company._id
-            });
+        
+        const newRole = new Role({
+            roleName,
+            description: description || '',
+            rolePermissions,
+            companyId
+        });
 
-            const savedRole = await newRole.save();
-            savedRoles.push(savedRole);
+        const savedRole = await newRole.save();
 
-            await Company.findByIdAndUpdate(
-                company._id,
-                {
-                    $push: {
-                        systemRoles: {
-                            _id: savedRole._id,
-                            roleName: savedRole.roleName,
-                            description: savedRole.description,
-                            rolePermissions: savedRole.rolePermissions
-                        }
+        
+        await Company.findByIdAndUpdate(
+            companyId,
+            {
+                $push: {
+                    systemRoles: {
+                        _id: savedRole._id,
+                        roleName: savedRole.roleName,
+                        description: savedRole.description,
+                        rolePermissions: rolePermissions
                     }
                 }
-            );
-        }
+            }
+        );
 
         res.status(200).json({
             status: 200,
-            data: savedRoles,
-            message: 'Roles created successfully for all companies'
+            data: savedRole,
+            message: 'Role created successfully for the specified company'
         });
 
     } catch (error) {

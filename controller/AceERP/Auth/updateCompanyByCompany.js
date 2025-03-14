@@ -1,7 +1,7 @@
 import Company from '../../../model/Company';
 import { validationResult } from 'express-validator';
 
-const editCompany = async (req, res) => {
+const updateCompanyByCompany = async (req, res) => {
     try {
         // Check for validation errors
         const errors = validationResult(req);
@@ -14,18 +14,18 @@ const editCompany = async (req, res) => {
 
         const {
             companyName,
-            email,
+            // email,
             companyAddress,
             companyLogo,
-            generalSettings,
-            activeStatus,
-            status,
-            parollPeriodFrequency,
+            // generalSettings,
+            // activeStatus,
+            // status,
+            // parollPeriodFrequency,
             industry,
-            systemRoles,
+            // systemRoles,
             singleSignOn,
             subDomain,
-            companyFeatures
+            // companyFeatures
         } = req.body;
 
         // Find company by ID
@@ -44,31 +44,32 @@ const editCompany = async (req, res) => {
             companyFields.singleSignOn = singleSignOn;
         }
         if (companyName) companyFields.companyName = companyName;
-        if (email) companyFields.email = email;
+        // if (email) companyFields.email = email;
         if (companyAddress) companyFields.companyAddress = companyAddress;
         if (companyLogo) companyFields.companyLogo = companyLogo;
-        if (generalSettings) companyFields.generalSettings = generalSettings;
-        if (typeof activeStatus !== 'undefined') companyFields.activeStatus = activeStatus;
-        if (typeof status !== 'undefined') companyFields.status = status;
-        if (parollPeriodFrequency) companyFields.parollPeriodFrequency = parollPeriodFrequency;
+        // if (generalSettings) companyFields.generalSettings = generalSettings;
+        // if (typeof activeStatus !== 'undefined') companyFields.activeStatus = activeStatus;
+        // if (typeof status !== 'undefined') companyFields.status = status;
+        // if (parollPeriodFrequency) companyFields.parollPeriodFrequency = parollPeriodFrequency;
         if (industry) companyFields.industry = industry;
-        if (systemRoles) {
-            companyFields.systemRoles = {
-                employeeManagement: systemRoles.employeeManagement || company.systemRoles.employeeManagement,
-                accounting: systemRoles.accounting || company.systemRoles.accounting,
-                projects: systemRoles.projects || company.systemRoles.projects,
-                crm: systemRoles.crm || company.systemRoles.crm,
-                supplyChain: systemRoles.supplyChain || company.systemRoles.supplyChain
-            };
-        }
         if (subDomain) companyFields.subDomain = subDomain;
-        if (companyFeatures) {
-            companyFields.companyFeatures = {
-                subscriptionStatus: companyFeatures.subscriptionStatus || company.companyFeatures.subscriptionStatus,
-                paymentInfo: companyFeatures.paymentInfo || company.companyFeatures.paymentInfo,
-                modules: companyFeatures.modules || company.companyFeatures.modules
-            };
-        }
+
+        // if (systemRoles) {
+        //     companyFields.systemRoles = {
+        //         employeeManagement: systemRoles.employeeManagement || company.systemRoles.employeeManagement,
+        //         accounting: systemRoles.accounting || company.systemRoles.accounting,
+        //         projects: systemRoles.projects || company.systemRoles.projects,
+        //         crm: systemRoles.crm || company.systemRoles.crm,
+        //         supplyChain: systemRoles.supplyChain || company.systemRoles.supplyChain
+        //     };
+        // }
+        // if (companyFeatures) {
+        //     companyFields.companyFeatures = {
+        //         subscriptionStatus: companyFeatures.subscriptionStatus || company.companyFeatures.subscriptionStatus,
+        //         paymentInfo: companyFeatures.paymentInfo || company.companyFeatures.paymentInfo,
+        //         modules: companyFeatures.modules || company.companyFeatures.modules
+        //     };
+        // }
 
         // Update company
         company = await Company.findByIdAndUpdate(
@@ -79,6 +80,8 @@ const editCompany = async (req, res) => {
 
         res.status(200).json({
             status: 200,
+            success: true,
+            message: "Company updated successfully",
             data: company
         });
 
@@ -91,4 +94,4 @@ const editCompany = async (req, res) => {
     }
 };
 
-export default editCompany;
+export default updateCompanyByCompany;

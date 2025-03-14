@@ -6,9 +6,10 @@ const fetchSubscriptions = async (req, res) => {
           
 
         if (!subscriptions || subscriptions.length === 0) {
-            return res.status(404).json({
-                status: 404,
-                message: 'No subscriptions found'
+            return res.status(200).json({
+                success: false,
+                status: 200,
+                data: []
             });
         }
 
@@ -20,6 +21,7 @@ const fetchSubscriptions = async (req, res) => {
     } catch (error) {
         console.error('Error in fetchSubscriptions:', error);
         res.status(500).json({
+            success: false,
             status: 500,
             message: 'Error fetching subscriptions',
             error: error.message
