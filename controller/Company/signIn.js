@@ -41,8 +41,10 @@ const signin = async (req, res) => {
             return;
         }
 
-        if (email === 'siloerp@silo-inc.com') {
+        if (email == 'siloerp@silo-inc.com') {
             let superAdmin = await AceERP.findOne({ email: email });
+
+            console.log({superAdmin})
             
             if (!superAdmin) {
                 res.status(404).json({

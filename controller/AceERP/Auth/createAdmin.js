@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import Company from '../../../model/AceErps';
+import Company from '../../../model/Silo';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import {emailTemp }from '../../../emailTemplate';
@@ -15,7 +15,7 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 const generatePasswordForAceERP = async (req, res) => {
     try {
-        const email = 'hello@silo-inc.com';
+        const email = 'siloerp@silo-inc.com';
         const randomBytes = crypto.randomBytes(12).toString('hex');
         const specialChars = '!@#$%^&*';
         const uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
