@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import Employee from '../../model/Employees';
 import EmployeeTable from '../../model/EmployeeTable';
+import mongoose from 'mongoose';
 
 import Roles from '../../model/Roles';
 
@@ -26,16 +27,24 @@ const fetchEmployees = async (req, res) => {
 
     try {
 
-        const { 
-            page, limit, firstName, lastName, managerName, companyName,
-            department, designation, employeeCode, gender, email, employmentStartDate 
-        } = req.query;
+        const { page, limit, firstName, lastName, managerName, companyName, 
+            department, designation, employeeCode, gender, email, employmentStartDate, search } = req.query;
 
         // Build filter object
         let filterQuery = {};
         
-        if (firstName) filterQuery.firstName = { $regex: firstName, $options: 'i' };
-        if (lastName) filterQuery.lastName = { $regex: lastName, $options: 'i' };
+        // Handle the combined search parameter
+        if (search) {
+            filterQuery.$or = [
+                { firstName: { $regex: search, $options: 'i' } },
+                { lastName: { $regex: search, $options: 'i' } }
+            ];
+        } else {
+            // If no search parameter, use individual filters
+            if (firstName) filterQuery.firstName = { $regex: firstName, $options: 'i' };
+            if (lastName) filterQuery.lastName = { $regex: lastName, $options: 'i' };
+        }
+
         if (managerName) filterQuery.managerName = { $regex: managerName, $options: 'i' };
         if (companyName) filterQuery.companyName = { $regex: companyName, $options: 'i' };
         if (department) filterQuery.department = { $regex: department, $options: 'i' };
@@ -45,28 +54,29 @@ const fetchEmployees = async (req, res) => {
         if (email) filterQuery.email = { $regex: email, $options: 'i' };
         if (employmentStartDate) filterQuery.employmentStartDate = employmentStartDate;
 
-        const employee = await Employee.findOne({_id: req.payload.id})
+        const company = await Company.findOne({_id: req.payload.id});
+        const employee = await Employee.findOne({_id: req.payload.id});
 
-        const company = await Company.findOne({_id: req.payload.id})
-
-        console.log({employee});
+        console.log({filterQuery});
         console.log({company});
+   
 
 
         if(employee){
-            // Combine company filter with other filters
-            filterQuery.companyId = employee.companyId;
+            filterQuery.companyId = mongoose.Types.ObjectId(employee.companyId);
             
-            const employeeData = await Employee.find(filterQuery).sort({_id: -1})
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
-            .exec();
+            const employeeData = await Employee.find(filterQuery)
+                .sort({_id: -1})
+                .limit(limit * 1)
+                .skip((page - 1) * limit)
+                .exec();
             const employeeTable = await EmployeeTable.find()
 
-            console.log({employeeData})
+            console.log({employeeData}, {companyId: mongoose.Types.ObjectId(employee.companyId)})
 
             const count = await Employee.find(filterQuery).countDocuments()
-    
+
+
             if(!employeeData){
                 res.status(404).json({
                     status:404,
@@ -81,23 +91,28 @@ const fetchEmployees = async (req, res) => {
                     employeeTable,
                     data: employeeData,
                     totalPages: Math.ceil(count / limit),
-                    currentPage: page
+                    currentPage: parseInt(page),
+                    totalRecords: count
                 })
+                return
             }
         } else if(company)
             {
-            // Combine company filter with other filters
-            filterQuery.companyId = req.payload.id;
-            
-            const employeeData = await Employee.find(filterQuery).sort({_id: -1})
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
-            .exec();
+                console.log(req.payload.id)
+                filterQuery.companyId = mongoose.Types.ObjectId(req.payload.id);
+                
+                const employeeData = await Employee.find(filterQuery)
+                    .sort({_id: -1})
+                    .limit(limit * 1)
+                    .skip((page - 1) * limit)
+                    .exec();
+     
 
             console.log({employeeData})
                 const employeeTable = await EmployeeTable.find()
 
                 const count = await Employee.find(filterQuery).countDocuments()
+
                 console.log({count})
         
                 if(!employeeData){
@@ -114,15 +129,19 @@ const fetchEmployees = async (req, res) => {
                         employeeTable,
                         data: employeeData,
                         totalPages: Math.ceil(count / limit),
-                        currentPage: page
+                        currentPage: parseInt(page),
+                        totalRecords: count
                     })
+                    return
                 }
             } 
+
     } catch (error) {
+        console.error("[fetchEmployees] Error:", error);
         res.status(500).json({
             status: 500,
             success: false,
-            error: error
+            error: error.message || 'An error occurred while fetching employees'
         })
     }
 }
