@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 import Employee from '../../model/Employees';
 import EmployeeTable from '../../model/EmployeeTable';
@@ -25,21 +24,74 @@ const getAdminApprovedRecords = async (req, res) => {
 
     try {
 
-        const { page, limit } = req.query;
+        const { 
+            page = 1, 
+            limit = 10,
+            search = '',
+            startDate,
+            endDate,
+            leaveType,
+            department,
+            sortBy = 'createdAt',
+            sortOrder = -1
+        } = req.query;
 
-        const employee = await LeaveRecords.find({leaveApprover: req.params.id, status: "Approved"}).sort({_id: -1})
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
+        // Build filter object
+        let filterQuery = { 
+            leaveApprover: req.params.id, 
+            status: "Approved" 
+        };
+        
+        // Add date range filters if provided
+        if (startDate && endDate) {
+            filterQuery.leaveStartDate = { $gte: new Date(startDate) };
+            filterQuery.leaveEndDate = { $lte: new Date(endDate) };
+        } else if (startDate) {
+            filterQuery.leaveStartDate = { $gte: new Date(startDate) };
+        } else if (endDate) {
+            filterQuery.leaveEndDate = { $lte: new Date(endDate) };
+        }
+        
+        // Add leaveType filter if provided
+        if (leaveType) {
+            filterQuery.leaveType = leaveType;
+        }
+        
+        // Add department filter if provided
+        if (department) {
+            filterQuery.department = department;
+        }
+        
+        // Add search functionality
+        if (search) {
+            filterQuery.$or = [
+                { firstName: { $regex: search, $options: 'i' } },
+                { lastName: { $regex: search, $options: 'i' } },
+                { fullName: { $regex: search, $options: 'i' } },
+                { reason: { $regex: search, $options: 'i' } }
+            ];
+        }
+        
+        // Create sort object
+        const sort = {};
+        sort[sortBy] = parseInt(sortOrder) || -1;
+        
+        // Get total count for pagination
+        const count = await LeaveRecords.find(filterQuery).countDocuments();
+
+        const employee = await LeaveRecords.find(filterQuery)
+            .sort(sort)
+            .limit(parseInt(limit))
+            .skip((parseInt(page) - 1) * parseInt(limit))
+            .exec();
 
         console.log({employee})
-        const count = await Employee.find().countDocuments()
 
-        if(!employee){
+        if(!employee || employee.length === 0){
             res.status(404).json({
                 status:404,
                 success: false,
-                error:'No employee Found'
+                error:'No approved records found'
             })
             return
         }else{
@@ -47,8 +99,10 @@ const getAdminApprovedRecords = async (req, res) => {
                 status: 200,
                 success: true,
                 data: employee,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page
+                totalRecords: count,
+                totalPages: Math.ceil(count / parseInt(limit)),
+                currentPage: parseInt(page),
+                limit: parseInt(limit)
             })
         }
 

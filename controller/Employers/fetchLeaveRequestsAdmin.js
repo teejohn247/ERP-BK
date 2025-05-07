@@ -23,7 +23,17 @@ const fetchExpenseReqsAdmin = async (req, res) => {
 
     try {
 
-        const { page, limit, status, startDate, endDate, expenseTypeId } = req.query;
+        const { 
+            page = 1, 
+            limit = 10, 
+            status, 
+            startDate, 
+            endDate, 
+            expenseTypeId,
+            search = '',
+            sortBy = 'dateRequested',
+            sortOrder = -1
+        } = req.query;
 
         const user =  await Employee.findOne({_id: req.payload.id, isManager: true})
         const company=  await Company.findOne({_id: req.payload.id})
@@ -55,25 +65,37 @@ const fetchExpenseReqsAdmin = async (req, res) => {
             if (expenseTypeId) {
                 filter.expenseTypeId = expenseTypeId;
             }
+            
+            // Add search functionality
+            if (search) {
+                filter.$or = [
+                    { expenseName: { $regex: search, $options: 'i' } },
+                    { description: { $regex: search, $options: 'i' } },
+                    { employeeName: { $regex: search, $options: 'i' } }
+                ];
+            }
+            
             return filter;
         };
 
+        // Create sort object
+        const sort = {};
+        sort[sortBy] = parseInt(sortOrder) || -1;
+
         if(user){
-
-
             const baseFilter = {
                 approverId: req.payload.id,
-                companyId: user.companyId ? user.companyId :company._id
+                companyId: user.companyId ? user.companyId : company._id
             };
             const filter = buildFilter(baseFilter);
 
+            const count = await Role.find(filter).countDocuments();
+            
             const role = await Role.find(filter)
-                .sort({ "dateRequested": -1 })
-                .limit(limit * 1)
-                .skip((page - 1) * limit)
+                .sort(sort)
+                .limit(parseInt(limit))
+                .skip((parseInt(page) - 1) * parseInt(limit))
                 .exec();
-    
-            const count = await Role.find(filter).countDocuments()
     
             console.log(role)
     
@@ -81,29 +103,27 @@ const fetchExpenseReqsAdmin = async (req, res) => {
                 status: 200,
                 success: true,
                 data: role,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page
-            })
+                totalRecords: count,
+                totalPages: Math.ceil(count / parseInt(limit)),
+                currentPage: parseInt(page),
+                limit: parseInt(limit)
+            });
     
             return;
-    
         }
-
         else if(company){
-
-
             const baseFilter = {
                 companyId: company._id
             };
             const filter = buildFilter(baseFilter);
 
+            const count = await Role.find(filter).countDocuments();
+            
             const role = await Role.find(filter)
-                .sort({ "dateRequested": -1 })
-                .limit(limit * 1)
-                .skip((page - 1) * limit)
+                .sort(sort)
+                .limit(parseInt(limit))
+                .skip((parseInt(page) - 1) * parseInt(limit))
                 .exec();
-    
-            const count = await Role.find(filter).countDocuments()
     
             console.log(role)
     
@@ -111,16 +131,14 @@ const fetchExpenseReqsAdmin = async (req, res) => {
                 status: 200,
                 success: true,
                 data: role,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page
-            })
+                totalRecords: count,
+                totalPages: Math.ceil(count / parseInt(limit)),
+                currentPage: parseInt(page),
+                limit: parseInt(limit)
+            });
     
             return;
-    
         }
-
-
-     
     } catch (error) {
         res.status(500).json({
             status: 500,

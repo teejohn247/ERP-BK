@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 import Role from '../../model/Debit';
 import PayrollPeriod from '../../model/PayrollPeriod';
@@ -23,13 +22,46 @@ const fetchPayrollPeriodDetails = async (req, res) => {
 
     try {
 
-        const { page, limit } = req.query;
+        const { page = 1, limit = 10, search = '', status, startDate, endDate, sortBy = 'endDate', sortOrder = -1 } = req.query;
 
+        // Build filter object
+        const filter = { _id: req.params.id };
+        
+        // Add date range filters if provided
+        if (startDate && endDate) {
+            filter.startDate = { $gte: startDate };
+            filter.endDate = { $lte: endDate };
+        } else if (startDate) {
+            filter.startDate = { $gte: startDate };
+        } else if (endDate) {
+            filter.endDate = { $lte: endDate };
+        }
+        
+        // Add status filter if provided
+        if (status) {
+            filter.status = status;
+        }
+        
+        // Add search functionality
+        if (search) {
+            filter.$or = [
+                { payrollPeriodName: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } },
+                { reference: { $regex: search, $options: 'i' } }
+            ];
+        }
 
-        const role = await PayrollPeriod.find({_id: req.params.id})
-        .sort({endDate: 1})
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
+        // Get total count for pagination
+        const count = await PayrollPeriod.countDocuments(filter);
+
+        // Create sort object
+        const sort = {};
+        sort[sortBy] = sortOrder;
+
+        const role = await PayrollPeriod.find(filter)
+        .sort(sort)
+        .limit(parseInt(limit))
+        .skip((parseInt(page) - 1) * parseInt(limit))
         .exec();
 
 
@@ -94,6 +126,10 @@ const fetchPayrollPeriodDetails = async (req, res) => {
                 status: 200,
                 success: true,
                 data: all,
+                totalRecords: count,
+                totalPages: Math.ceil(count / parseInt(limit)),
+                currentPage: parseInt(page),
+                limit: parseInt(limit)
             });
           })
 
@@ -153,6 +189,10 @@ const fetchPayrollPeriodDetails = async (req, res) => {
                 status: 200,
                 success: true,
                 data: all,
+                totalRecords: count,
+                totalPages: Math.ceil(count / parseInt(limit)),
+                currentPage: parseInt(page),
+                limit: parseInt(limit)
             });
           })
         }

@@ -26,7 +26,17 @@ const getLeaveRecords = async (req, res) => {
 
     try {
 
-        const { page, limit, status, leaveType, startDate, endDate, search } = req.query;
+        const { 
+            page = 1, 
+            limit = 10, 
+            status, 
+            leaveType, 
+            startDate, 
+            endDate, 
+            search,
+            sortBy = 'createdAt',
+            sortOrder = -1
+        } = req.query;
 
         // Build filter object
         let filterQuery = { userId: req.payload.id };
@@ -59,14 +69,19 @@ const getLeaveRecords = async (req, res) => {
         }
 
         console.log("[getLeaveRecords] Filter query:", filterQuery);
+        
+        // Create sort object
+        const sort = {};
+        sort[sortBy] = parseInt(sortOrder) || -1;
+
+        // Get count for pagination
+        const count = await LeaveRecords.find(filterQuery).countDocuments();
 
         const leaveRecords = await LeaveRecords.find(filterQuery)
-            .sort({_id: -1})
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
+            .sort(sort)
+            .limit(parseInt(limit))
+            .skip((parseInt(page) - 1) * parseInt(limit))
             .exec();
-
-        const count = await LeaveRecords.find(filterQuery).countDocuments();
 
         if(!leaveRecords || leaveRecords.length === 0){
             res.status(200).json({
@@ -74,8 +89,10 @@ const getLeaveRecords = async (req, res) => {
                 success: true,
                 data: [],
                 message: 'No leave records found matching the criteria',
+                totalRecords: 0,
                 totalPages: 0,
-                currentPage: page || 1
+                currentPage: parseInt(page),
+                limit: parseInt(limit)
             });
             return;
         } else {
@@ -83,9 +100,10 @@ const getLeaveRecords = async (req, res) => {
                 status: 200,
                 success: true,
                 data: leaveRecords,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page || 1,
-                totalRecords: count
+                totalRecords: count,
+                totalPages: Math.ceil(count / parseInt(limit)),
+                currentPage: parseInt(page),
+                limit: parseInt(limit)
             });
         }
 

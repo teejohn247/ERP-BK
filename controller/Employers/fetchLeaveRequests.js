@@ -21,7 +21,17 @@ const fetchExpenseReqs= async (req, res) => {
 
     try {
 
-        const { page, limit, status, startDate, endDate, expenseTypeId } = req.query;
+        const { 
+            page = 1, 
+            limit = 10, 
+            status, 
+            startDate, 
+            endDate, 
+            expenseTypeId,
+            search = '',
+            sortBy = 'dateRequested',
+            sortOrder = -1
+        } = req.query;
 
         // Build filter object
         let filterQuery = { employeeId: req.payload.id };
@@ -40,14 +50,28 @@ const fetchExpenseReqs= async (req, res) => {
         if (expenseTypeId) {
             filterQuery.expenseTypeId = expenseTypeId;
         }
+        
+        // Add search functionality
+        if (search) {
+            filterQuery.$or = [
+                { expenseName: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } },
+                { reference: { $regex: search, $options: 'i' } }
+            ];
+        }
+        
+        // Create sort object
+        const sort = {};
+        sort[sortBy] = parseInt(sortOrder) || -1;
+
+        // Get total count for pagination
+        const count = await Role.find(filterQuery).countDocuments();
 
         const role = await Role.find(filterQuery)
-            .sort({ "dateRequested": -1 })
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
+            .sort(sort)
+            .limit(parseInt(limit))
+            .skip((parseInt(page) - 1) * parseInt(limit))
             .exec();
-
-        const count = await Role.find(filterQuery).countDocuments();
 
         console.log(role)
 
@@ -55,9 +79,11 @@ const fetchExpenseReqs= async (req, res) => {
             status: 200,
             success: true,
             data: role,
-            totalPages: Math.ceil(count / limit),
-            currentPage: page
-        })
+            totalRecords: count,
+            totalPages: Math.ceil(count / parseInt(limit)),
+            currentPage: parseInt(page),
+            limit: parseInt(limit)
+        });
         return;
     } catch (error) {
         res.status(500).json({

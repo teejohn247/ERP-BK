@@ -594,7 +594,7 @@ router.patch("/checkInOut", auth, checkInOut);
 router.get("/masterList", auth, listMasterApplications);
 router.post("/attendanceSheet", dailyAttendance);
 router.get("/fetchAttendance", auth, fetchTodaysAttendance);
-router.get("/fetchAttendance", auth, mult.single("file"), createOfferLetter);
+// router.get("/fetchAttendance", auth, mult.single("file"), createOfferLetter);
 
 
 router.post("/createContact",upload.single("profilePhoto"), createContact);

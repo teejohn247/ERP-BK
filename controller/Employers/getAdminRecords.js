@@ -27,8 +27,8 @@ const getAdminRecords = async (req, res) => {
     try {
 
         const { 
-            page, 
-            limit, 
+            page = 1, 
+            limit = 10, 
             firstName,
             lastName,
             fullName,
@@ -37,7 +37,9 @@ const getAdminRecords = async (req, res) => {
             department,
             startDate,
             endDate,
-            approved
+            approved,
+            sortBy = 'createdAt',
+            sortOrder = -1
         } = req.query;
 
         const comp = await Employee.findOne({_id: req.payload.id})
@@ -68,24 +70,30 @@ const getAdminRecords = async (req, res) => {
             if (startDate) filterQuery.leaveDate.$gte = new Date(startDate);
             if (endDate) filterQuery.leaveDate.$lte = new Date(endDate);
         }
+        
+        // Create sort object
+        const sort = {};
+        sort[sortBy] = parseInt(sortOrder) || -1;
 
         if(comp){
-            const employee = await LeaveRecords.find({
+            const finalFilter = {
                 ...filterQuery,
                 companyId: comp.companyId, 
                 leaveApprover: req.payload.id
-            }).sort({_id: -1}) 
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
-            .exec();
+            };
+            
+            // Get count for pagination
+            const count = await LeaveRecords.find(finalFilter).countDocuments();
+            
+            const employee = await LeaveRecords.find(finalFilter)
+                .sort(sort)
+                .limit(parseInt(limit))
+                .skip((parseInt(page) - 1) * parseInt(limit))
+                .exec();
     
             console.log({employee})
     
-            
-    
-            const count = await Employee.find().countDocuments()
-    
-            if(!employee){
+            if(!employee || employee.length === 0){
                 res.status(404).json({
                     status:404,
                     success: false,
@@ -97,27 +105,31 @@ const getAdminRecords = async (req, res) => {
                     status: 200,
                     success: true,
                     data: employee,
-                    totalPages: Math.ceil(count / limit),
-                    currentPage: page
+                    totalRecords: count,
+                    totalPages: Math.ceil(count / parseInt(limit)),
+                    currentPage: parseInt(page),
+                    limit: parseInt(limit)
                 })
             }
             return
-        }  else if(allComp){
-            const employee = await LeaveRecords.find({
+        } else if(allComp){
+            const finalFilter = {
                 ...filterQuery,
                 companyId: req.payload.id
-            }).sort({_id: -1}) 
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
-            .exec();
+            };
+            
+            // Get count for pagination
+            const count = await LeaveRecords.find(finalFilter).countDocuments();
+            
+            const employee = await LeaveRecords.find(finalFilter)
+                .sort(sort)
+                .limit(parseInt(limit))
+                .skip((parseInt(page) - 1) * parseInt(limit))
+                .exec();
     
             console.log({employee})
     
-            
-    
-            const count = await Employee.find().countDocuments()
-    
-            if(!employee){
+            if(!employee || employee.length === 0){
                 res.status(404).json({
                     status:404,
                     success: false,
@@ -129,8 +141,10 @@ const getAdminRecords = async (req, res) => {
                     status: 200,
                     success: true,
                     data: employee,
-                    totalPages: Math.ceil(count / limit),
-                    currentPage: page
+                    totalRecords: count,
+                    totalPages: Math.ceil(count / parseInt(limit)),
+                    currentPage: parseInt(page),
+                    limit: parseInt(limit)
                 })
             }
             return

@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 import Payroll from '../../model/Payroll';
 import PayrollPeriod from '../../model/PayrollPeriod';
@@ -21,7 +20,7 @@ const fetchPayrollPrd = async (req, res) => {
 
     try {
 
-        const { page, limit } = req.query;
+        const { page = 1, limit = 10, search = '', status, startDate, endDate, sortBy = 'endDate', sortOrder = -1 } = req.query;
 
 
         // companyName: { type: String },
@@ -40,97 +39,210 @@ const fetchPayrollPrd = async (req, res) => {
 
      if(comp){
 
-        const totals = await PeriodPayData.aggregate([
+        // Build match stage with filters
+        const matchStage = { companyId: req.payload.id };
+        
+        // Add date filters if provided
+        if (startDate && endDate) {
+            matchStage['payrollPeriodData.startDate'] = { $gte: startDate };
+            matchStage['payrollPeriodData.endDate'] = { $lte: endDate };
+        } else if (startDate) {
+            matchStage['payrollPeriodData.startDate'] = { $gte: startDate };
+        } else if (endDate) {
+            matchStage['payrollPeriodData.endDate'] = { $lte: endDate };
+        }
+        
+        // Add status filter if provided
+        if (status) {
+            matchStage['payrollPeriodData.status'] = status;
+        }
+        
+        // Add search functionality
+        if (search) {
+            matchStage.$or = [
+                { 'payrollPeriodData.payrollPeriodName': { $regex: search, $options: 'i' } },
+                { 'payrollPeriodData.reference': { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        // Create pipeline
+        const aggregatePipeline = [
           {
             $match: {
               companyId: req.payload.id
             }
           },
-            {
-              $lookup: {
-                from: 'payrollperiods', // Replace 'payrollperiods' with the actual collection name of PayrollPeriod
-                localField: 'payrollPeriodId',
-                foreignField: '_id',
-                as: 'payrollPeriodData',
-              },
+          {
+            $lookup: {
+              from: 'payrollperiods', 
+              localField: 'payrollPeriodId',
+              foreignField: '_id',
+              as: 'payrollPeriodData',
             },
-            {
-              $unwind: '$payrollPeriodData', // Unwind to flatten the array if needed
+          },
+          {
+            $unwind: '$payrollPeriodData', 
+          }
+        ];
+        
+        // Add additional match stage for filters
+        if (Object.keys(matchStage).length > 1) {
+          aggregatePipeline.push({
+            $match: matchStage
+          });
+        }
+        
+        // Complete the pipeline with grouping
+        aggregatePipeline.push(
+          {
+            $group: {
+              _id: '$payrollPeriodId',
+              payrollPeriodName: { $first: '$payrollPeriodData.payrollPeriodName' },
+              startDate: { $first: '$payrollPeriodData.startDate' },
+              endDate: { $first: '$payrollPeriodData.endDate' },
+              reference: { $first: '$payrollPeriodData.reference' },
+              status: { $first: '$payrollPeriodData.status' },
+              totalEarnings: { $sum: { $add: ['$totalEarnings'] } },
+              netEarnings: { $sum: '$netEarnings' },
+              deductions: { $sum: { $add: ['$deductions'] } },
             },
-            {
-              $group: {
-                _id: '$payrollPeriodId', // Group by PayrollPeriod _id
-                payrollPeriodName: { $first: '$payrollPeriodData.payrollPeriodName' },
-                startDate: { $first: '$payrollPeriodData.startDate' },
-                endDate: { $first: '$payrollPeriodData.endDate' },
-                reference: { $first: '$payrollPeriodData.reference' },
-                status: { $first: '$payrollPeriodData.status' },
-                totalEarnings: { $sum: { $add: ['$totalEarnings'] } },
-                netEarnings: { $sum: '$netEarnings' },
-                deductions: { $sum: { $add: ['$deductions'] } },
-                // You can include other fields from PayrollPeriod if needed
-              },
-            },
-          ]);
+          }
+        );
+        
+        // Add sort stage
+        const sortStage = {};
+        sortStage[sortBy || 'endDate'] = parseInt(sortOrder) || -1;
+        
+        aggregatePipeline.push({ $sort: sortStage });
+        
+        // Get total count for pagination
+        const countPipeline = [...aggregatePipeline];
+        const totalData = await PeriodPayData.aggregate(countPipeline);
+        const totalCount = totalData.length;
+        
+        // Add pagination stages
+        aggregatePipeline.push(
+          { $skip: (parseInt(page) - 1) * parseInt(limit) },
+          { $limit: parseInt(limit) }
+        );
 
-          console.log({totals})
+        const totals = await PeriodPayData.aggregate(aggregatePipeline);
+
+        console.log({totals})
       
-          res.status(200).json({
-            status: 200,
-            success: true,
-            data: totals,
-            // totalPages: Math.ceil(count / limit),
-            // currentPage: page
+        res.status(200).json({
+          status: 200,
+          success: true,
+          data: totals,
+          totalRecords: totalCount,
+          totalPages: Math.ceil(totalCount / parseInt(limit)),
+          currentPage: parseInt(page),
+          limit: parseInt(limit)
         });
         return
       }
 
       else if(employee){
 
-        const totals = await PeriodPayData.aggregate([
+        // Build match stage with filters
+        const matchStage = { employeeId: req.payload.id };
+        
+        // Add date filters if provided
+        if (startDate && endDate) {
+            matchStage['payrollPeriodData.startDate'] = { $gte: startDate };
+            matchStage['payrollPeriodData.endDate'] = { $lte: endDate };
+        } else if (startDate) {
+            matchStage['payrollPeriodData.startDate'] = { $gte: startDate };
+        } else if (endDate) {
+            matchStage['payrollPeriodData.endDate'] = { $lte: endDate };
+        }
+        
+        // Add status filter if provided
+        if (status) {
+            matchStage['payrollPeriodData.status'] = status;
+        }
+        
+        // Add search functionality
+        if (search) {
+            matchStage.$or = [
+                { 'payrollPeriodData.payrollPeriodName': { $regex: search, $options: 'i' } },
+                { 'payrollPeriodData.reference': { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        // Create pipeline
+        const aggregatePipeline = [
           {
             $match: {
               employeeId: req.payload.id
             }
           },
-            {
-              $lookup: {
-                from: 'payrollperiods', // Replace 'payrollperiods' with the actual collection name of PayrollPeriod
-                localField: 'payrollPeriodId',
-                foreignField: '_id',
-                as: 'payrollPeriodData',
-              },
+          {
+            $lookup: {
+              from: 'payrollperiods', 
+              localField: 'payrollPeriodId',
+              foreignField: '_id',
+              as: 'payrollPeriodData',
             },
-            {
-              $unwind: '$payrollPeriodData', // Unwind to flatten the array if needed
+          },
+          {
+            $unwind: '$payrollPeriodData', 
+          }
+        ];
+        
+        // Add additional match stage for filters
+        if (Object.keys(matchStage).length > 1) {
+          aggregatePipeline.push({
+            $match: matchStage
+          });
+        }
+        
+        // Complete the pipeline with grouping
+        aggregatePipeline.push(
+          {
+            $group: {
+              _id: '$payrollPeriodId',
+              payrollPeriodName: { $first: '$payrollPeriodData.payrollPeriodName' },
+              startDate: { $first: '$payrollPeriodData.startDate' },
+              endDate: { $first: '$payrollPeriodData.endDate' },
+              reference: { $first: '$payrollPeriodData.reference' },
+              status: { $first: '$payrollPeriodData.status' },
+              totalEarnings: { $sum: { $add: ['$totalEarnings'] } },
+              netEarnings: { $sum: '$netEarnings' },
+              deductions: { $sum: { $add: ['$deductions'] } },
             },
-            {
-              $group: {
-                _id: '$payrollPeriodId', // Group by PayrollPeriod _id
-                payrollPeriodName: { $first: '$payrollPeriodData.payrollPeriodName' },
-                startDate: { $first: '$payrollPeriodData.startDate' },
-                endDate: { $first: '$payrollPeriodData.endDate' },
-                reference: { $first: '$payrollPeriodData.reference' },
-                status: { $first: '$payrollPeriodData.status' },
-                totalEarnings: { $sum: { $add: ['$totalEarnings'] } },
-                netEarnings: { $sum: '$netEarnings' },
-                deductions: { $sum: { $add: ['$deductions'] } },
-                // You can include other fields from PayrollPeriod if needed
-              },
-            },
-          ]);
+          }
+        );
+        
+        // Add sort stage
+        const sortStage = {};
+        sortStage[sortBy || 'endDate'] = parseInt(sortOrder) || -1;
+        
+        aggregatePipeline.push({ $sort: sortStage });
+        
+        // Get total count for pagination
+        const countPipeline = [...aggregatePipeline];
+        const totalData = await PeriodPayData.aggregate(countPipeline);
+        const totalCount = totalData.length;
+        
+        // Add pagination stages
+        aggregatePipeline.push(
+          { $skip: (parseInt(page) - 1) * parseInt(limit) },
+          { $limit: parseInt(limit) }
+        );
 
-          console.log({totals})
+        const totals = await PeriodPayData.aggregate(aggregatePipeline);
 
-
-
+        console.log({totals})
       
-          res.status(200).json({
-            status: 200,
-            success: true,
-            data: totals,
-            // totalPages: Math.ceil(count / limit),
-            // currentPage: page
+        res.status(200).json({
+          status: 200,
+          success: true,
+          data: totals,
+          totalRecords: totalCount,
+          totalPages: Math.ceil(totalCount / parseInt(limit)),
+          currentPage: parseInt(page),
+          limit: parseInt(limit)
         });
         return
       }
