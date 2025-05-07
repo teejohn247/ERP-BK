@@ -24,11 +24,24 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 
 const fetchEmployees = async (req, res) => {
-
     try {
-
-        const { page, limit, firstName, lastName, managerName, companyName, 
-            department, designation, employeeCode, gender, email, employmentStartDate, search } = req.query;
+        const { 
+            page = 1, 
+            limit = 10, 
+            firstName, 
+            lastName, 
+            managerName, 
+            companyName, 
+            department, 
+            designation, 
+            employeeCode, 
+            gender, 
+            email, 
+            employmentStartDate, 
+            search,
+            sortBy = 'createdAt',
+            sortOrder = -1
+        } = req.query;
 
         // Build filter object
         let filterQuery = {};
@@ -37,7 +50,9 @@ const fetchEmployees = async (req, res) => {
         if (search) {
             filterQuery.$or = [
                 { firstName: { $regex: search, $options: 'i' } },
-                { lastName: { $regex: search, $options: 'i' } }
+                { lastName: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } },
+                { employeeCode: { $regex: search, $options: 'i' } }
             ];
         } else {
             // If no search parameter, use individual filters
@@ -54,97 +69,74 @@ const fetchEmployees = async (req, res) => {
         if (email) filterQuery.email = { $regex: email, $options: 'i' };
         if (employmentStartDate) filterQuery.employmentStartDate = employmentStartDate;
 
+        // Create sort object
+        const sort = {};
+        sort[sortBy] = parseInt(sortOrder);
+
         const company = await Company.findOne({_id: req.payload.id});
         const employee = await Employee.findOne({_id: req.payload.id});
 
-        console.log({filterQuery});
-        console.log({company});
-   
-
-
-        if(employee){
+        // Set appropriate companyId in filter
+        if (employee) {
             filterQuery.companyId = mongoose.Types.ObjectId(employee.companyId);
+        } else if (company) {
+            filterQuery.companyId = mongoose.Types.ObjectId(req.payload.id);
+        } else {
+            return res.status(403).json({
+                status: 403,
+                success: false,
+                message: 'Not authorized to view employees'
+            });
+        }
+
+        // Fetch employees with pagination
+        const employeeData = await Employee.find(filterQuery)
+            .sort(sort)
+            .limit(parseInt(limit))
+            .skip((parseInt(page) - 1) * parseInt(limit))
+            .exec();
             
-            const employeeData = await Employee.find(filterQuery)
-                .sort({_id: -1})
-                .limit(limit * 1)
-                .skip((page - 1) * limit)
-                .exec();
-            const employeeTable = await EmployeeTable.find()
-
-            console.log({employeeData}, {companyId: mongoose.Types.ObjectId(employee.companyId)})
-
-            const count = await Employee.find(filterQuery).countDocuments()
-
-
-            if(!employeeData){
-                res.status(404).json({
-                    status:404,
-                    success: false,
-                    error:'No employee Found'
-                })
-                return
-            }else{
-                res.status(200).json({
-                    status: 200,    
-                    success: true,
-                    employeeTable,
-                    data: employeeData,
-                    totalPages: Math.ceil(count / limit),
-                    currentPage: parseInt(page),
-                    totalRecords: count
-                })
-                return
-            }
-        } else if(company)
-            {
-                console.log(req.payload.id)
-                filterQuery.companyId = mongoose.Types.ObjectId(req.payload.id);
-                
-                const employeeData = await Employee.find(filterQuery)
-                    .sort({_id: -1})
-                    .limit(limit * 1)
-                    .skip((page - 1) * limit)
-                    .exec();
-     
-
-            console.log({employeeData})
-                const employeeTable = await EmployeeTable.find()
-
-                const count = await Employee.find(filterQuery).countDocuments()
-
-                console.log({count})
+        // Get employee table data
+        const employeeTable = await EmployeeTable.find();
         
-                if(!employeeData){
-                    res.status(404).json({
-                        status:404,
-                        success: false,
-                        error:'No employee Found'
-                    })
-                    return
-                }else{
-                    res.status(200).json({
-                        status: 200,
-                        success: true,
-                        employeeTable,
-                        data: employeeData,
-                        totalPages: Math.ceil(count / limit),
-                        currentPage: parseInt(page),
-                        totalRecords: count
-                    })
-                    return
-                }
-            } 
+        // Get total count for pagination
+        const count = await Employee.countDocuments(filterQuery);
+
+        if (!employeeData || employeeData.length === 0) {
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'No employees found',
+                totalItems: 0,
+                totalPages: 0,
+                currentPage: parseInt(page),
+                data: []
+            });
+        }
+        
+        // Return consistent response format with pagination at top level
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'Employees fetched successfully',
+            totalItems: count,
+            totalPages: Math.ceil(count / parseInt(limit)),
+            currentPage: parseInt(page),
+            employeeTable,
+            data: employeeData
+        });
 
     } catch (error) {
         console.error("[fetchEmployees] Error:", error);
-        res.status(500).json({
+        return res.status(500).json({
             status: 500,
             success: false,
-            error: error.message || 'An error occurred while fetching employees'
-        })
+            message: 'An error occurred while fetching employees',
+            error: error.message
+        });
     }
-}
+};
+
 export default fetchEmployees;
 
 
