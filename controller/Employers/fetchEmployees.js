@@ -103,8 +103,8 @@ const fetchEmployees = async (req, res) => {
         const count = await Employee.countDocuments(filterQuery);
 
         if (!employeeData || employeeData.length === 0) {
-            return res.status(404).json({
-                status: 404,
+            return res.status(200).json({
+                status: 200,
                 success: false,
                 message: 'No employees found',
                 totalItems: 0,
